@@ -5,6 +5,7 @@ COLOR_RED = \x1b[31;01m
 
 install-desktop:
 	@echo -e '$(COLOR_RED)* installing desktop theme... $(COLOR_NONE)'
+	mkdir -p  /usr/share/sddm/themes/
 	cp -r lliurex-desktop $(DESTDIR)/usr/share/sddm/themes/
 	cp -r conf/80-lliurex-desktop.conf $(DESTDIR)/usr/lib/sddm/sddm.conf.d/
 	cp -r sddm.service.d $(DESTDIR)/usr/lib/systemd/system/
