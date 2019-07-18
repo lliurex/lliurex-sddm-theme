@@ -1,5 +1,6 @@
 lliurex-sddm-theme (1.7.5.0) bionic; urgency=medium
 
-  * Initial release.
+  * Master tag: a1027573f3c6bc2800ebe3f349e95566d3608524
+  * Moved from lliurex-artwork
 
  -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Thu, 18 Jul 2019 12:26:23 +0200
