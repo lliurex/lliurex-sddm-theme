@@ -1,3 +1,4 @@
+build:
 
 install-desktop:
 	mkdir -p $(DESTDIR)/usr/share/sddm/themes
@@ -18,4 +19,4 @@ install-server: install-classroom
 
 install: install-server
 
-.PHONY: all clean install
+.PHONY: all clean install build
