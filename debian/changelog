@@ -1,3 +1,10 @@
+lliurex-sddm-theme (1.7.6.0) bionic; urgency=medium
+
+  * Master tag: 3080e7906cd07e4bc4b6736dce335120a2fe0902
+  * Fixed makefile
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Thu, 18 Jul 2019 13:54:00 +0200
+
 lliurex-sddm-theme (1.7.5.0) bionic; urgency=medium
 
   * Master tag: a1027573f3c6bc2800ebe3f349e95566d3608524
