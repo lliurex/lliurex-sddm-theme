@@ -1,6 +1,5 @@
-lliurex-sddm-theme (1.7.8.0) bionic; urgency=medium
+lliurex-sddm-theme (1.7.9.0) bionic; urgency=medium
 
-  * Master tag: 801c6c4de7532b7412446e84f3f8b9fc1660062d
   * Makefile again (the lat one?)
 
  -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Thu, 18 Jul 2019 14:36:15 +0200
