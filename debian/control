@@ -1,0 +1,27 @@
+Source: lliurex-sddm-theme
+Section: x11
+Priority: optional
+Maintainer: LliureX Team <lliurex@gva.es>
+Build-Depends: debhelper (>= 10)
+Standards-Version: 4.1.2
+
+Package: lliurex-desktop-sddm-theme
+Architecture: all
+Section: x11
+Depends: sddm
+Description: LliureX desktop sddm theme
+ LliureX 19 custom sddm theme
+
+Package: lliurex-classroom-sddm-theme
+Architecture: all
+Section: x11
+Depends: lliurex-desktop-sddm-theme
+Description: LliureX classroom sddm theme
+ LliureX 19 Classroom custom sddm theme
+
+Package: lliurex-server-sddm-theme
+Architecture: all
+Section: x11
+Depdends: lliurex-classroom-sddm-theme
+Description: LliureX server sddm theme
+ LliureX 19 Server custom sddm theme
