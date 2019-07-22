@@ -18,76 +18,24 @@
 */
 
 import QtQuick 2.0
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.0 as Controls
 
-Rectangle {
-    
-    id: button
-    
-    signal clicked();
-    property string text: ""
-    property int minWidth:0
+Controls.Button {
+    id: control
     
     property Gradient colorNormal :  Gradient {
         GradientStop { position: 0.0; color: "#f1f2f3" }
         GradientStop { position: 1.0; color: "#e8e9ea" }
     }
     
-    property Gradient colorPressed :  Gradient {
-        GradientStop { position: 0.0; color: "#c2e0f5" }
-        GradientStop { position: 1.0; color: "#b0d9f5" }
-    }
+    palette.highlight: "#3daee9"
     
-    states: [
-        State {
-            name: "normal"
-            when: enabled && mouseArea.containsPress==false && mouseArea.containsMouse==false
-            PropertyChanges { target: button; gradient: colorNormal ; border.color: "#b3b5b6" }
-            PropertyChanges { target: label; color: "#0e0e0e" }
-        }
-        ,
-        State {
-            name: "hover"
-            when: enabled && mouseArea.containsPress==false && mouseArea.containsMouse==true
-            PropertyChanges { target: button; gradient: colorNormal ; border.color: "#c2e0f5" }
-            PropertyChanges { target: label; color: "#0e0e0e" ; }
-        }
-        ,
-        State {
-            name: "pressed"
-            when: enabled && mouseArea.containsPress==true && mouseArea.containsMouse==true
-            PropertyChanges { target: button; gradient: colorPressed ; border.color: "#c2e0f5"}
-            PropertyChanges { target: label; color: "#0e0e0e" }
-        }
-        ,
-        State {
-            name: "disabled"
-            when: enabled==false
-            PropertyChanges { target: button; gradient: colorNormal ; border.color: "#b3b5b6"}
-            PropertyChanges { target: label; color: "#8e8e8e" }
-        }
-    ]
-    
-    radius: 3
-    border.width: 2
-    
-    width: ((label.width*1.6)>minWidth) ? (label.width*1.6) : minWidth
-    height:label.height*2.0
-    
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        hoverEnabled: true
-        acceptedButtons: Qt.LeftButton
-        
-        onClicked: parent.clicked()
-        
-    }
-    
-    Text {
-        id: label
-        text:button.text
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+    background: Rectangle {
+        implicitWidth: 100
+        implicitHeight: 40
+        visible: !control.flat || control.down || control.checked || control.highlighted
+        gradient: colorNormal
+        border.color: control.visualFocus ? control.palette.highlight : control.palette.mid
+        border.width: control.visualFocus ? 2 : 1
     }
 }

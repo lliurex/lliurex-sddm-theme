@@ -235,6 +235,7 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     enabled: loginFrame.enabled
                     onEditingFinished: theme.loginStatus=true;
+                    palette.highlight: "#3daee9"
                     
                     Component.onCompleted: focus=true;
                     
@@ -247,6 +248,7 @@ Rectangle {
                     placeholderText: qsTr("Password")
                     enabled: loginFrame.enabled
                     anchors.horizontalCenter: parent.horizontalCenter
+                    palette.highlight: "#3daee9"
                     
                     Keys.onReturnPressed: {
                         loginFrame.enabled=false
@@ -275,7 +277,7 @@ Rectangle {
                 
                 Lliurex.Button {
                     text: qsTr("Login");
-                    minWidth: 200
+                    implicitWidth: 200
                     enabled: loginFrame.enabled
                     anchors.horizontalCenter: parent.horizontalCenter
                     
@@ -292,6 +294,7 @@ Rectangle {
                     model: sessionModel
                     currentIndex: sessionModel.lastIndex
                     textRole: "name"
+                    palette.highlight: "#3daee9"
                     
                     indicator: Item {}
                     
