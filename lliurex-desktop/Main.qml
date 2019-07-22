@@ -47,17 +47,17 @@ Rectangle {
         
         onLoginSucceeded: {
             theme.loginStatus=true;
-            
-            message.text=""
+            loginFrame.enable=true;
+            message.text="";
         }
         
         onLoginFailed: {
             theme.loginStatus=false;
+            loginFrame.enable=true;
+            txtPass.text = "";
+            txtPass.focus = true;
             
-            txtPass.text = ""
-            txtPass.focus = true
-            
-            txtPass.borderColor="red"
+            txtPass.borderColor="red";
         }
     }
     
@@ -233,8 +233,11 @@ Rectangle {
                     width: 200
                     placeholderText: qsTr("User name")
                     anchors.horizontalCenter: parent.horizontalCenter
-                    
+                    enabled: loginFrame.enabled
                     onEditingFinished: theme.loginStatus=true;
+                    
+                    Component.onCompleted: focus=true;
+                    
                 }
                 
                 TextField {
@@ -242,9 +245,11 @@ Rectangle {
                     width: 200
                     echoMode: TextInput.Password
                     placeholderText: qsTr("Password")
+                    enabled: loginFrame.enabled
                     anchors.horizontalCenter: parent.horizontalCenter
                     
                     Keys.onReturnPressed: {
+                        loginFrame.enabled=false
                         sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
                     }
                     
@@ -271,9 +276,11 @@ Rectangle {
                 Lliurex.Button {
                     text: qsTr("Login");
                     minWidth: 200
+                    enabled: loginFrame.enabled
                     anchors.horizontalCenter: parent.horizontalCenter
                     
                     onClicked: {
+                        loginFrame.enabled=false
                         sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
                     }
                 }
