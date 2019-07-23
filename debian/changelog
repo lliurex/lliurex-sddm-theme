@@ -1,3 +1,9 @@
+lliurex-sddm-theme (1.8.0.1) bionic; urgency=low
+
+  * Added a conflict with old lliurex desktop defaults
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Tue, 23 Jul 2019 15:28:13 +0200
+
 lliurex-sddm-theme (1.8.0.0) bionic; urgency=medium
 
   * Master tag: 9cb01f946ae7284a2a0ff4e65bfc985cdccf16e9

@@ -9,6 +9,7 @@ Package: lliurex-desktop-sddm-theme
 Architecture: all
 Section: x11
 Depends: sddm
+Conflicts: lliurex-desktop-defaults (<<1.7.0.2)
 Description: LliureX desktop sddm theme
  LliureX 19 custom sddm theme
 
@@ -16,6 +17,7 @@ Package: lliurex-classroom-sddm-theme
 Architecture: all
 Section: x11
 Depends: lliurex-desktop-sddm-theme
+Conflicts: lliurex-desktop-defaults (<<1.7.0.2)
 Description: LliureX classroom sddm theme
  LliureX 19 Classroom custom sddm theme
 
@@ -23,5 +25,6 @@ Package: lliurex-server-sddm-theme
 Architecture: all
 Section: x11
 Depdends: lliurex-classroom-sddm-theme
+Conflicts: lliurex-desktop-defaults (<<1.7.0.2)
 Description: LliureX server sddm theme
  LliureX 19 Server custom sddm theme
