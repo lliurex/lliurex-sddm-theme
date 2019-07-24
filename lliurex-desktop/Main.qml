@@ -47,17 +47,15 @@ Rectangle {
         
         onLoginSucceeded: {
             theme.loginStatus=true;
-            loginFrame.enable=true;
+            loginFrame.enabled=true;
             message.text="";
         }
         
         onLoginFailed: {
             theme.loginStatus=false;
-            loginFrame.enable=true;
+            loginFrame.enabled=true;
             txtPass.text = "";
             txtPass.focus = true;
-            
-            txtPass.borderColor="red";
         }
     }
     
@@ -233,7 +231,6 @@ Rectangle {
                     width: 200
                     placeholderText: qsTr("User name")
                     anchors.horizontalCenter: parent.horizontalCenter
-                    enabled: loginFrame.enabled
                     onEditingFinished: theme.loginStatus=true;
                     palette.highlight: "#3daee9"
                     
@@ -246,7 +243,6 @@ Rectangle {
                     width: 200
                     echoMode: TextInput.Password
                     placeholderText: qsTr("Password")
-                    enabled: loginFrame.enabled
                     anchors.horizontalCenter: parent.horizontalCenter
                     palette.highlight: "#3daee9"
                     
@@ -278,7 +274,6 @@ Rectangle {
                 Lliurex.Button {
                     text: qsTr("Login");
                     implicitWidth: 200
-                    enabled: loginFrame.enabled
                     anchors.horizontalCenter: parent.horizontalCenter
                     
                     onClicked: {
