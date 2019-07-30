@@ -1,0 +1,57 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-07-30 12:16+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Enrique Medina Gremaldos <quiqueiii@gmail.com>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: Main.qml:233
+msgid "User name"
+msgstr "Usuario"
+
+#: Main.qml:246
+msgid "Password"
+msgstr "Contraseña"
+
+#: Main.qml:270
+msgid "Login failed"
+msgstr "Fallo en el acceso"
+
+#: Main.qml:270
+msgid "No connection to server"
+msgstr "Sin connexión al servidor"
+
+#: Main.qml:276
+msgid "Login"
+msgstr "Acceder"
+
+#: Main.qml:364
+msgid "Power off"
+msgstr "Apagar"
+
+#: Main.qml:372
+msgid "Reboot"
+msgstr "Reiniciar"
+
+#: Main.qml:380
+msgid "Suspend"
+msgstr "Suspender"
+
+#: Main.qml:388
+msgid "Hibernate"
+msgstr "Hibernar"
+
+#: Main.qml:397
+msgid "Cancel"
+msgstr "Cancelar"
