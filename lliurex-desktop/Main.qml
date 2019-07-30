@@ -20,6 +20,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import SddmComponents 2.0 as Sddm
+import org.kde.plasma.core 2.0 as PlasmaCore
 import "ui" as Lliurex
 
 Rectangle {
@@ -119,7 +120,7 @@ Rectangle {
         }
     }
 
-    /* Clock aand date */
+    /* Clock and date */
     Column {
         spacing: 10
         anchors.verticalCenter: parent.verticalCenter
@@ -229,7 +230,7 @@ Rectangle {
                 TextField {
                     id: txtUser
                     width: 200
-                    placeholderText: qsTr("User name")
+                    placeholderText: i18nd("lliurex-sddm","User name")
                     anchors.horizontalCenter: parent.horizontalCenter
                     onEditingFinished: theme.loginStatus=true;
                     palette.highlight: "#3daee9"
@@ -242,7 +243,7 @@ Rectangle {
                     id: txtPass
                     width: 200
                     echoMode: TextInput.Password
-                    placeholderText: qsTr("Password")
+                    placeholderText: i18nd("lliurex-sddm","Password")
                     anchors.horizontalCenter: parent.horizontalCenter
                     palette.highlight: "#3daee9"
                     
@@ -266,13 +267,13 @@ Rectangle {
                     color: "red"
                     height: 32
 
-                    text: (theme.loginStatus==false) ? qsTr("Login failed") : ((theme.serverStatus==false) ? qsTr("No connection to server") : "")
+                    text: (theme.loginStatus==false) ? i18nd("lliurex-sddm","Login failed") : ((theme.serverStatus==false) ? i18nd("lliurex-sddm","No connection to server") : "")
                     
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
                 
                 Lliurex.Button {
-                    text: qsTr("Login");
+                    text: i18nd("lliurex-sddm","Login");
                     implicitWidth: 200
                     anchors.horizontalCenter: parent.horizontalCenter
                     
@@ -360,7 +361,7 @@ Rectangle {
                     spacing: 10
                     
                     Lliurex.Button {
-                        text: qsTr("Power off")
+                        text: i18nd("lliurex-sddm","Power off")
                         enabled:sddm.canPowerOff
                         onClicked: {
                             sddm.powerOff()
@@ -368,7 +369,7 @@ Rectangle {
                     }
                     
                     Lliurex.Button {
-                        text: qsTr("Reboot")
+                        text: i18nd("lliurex-sddm","Reboot")
                         enabled: sddm.canReboot
                         onClicked: {
                             sddm.reboot()
@@ -376,7 +377,7 @@ Rectangle {
                     }
                     
                     Lliurex.Button {
-                        text: qsTr("Suspend")
+                        text: i18nd("lliurex-sddm","Suspend")
                         enabled: sddm.canSuspend
                         onClicked: {
                             sddm.suspend()
@@ -384,7 +385,7 @@ Rectangle {
                     }
                     
                     Lliurex.Button {
-                        text: qsTr("Hibernate")
+                        text: i18nd("lliurex-sddm","Hibernate")
                         enabled: sddm.canHibernate
                         onClicked: {
                             sddm.hibernate()
@@ -393,7 +394,7 @@ Rectangle {
                 }
 
                 Lliurex.Button {
-                    text: qsTr("Cancel")
+                    text: i18nd("lliurex-sddm","Cancel")
                     anchors.right: parent.right
                     onClicked: {
                         loginFrame.visible=true

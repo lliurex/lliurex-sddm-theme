@@ -25,17 +25,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="151.53674"
-     inkscape:cy="17.103971"
+     inkscape:zoom="1.979899"
+     inkscape:cx="60.918054"
+     inkscape:cy="19.808515"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
      inkscape:window-width="1920"
-     inkscape:window-height="952"
+     inkscape:window-height="1019"
      inkscape:window-x="0"
-     inkscape:window-y="36"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata877">
@@ -45,7 +45,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -57,7 +57,7 @@
     <g
        id="g1117"
        transform="matrix(1.5054216,0,0,1.4541153,-261.79369,-190.40855)"
-       style="fill:#7f8c8d">
+       style="fill:#7f8c8d;fill-opacity:1">
       <path
          sodipodi:nodetypes="sssscscsscsssss"
          d="m 178.07229,334.9778 c -0.99243,0 -1.75719,-0.28606 -2.29428,-0.85817 -0.53709,-0.57211 -0.80562,-1.30768 -0.80562,-2.20671 v -2.39062 c 0,-0.21599 0.0583,-0.38237 0.17514,-0.49912 0.11676,-0.11677 0.28313,-0.17515 0.49913,-0.17515 0.216,0 0.38238,0.0584 0.49914,0.17515 0.11676,0.11675 0.17513,0.28313 0.17513,0.49912 v 2.39062 c 0,0.5546 0.16347,1.00703 0.49038,1.35731 0.32693,0.34443 0.79688,0.51665 1.40986,0.51665 h 3.48519 c 0.40282,0 0.60423,0.19849 0.60423,0.59547 0,0.39696 -0.20141,0.59545 -0.60423,0.59545 z"
@@ -73,7 +73,7 @@
       <path
          sodipodi:nodetypes="ssscsssssssssssss"
          d="m 192.31237,327.32136 v 5.03816 c 0,0.42616 -0.21599,0.63924 -0.648,0.63924 -0.21016,0 -0.37362,-0.0555 -0.49038,-0.16638 -0.11092,-0.11092 -0.16638,-0.26854 -0.16638,-0.47286 v -5.03816 c 0,-0.43201 0.21892,-0.64801 0.65676,-0.64801 0.43201,0 0.648,0.216 0.648,0.64801 z m -1.2347,7.44628 c -0.14011,-0.14011 -0.21017,-0.33568 -0.21017,-0.5867 0,-0.25104 0.0701,-0.4466 0.21017,-0.58672 0.1401,-0.1401 0.33567,-0.21016 0.5867,-0.21016 0.25686,0 0.45535,0.0701 0.59546,0.21016 0.14011,0.14012 0.21017,0.33568 0.21017,0.58672 0,0.25102 -0.0701,0.44659 -0.21017,0.5867 -0.14011,0.14011 -0.3386,0.21016 -0.59546,0.21016 -0.25103,0 -0.4466,-0.0701 -0.5867,-0.21016 z"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:medium;line-height:42.05411148px;font-family:SpaceColony-SemiBold;-inkscape-font-specification:'SpaceColony-SemiBold Bold';letter-spacing:0px;word-spacing:0px;fill:#3397d1;fill-opacity:1;stroke:none;stroke-width:0.21892026px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:medium;line-height:42.05411148px;font-family:SpaceColony-SemiBold;-inkscape-font-specification:'SpaceColony-SemiBold Bold';letter-spacing:0px;word-spacing:0px;fill:#7f8c8d;fill-opacity:1;stroke:none;stroke-width:0.21892026px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          id="path1100"
          inkscape:connector-curvature="0" />
       <path
