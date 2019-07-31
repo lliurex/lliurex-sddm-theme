@@ -1,3 +1,9 @@
+lliurex-sddm-theme (1.8.2.1) bionic; urgency=medium
+
+  * Fixed translation install
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Wed, 31 Jul 2019 09:03:55 +0200
+
 lliurex-sddm-theme (1.8.2.0) bionic; urgency=medium
 
   * Master tag: 07a1001a8b1188568a35c23300d0db087cb47983
