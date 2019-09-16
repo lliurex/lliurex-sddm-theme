@@ -31,6 +31,8 @@ Rectangle {
     property bool loginStatus: true
     property bool serverStatus: true
     
+    property bool compact: (loginFrame.width+dateFrame.width+60) > theme.width
+    
     property variant geometry: screenModel.geometry(screenModel.primary)
     x: geometry.x
     y: geometry.y
@@ -122,11 +124,16 @@ Rectangle {
 
     /* Clock and date */
     Column {
+        
+        id:dateFrame
+        
         spacing: 10
         anchors.verticalCenter: parent.verticalCenter
-        x: parent.width*0.7
+        //x: parent.width*0.7
+        anchors.right: parent.right
+        anchors.rightMargin:60
         
-        visible: (theme.width>=1024)
+        visible: !theme.compact && loginFrame.visible
         
         Text {
             id: txtHostname
@@ -188,7 +195,7 @@ Rectangle {
         width: loginShadow.width
         height: loginShadow.height
         
-        x: (theme.width>=1024) ? (200) : ((theme.width*0.5)-(width*0.5))
+        x: theme.compact ? ((theme.width*0.5)-(width*0.5)) : ((dateFrame.x-width)<200 ? (dateFrame.x-width) : 200)
         
         anchors.verticalCenter: theme.verticalCenter
         
