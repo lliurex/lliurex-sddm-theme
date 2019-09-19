@@ -189,12 +189,69 @@ Rectangle {
         }
     }
     
+    /* user frame */
+    Item {
+        id: userFrame
+        visible: false
+        width: userShadow.width
+        height: userShadow.height
+        z:5000
+        anchors.horizontalCenter: theme.horizontalCenter
+        anchors.verticalCenter: theme.verticalCenter
+        
+        Rectangle {
+            id: userShadow
+            color: "#40000000"
+            
+            width: userTop.width+6
+            height: userTop.height+6
+            radius:5
+            
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        
+        Rectangle {
+            id: userTop
+            
+            width: theme.width*0.8
+            height: theme.height*0.8
+            
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            
+            Lliurex.UserGrid {
+                //anchors.fill : parent
+                width:parent.width*0.95
+                height:parent.height*0.95
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                
+                model: userModel
+                focus: true
+                
+                onCancel: {
+                    userFrame.visible = false
+                    loginFrame.visible = true
+                }
+                
+                onSelected: {
+                    userFrame.visible = false
+                    loginFrame.visible = true
+                    txtUser.text = name
+                    txtPass.focus = true
+                }
+            }
+            
+        }
+    }
+    
     /* login frame */
     Item {
         id: loginFrame
         width: loginShadow.width
         height: loginShadow.height
-        
+        visible: true
         x: theme.compact ? ((theme.width*0.5)-(width*0.5)) : ((dateFrame.x-width)<200 ? (dateFrame.x-width) : 200)
         
         anchors.verticalCenter: theme.verticalCenter
@@ -234,38 +291,88 @@ Rectangle {
                     width: 320
                 }
                 
-                TextField {
-                    id: txtUser
-                    width: 200
-                    placeholderText: i18nd("lliurex-sddm","User name")
+                Row {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    onEditingFinished: theme.loginStatus=true;
-                    palette.highlight: "#3daee9"
+                    spacing: 4
                     
-                    Component.onCompleted: focus=true;
-                    
-                }
-                
-                TextField {
-                    id: txtPass
-                    width: 200
-                    echoMode: TextInput.Password
-                    placeholderText: i18nd("lliurex-sddm","Password")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    palette.highlight: "#3daee9"
-                    
-                    Keys.onReturnPressed: {
-                        loginFrame.enabled=false
-                        sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
-                    }
-                    
-                    Image {
-                        source: "images/upcase.svg"
-                        anchors.right: parent.right
-                        anchors.rightMargin:5
+                    Rectangle {
+                        color: "transparent"
+                        width:imgUsername.width
+                        height: imgUsername.height
                         anchors.verticalCenter: parent.verticalCenter
                         
-                        visible: keyboard.capsLock
+                        Image {
+                            id: imgUsername
+                            source: "images/username.svg"
+                            
+                        }
+                        
+                        MouseArea {
+                            id: mouseArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            
+                            onEntered: {
+                                parent.color="#bfdcf1"
+                            }
+                            onExited: {
+                                parent.color="transparent"
+                            }
+                            
+                            onClicked: {
+                                if (mouse.button == Qt.LeftButton) {
+                                    loginFrame.visible=false
+                                    userFrame.visible=true
+                                }
+                            }
+                        }
+                    }
+                    
+                    TextField {
+                        id: txtUser
+                        width: 200
+                        placeholderText: i18nd("lliurex-sddm","User name")
+                        anchors.verticalCenter: parent.verticalCenter
+                        //anchors.horizontalCenter: parent.horizontalCenter
+                        onEditingFinished: theme.loginStatus=true;
+                        palette.highlight: "#3daee9"
+                        
+                        //Component.onCompleted: focus=true;
+                        
+                    }
+                }
+                
+                Row {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 4
+                    
+                    Image {
+                        source: "images/password.svg"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    
+                    TextField {
+                        id: txtPass
+                        width: 200
+                        echoMode: TextInput.Password
+                        placeholderText: i18nd("lliurex-sddm","Password")
+                        //anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        palette.highlight: "#3daee9"
+                        
+                        Keys.onReturnPressed: {
+                            loginFrame.enabled=false
+                            sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
+                        }
+                        
+                        Image {
+                            source: "images/upcase.svg"
+                            anchors.right: parent.right
+                            anchors.rightMargin:5
+                            anchors.verticalCenter: parent.verticalCenter
+                            
+                            visible: keyboard.capsLock
+                        }
                     }
                 }
                 
