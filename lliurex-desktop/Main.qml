@@ -169,22 +169,40 @@ Rectangle {
         }
     }
     
-    Image {
-        source: "images/shutdown.svg"
-        
+    Rectangle {
+        id: btnShutdown
+        width:48
+        height:48
+        color: "transparent"
+
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.rightMargin:40
         anchors.bottomMargin: 40
-        
-        MouseArea {
-            anchors.fill: parent
+
+        Image {
+            id: imgShutdown
+            source: "images/shutdown.svg"
+            anchors.centerIn: parent
             
-            acceptedButtons: Qt.LeftButton
-            
-            onClicked: {
-                loginFrame.visible=false
-                shutdownFrame.visible=true
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                
+                acceptedButtons: Qt.LeftButton
+                
+                onEntered: {
+                    parent.source="images/shutdown-hover.svg"
+                }
+                
+                onExited: {
+                    parent.source="images/shutdown.svg"
+                }
+                
+                onClicked: {
+                    loginFrame.visible=false
+                    shutdownFrame.visible=true
+                }
             }
         }
     }
@@ -292,8 +310,9 @@ Rectangle {
                 }
                 
                 Row {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: 4
+                    //anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.right: btnLogin.right
+                    spacing: 6
                     
                     Rectangle {
                         color: "transparent"
@@ -313,10 +332,13 @@ Rectangle {
                             hoverEnabled: true
                             
                             onEntered: {
-                                parent.color="#bfdcf1"
+                                parent.border.color= "#3daee9"
+                                parent.border.width=1
                             }
                             onExited: {
-                                parent.color="transparent"
+                                parent.border.color= "transparent"
+                                parent.border.width=0
+
                             }
                             
                             onClicked: {
@@ -334,7 +356,10 @@ Rectangle {
                         placeholderText: i18nd("lliurex-sddm","User name")
                         anchors.verticalCenter: parent.verticalCenter
                         //anchors.horizontalCenter: parent.horizontalCenter
-                        onEditingFinished: theme.loginStatus=true;
+                        onEditingFinished: {
+                            theme.loginStatus=true
+                            txtPass.focus=true
+                        }
                         palette.highlight: "#3daee9"
                         
                         //Component.onCompleted: focus=true;
@@ -343,8 +368,9 @@ Rectangle {
                 }
                 
                 Row {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: 4
+                    //anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.right: btnLogin.right
+                    spacing: 6
                     
                     Image {
                         source: "images/password.svg"
@@ -387,6 +413,7 @@ Rectangle {
                 }
                 
                 Lliurex.Button {
+                    id: btnLogin
                     text: i18nd("lliurex-sddm","Login");
                     implicitWidth: 200
                     anchors.horizontalCenter: parent.horizontalCenter

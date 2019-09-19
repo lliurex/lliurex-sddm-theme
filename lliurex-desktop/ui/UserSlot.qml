@@ -30,6 +30,7 @@ Rectangle {
     
     width: 128
     height: 128
+    color:"transparent"
     
     visible : filter.length==0 || (filter.length>0 && name.startsWith(filter))
     
@@ -58,13 +59,13 @@ Rectangle {
         hoverEnabled: true
         
         onEntered: {
-            //border.width=1
-            //border.color="#7f8c8d"
-            color="#bfdcf1"
+            //color="#bfdcf1"
+            border.color= "#3daee9"
+            border.width=1
         }
         onExited: {
-            //border.width=0
-            color="transparent"
+            border.color="transparent"
+            border.width=0
         }
         
         onClicked: {

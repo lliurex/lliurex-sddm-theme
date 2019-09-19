@@ -37,8 +37,9 @@ FocusScope {
             if (event.key == Qt.Key_Backspace) {
                 filter=filter.substring(0, filter.length - 1);
             }
-            if (event.key == Qt.Key_Enter) {
+            if (event.key == Qt.Key_Return) {
                 console.log("Boom")
+                //ToDo
             }
             if (event.key == Qt.Key_Escape) {
                 cancel()
@@ -56,10 +57,6 @@ FocusScope {
         for (var i = 0; i < grid.children.length; i++) {
             grid.children[i].filter=filter
         }
-    }
-    
-    onActiveFocusChanged: {
-        console.log("my focus",focus)
     }
     
     MouseArea {
@@ -84,11 +81,6 @@ FocusScope {
         
         onModelChanged: {
             
-            //userGrid.forceActiveFocus()
-            console.log("you touch my tralala")
-            console.log(model.rowCount())
-            console.log(model)
-
             var component=Qt.createComponent("UserSlot.qml")
             
             for (var n=0;n< model.count;n++) {
@@ -96,11 +88,16 @@ FocusScope {
                 var name=model.data(index,0x0100+1)
                 var home=model.data(index,0x0100+3)
                 var icon=model.data(index,0x0100+4)
-                //var icon = home+"/.face"
                 console.log(name)
                 console.log(icon)
-                //"../images/user.svg"
                 var o = component.createObject(grid,{name:name,image:icon})
+                
+                o.selected.connect(selected)
+            }
+            
+            //TEST
+            for (var n=0;n<8;n++) {
+                var o = component.createObject(grid,{name:"alu"+n,image:"file:///usr/share/sddm/faces/.face.icon"})
                 
                 o.selected.connect(selected)
             }
