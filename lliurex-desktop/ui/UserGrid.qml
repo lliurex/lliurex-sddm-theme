@@ -16,8 +16,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+import "." as Lliurex
 import QtQuick 2.0
+import QtQuick.Layouts 1.1 as Layouts
 import QtQuick.Controls 2.5 as Controls
 
 FocusScope {
@@ -29,7 +30,7 @@ FocusScope {
     signal cancel()
     
     focus: true
-    
+    /*
     Keys.onPressed: {
         var code = event.text.charCodeAt(0)
         
@@ -57,13 +58,42 @@ FocusScope {
         }
         
     }
+    */
+    
+    Keys.onPressed: {
+        if (event.key == Qt.Key_Return) {
+            for (var n = 0; n < grid.children.length; n++) {
+                if (grid.children[n].visible) {
+                    selected(grid.children[n].name);
+                    break;
+                }
+            }
+            
+        }
+        if (event.key == Qt.Key_Escape) {
+            cancel();
+        }
+    }
     
     onFilterChanged: {
+        var hl=filter.length>0;
+        var first=true
+        
         for (var i = 0; i < grid.children.length; i++) {
-            grid.children[i].filter=filter
+            grid.children[i].filter=filter;
         }
         
-        scroll.Controls.ScrollBar.vertical.position=0
+        for (var n=0;n<grid.children.length;n++) {
+            if (hl && first && grid.children[n].visible) {
+                first=false;
+                grid.children[n].highlight=true;
+            }
+            else {
+                grid.children[n].highlight=false;
+            }
+        }
+        
+        scroll.Controls.ScrollBar.vertical.position=0;
     }
     
     MouseArea {
@@ -76,71 +106,82 @@ FocusScope {
         }
     }
     
-    Controls.ScrollView {
-        id: scroll
-        anchors.fill: parent
-        clip:true
-        Controls.ScrollBar.horizontal.policy: Controls.ScrollBar.AlwaysOff
-        Controls.ScrollBar.vertical.policy: Controls.ScrollBar.AlwaysOn
-        contentWidth: width
+    Layouts.ColumnLayout {
+        anchors.fill:parent
         
-        Grid {
-            id: grid
-            rows: 16
-            columns: width/128
-            spacing: 4
+        Controls.TextField {
+            height:32
+            width: 200
+
+            onTextChanged: {
+                userGrid.filter=text
+            }
             
-            anchors.fill: parent
+            placeholderText: "Search..."
+            palette.highlight: "#3daee9"
+        }
+        
+        Controls.ScrollView {
+            id: scroll
+            Layouts.Layout.fillHeight: true
+            Layouts.Layout.fillWidth: true
+            clip:true
+            Controls.ScrollBar.horizontal.policy: Controls.ScrollBar.AlwaysOff
+            Controls.ScrollBar.vertical.policy: Controls.ScrollBar.AlwaysOn
+            contentWidth: width
             
-            property var model
-            
-            onModelChanged: {
+            Grid {
+                id: grid
+                rows: 16
+                columns: width/128
+                spacing: 4
                 
-                var component=Qt.createComponent("UserSlot.qml")
+                anchors.fill: parent
                 
-                for (var n=0;n< model.count;n++) {
-                    var index=model.index(n,0)
-                    var name=model.data(index,0x0100+1)
-                    var home=model.data(index,0x0100+3)
-                    var icon=model.data(index,0x0100+4)
-                    console.log(name)
-                    console.log(icon)
-                    var o = component.createObject(grid,{name:name,image:icon})
+                property var model
+                
+                onModelChanged: {
                     
-                    o.selected.connect(selected)
-                }
-                
-                //TEST
-                for (var n=0;n<64;n++) {
-                    var o = component.createObject(grid,{name:"alu"+n,image:"file:///usr/share/sddm/faces/.face.icon"})
+                    var component=Qt.createComponent("UserSlot.qml")
                     
-                    o.selected.connect(selected)
+                    for (var n=0;n< model.count;n++) {
+                        var index=model.index(n,0)
+                        var name=model.data(index,0x0100+1)
+                        var home=model.data(index,0x0100+3)
+                        var icon=model.data(index,0x0100+4)
+                        console.log(name)
+                        console.log(icon)
+                        var o = component.createObject(grid,{name:name,image:icon})
+                        
+                        o.selected.connect(selected)
+                    }
+                    
+                    //TEST
+                    for (var n=0;n<96;n++) {
+                        var o = component.createObject(grid,{name:"alu"+n,image:"file:///usr/share/sddm/faces/.face.icon"})
+                        
+                        o.selected.connect(selected)
+                    }
                 }
             }
         }
+        
+        Lliurex.Button {
+            Layouts.Layout.alignment: Qt.AlignRight
+            text: "Cancel"
+            
+            onClicked: {
+                cancel()
+            }
+            
+        }
+        
     }
+    
+    
     
     onSelected: {
         console.log("Selected ",name)
     }
     
-    Rectangle {
-        id: nameFilter
-        color: "#07000000"
-        
-        z:grid.z+10
-        visible: parent.filter!=""
-        
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-            
-        width: text.width+20
-        height: text.height+10
-        
-        Text {
-            id: text
-            text: userGrid.filter
-            anchors.centerIn: parent
-        }
-    }
 }

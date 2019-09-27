@@ -26,11 +26,13 @@ Rectangle {
     property string filter : ""
     property alias image: userImage.source
     property alias name: userName.text
+    property bool highlight: false
+    
     signal selected (string name)
     
     width: 128
     height: 128
-    color:"transparent"
+    color: highlight ? "#3daee9":"transparent"
     
     visible : filter.length==0 || (filter.length>0 && name.startsWith(filter))
     
