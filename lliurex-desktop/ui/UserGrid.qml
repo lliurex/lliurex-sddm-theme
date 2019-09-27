@@ -71,8 +71,8 @@ FocusScope {
     
     Grid {
         id: grid
-        rows: 8
-        columns: 6
+        rows: 16
+        columns: width/128
         spacing: 4
         
         anchors.fill: parent
@@ -96,7 +96,7 @@ FocusScope {
             }
             
             //TEST
-            for (var n=0;n<8;n++) {
+            for (var n=0;n<64;n++) {
                 var o = component.createObject(grid,{name:"alu"+n,image:"file:///usr/share/sddm/faces/.face.icon"})
                 
                 o.selected.connect(selected)
