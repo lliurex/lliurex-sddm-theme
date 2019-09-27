@@ -18,7 +18,7 @@
 */
 
 import QtQuick 2.0
-import QtQuick.Controls 2.0 as Controls
+import QtQuick.Controls 2.5 as Controls
 
 FocusScope {
     id: userGrid
@@ -38,8 +38,13 @@ FocusScope {
                 filter=filter.substring(0, filter.length - 1);
             }
             if (event.key == Qt.Key_Return) {
-                console.log("Boom")
-                //ToDo
+                for (var n = 0; n < grid.children.length; n++) {
+                    if (grid.children[n].visible) {
+                        selected(grid.children[n].name);
+                        break;
+                    }
+                }
+                
             }
             if (event.key == Qt.Key_Escape) {
                 cancel()
@@ -57,6 +62,8 @@ FocusScope {
         for (var i = 0; i < grid.children.length; i++) {
             grid.children[i].filter=filter
         }
+        
+        scroll.Controls.ScrollBar.vertical.position=0
     }
     
     MouseArea {
@@ -69,37 +76,46 @@ FocusScope {
         }
     }
     
-    Grid {
-        id: grid
-        rows: 16
-        columns: width/128
-        spacing: 4
-        
+    Controls.ScrollView {
+        id: scroll
         anchors.fill: parent
+        clip:true
+        Controls.ScrollBar.horizontal.policy: Controls.ScrollBar.AlwaysOff
+        Controls.ScrollBar.vertical.policy: Controls.ScrollBar.AlwaysOn
+        contentWidth: width
         
-        property var model
-        
-        onModelChanged: {
+        Grid {
+            id: grid
+            rows: 16
+            columns: width/128
+            spacing: 4
             
-            var component=Qt.createComponent("UserSlot.qml")
+            anchors.fill: parent
             
-            for (var n=0;n< model.count;n++) {
-                var index=model.index(n,0)
-                var name=model.data(index,0x0100+1)
-                var home=model.data(index,0x0100+3)
-                var icon=model.data(index,0x0100+4)
-                console.log(name)
-                console.log(icon)
-                var o = component.createObject(grid,{name:name,image:icon})
+            property var model
+            
+            onModelChanged: {
                 
-                o.selected.connect(selected)
-            }
-            
-            //TEST
-            for (var n=0;n<64;n++) {
-                var o = component.createObject(grid,{name:"alu"+n,image:"file:///usr/share/sddm/faces/.face.icon"})
+                var component=Qt.createComponent("UserSlot.qml")
                 
-                o.selected.connect(selected)
+                for (var n=0;n< model.count;n++) {
+                    var index=model.index(n,0)
+                    var name=model.data(index,0x0100+1)
+                    var home=model.data(index,0x0100+3)
+                    var icon=model.data(index,0x0100+4)
+                    console.log(name)
+                    console.log(icon)
+                    var o = component.createObject(grid,{name:name,image:icon})
+                    
+                    o.selected.connect(selected)
+                }
+                
+                //TEST
+                for (var n=0;n<64;n++) {
+                    var o = component.createObject(grid,{name:"alu"+n,image:"file:///usr/share/sddm/faces/.face.icon"})
+                    
+                    o.selected.connect(selected)
+                }
             }
         }
     }
