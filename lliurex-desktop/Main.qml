@@ -17,11 +17,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import "ui" as Lliurex
+
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import SddmComponents 2.0 as Sddm
 import org.kde.plasma.core 2.0 as PlasmaCore
-import "ui" as Lliurex
 
 Rectangle {
     
@@ -201,6 +202,7 @@ Rectangle {
                 
                 onClicked: {
                     loginFrame.visible=false
+                    userFrame.visible=false
                     shutdownFrame.visible=true
                 }
             }

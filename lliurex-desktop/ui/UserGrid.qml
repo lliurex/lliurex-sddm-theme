@@ -16,10 +16,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 import "." as Lliurex
 import QtQuick 2.0
 import QtQuick.Layouts 1.1 as Layouts
 import QtQuick.Controls 2.5 as Controls
+import org.kde.plasma.core 2.0 as PlasmaCore
+
 
 FocusScope {
     id: userGrid
@@ -28,37 +31,6 @@ FocusScope {
     property string filter : ""
     signal selected(string name)
     signal cancel()
-    
-    focus: true
-    /*
-    Keys.onPressed: {
-        var code = event.text.charCodeAt(0)
-        
-        if (code<32) {
-            if (event.key == Qt.Key_Backspace) {
-                filter=filter.substring(0, filter.length - 1);
-            }
-            if (event.key == Qt.Key_Return) {
-                for (var n = 0; n < grid.children.length; n++) {
-                    if (grid.children[n].visible) {
-                        selected(grid.children[n].name);
-                        break;
-                    }
-                }
-                
-            }
-            if (event.key == Qt.Key_Escape) {
-                cancel()
-            }
-        }
-        else {
-            console.log("[",event.text,"]")
-            filter+=event.text
-            console.log(filter)
-        }
-        
-    }
-    */
     
     Keys.onPressed: {
         if (event.key == Qt.Key_Return) {
@@ -70,6 +42,7 @@ FocusScope {
             }
             
         }
+        
         if (event.key == Qt.Key_Escape) {
             cancel();
         }
@@ -77,13 +50,17 @@ FocusScope {
     
     onFilterChanged: {
         var hl=filter.length>0;
-        var first=true
+        var first=true;
+        var visibles=0;
         
         for (var i = 0; i < grid.children.length; i++) {
             grid.children[i].filter=filter;
         }
         
         for (var n=0;n<grid.children.length;n++) {
+            if (grid.children[n].visible) {
+                visibles++;
+            }
             if (hl && first && grid.children[n].visible) {
                 first=false;
                 grid.children[n].highlight=true;
@@ -94,6 +71,8 @@ FocusScope {
         }
         
         scroll.Controls.ScrollBar.vertical.position=0;
+        grid.rows=(visibles/grid.columns)+0.5;
+        
     }
     
     MouseArea {
@@ -112,12 +91,13 @@ FocusScope {
         Controls.TextField {
             height:32
             width: 200
-
+            focus:true
+            
             onTextChanged: {
                 userGrid.filter=text
             }
             
-            placeholderText: "Search..."
+            placeholderText: i18nd("lliurex-sddm","Search...")
             palette.highlight: "#3daee9"
         }
         
@@ -132,7 +112,7 @@ FocusScope {
             
             Grid {
                 id: grid
-                rows: 16
+                rows: 4
                 columns: width/128
                 spacing: 4
                 
@@ -140,20 +120,28 @@ FocusScope {
                 
                 property var model
                 
+                Component.onCompleted: {
+                    rows = (model.count/columns)+0.5;
+                }
+                
                 onModelChanged: {
+                    for (var m in model) {
+                        console.log(m)
+                    }
                     
-                    var component=Qt.createComponent("UserSlot.qml")
+                    var component=Qt.createComponent("UserSlot.qml");
                     
                     for (var n=0;n< model.count;n++) {
-                        var index=model.index(n,0)
-                        var name=model.data(index,0x0100+1)
-                        var home=model.data(index,0x0100+3)
-                        var icon=model.data(index,0x0100+4)
-                        console.log(name)
-                        console.log(icon)
-                        var o = component.createObject(grid,{name:name,image:icon})
+                        var index=model.index(n,0);
+                        var name=model.data(index,0x0100+1);
+                        var home=model.data(index,0x0100+3);
+                        var icon=model.data(index,0x0100+4);
+                        console.log(name);
+                        console.log(icon);
+                        for (var j=0;j<10;j++)console.log(model.data(index,0x0100+j))
+                        var o = component.createObject(grid,{name:name,image:icon});
                         
-                        o.selected.connect(selected)
+                        o.selected.connect(selected);
                     }
                     
                     //TEST
@@ -168,20 +156,18 @@ FocusScope {
         
         Lliurex.Button {
             Layouts.Layout.alignment: Qt.AlignRight
-            text: "Cancel"
+            text: i18nd("lliurex-sddm","Cancel")
             
             onClicked: {
-                cancel()
+                cancel();
             }
             
         }
         
     }
     
-    
-    
     onSelected: {
-        console.log("Selected ",name)
+        console.log("Selected ",name);
     }
     
 }
