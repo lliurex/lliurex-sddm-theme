@@ -17,11 +17,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import "ui" as Lliurex
+
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import SddmComponents 2.0 as Sddm
 import org.kde.plasma.core 2.0 as PlasmaCore
-import "ui" as Lliurex
 
 Rectangle {
     
@@ -169,23 +170,99 @@ Rectangle {
         }
     }
     
-    Image {
-        source: "images/shutdown.svg"
-        
+    Rectangle {
+        id: btnShutdown
+        width:48
+        height:48
+        color: "transparent"
+
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.rightMargin:40
         anchors.bottomMargin: 40
-        
-        MouseArea {
-            anchors.fill: parent
+
+        Image {
+            id: imgShutdown
+            source: "images/shutdown.svg"
+            anchors.centerIn: parent
             
-            acceptedButtons: Qt.LeftButton
-            
-            onClicked: {
-                loginFrame.visible=false
-                shutdownFrame.visible=true
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                
+                acceptedButtons: Qt.LeftButton
+                
+                onEntered: {
+                    parent.source="images/shutdown-hover.svg"
+                }
+                
+                onExited: {
+                    parent.source="images/shutdown.svg"
+                }
+                
+                onClicked: {
+                    loginFrame.visible=false
+                    userFrame.visible=false
+                    shutdownFrame.visible=true
+                }
             }
+        }
+    }
+    
+    /* user frame */
+    Item {
+        id: userFrame
+        visible: false
+        width: userShadow.width
+        height: userShadow.height
+        z:5000
+        anchors.horizontalCenter: theme.horizontalCenter
+        anchors.verticalCenter: theme.verticalCenter
+        
+        Rectangle {
+            id: userShadow
+            color: "#40000000"
+            
+            width: userTop.width+6
+            height: userTop.height+6
+            radius:5
+            
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        
+        Rectangle {
+            id: userTop
+            
+            width: theme.width*0.8
+            height: theme.height*0.8
+            
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            
+            Lliurex.UserGrid {
+                //anchors.fill : parent
+                width:parent.width*0.95
+                height:parent.height*0.95
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                
+                model: userModel
+                focus: true
+                
+                onCancel: {
+                    userFrame.visible = false
+                    loginFrame.visible = true
+                }
+                
+                onSelected: {
+                    userFrame.visible = false
+                    loginFrame.visible = true
+                    txtUser.text = name
+                    txtPass.focus = true
+                }
+            }
+            
         }
     }
     
@@ -194,7 +271,7 @@ Rectangle {
         id: loginFrame
         width: loginShadow.width
         height: loginShadow.height
-        
+        visible: true
         x: theme.compact ? ((theme.width*0.5)-(width*0.5)) : ((dateFrame.x-width)<200 ? (dateFrame.x-width) : 200)
         
         anchors.verticalCenter: theme.verticalCenter
@@ -234,38 +311,96 @@ Rectangle {
                     width: 320
                 }
                 
-                TextField {
-                    id: txtUser
-                    width: 200
-                    placeholderText: i18nd("lliurex-sddm","User name")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    onEditingFinished: theme.loginStatus=true;
-                    palette.highlight: "#3daee9"
+                Row {
+                    //anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.right: btnLogin.right
+                    spacing: 6
                     
-                    Component.onCompleted: focus=true;
-                    
-                }
-                
-                TextField {
-                    id: txtPass
-                    width: 200
-                    echoMode: TextInput.Password
-                    placeholderText: i18nd("lliurex-sddm","Password")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    palette.highlight: "#3daee9"
-                    
-                    Keys.onReturnPressed: {
-                        loginFrame.enabled=false
-                        sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
-                    }
-                    
-                    Image {
-                        source: "images/upcase.svg"
-                        anchors.right: parent.right
-                        anchors.rightMargin:5
+                    Rectangle {
+                        color: "transparent"
+                        width:imgUsername.width
+                        height: imgUsername.height
                         anchors.verticalCenter: parent.verticalCenter
                         
-                        visible: keyboard.capsLock
+                        Image {
+                            id: imgUsername
+                            source: "images/username.svg"
+                            
+                        }
+                        
+                        MouseArea {
+                            id: mouseArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            
+                            onEntered: {
+                                parent.border.color= "#3daee9"
+                                parent.border.width=1
+                            }
+                            onExited: {
+                                parent.border.color= "transparent"
+                                parent.border.width=0
+
+                            }
+                            
+                            onClicked: {
+                                if (mouse.button == Qt.LeftButton) {
+                                    loginFrame.visible=false
+                                    userFrame.visible=true
+                                }
+                            }
+                        }
+                    }
+                    
+                    TextField {
+                        id: txtUser
+                        width: 200
+                        placeholderText: i18nd("lliurex-sddm","User name")
+                        anchors.verticalCenter: parent.verticalCenter
+                        //anchors.horizontalCenter: parent.horizontalCenter
+                        onEditingFinished: {
+                            theme.loginStatus=true
+                            txtPass.focus=true
+                        }
+                        palette.highlight: "#3daee9"
+                        
+                        //Component.onCompleted: focus=true;
+                        
+                    }
+                }
+                
+                Row {
+                    //anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.right: btnLogin.right
+                    spacing: 6
+                    
+                    Image {
+                        source: "images/password.svg"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    
+                    TextField {
+                        id: txtPass
+                        width: 200
+                        echoMode: TextInput.Password
+                        placeholderText: i18nd("lliurex-sddm","Password")
+                        //anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        palette.highlight: "#3daee9"
+                        
+                        Keys.onReturnPressed: {
+                            loginFrame.enabled=false
+                            sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
+                        }
+                        
+                        Image {
+                            source: "images/upcase.svg"
+                            anchors.right: parent.right
+                            anchors.rightMargin:5
+                            anchors.verticalCenter: parent.verticalCenter
+                            
+                            visible: keyboard.capsLock
+                        }
                     }
                 }
                 
@@ -280,6 +415,7 @@ Rectangle {
                 }
                 
                 Lliurex.Button {
+                    id: btnLogin
                     text: i18nd("lliurex-sddm","Login");
                     implicitWidth: 200
                     anchors.horizontalCenter: parent.horizontalCenter

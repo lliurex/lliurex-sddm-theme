@@ -1,5 +1,8 @@
 build:
 
+get-translations:
+	xgettext -kde -ki18nd:2 lliurex-desktop/*.qml lliurex-desktop/ui/*.qml
+	
 install-desktop:
 	mkdir -p $(DESTDIR)/usr/share/sddm/themes
 	mkdir -p $(DESTDIR)/usr/lib/sddm/sddm.conf.d

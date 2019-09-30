@@ -22,20 +22,37 @@ import QtQuick.Controls 2.0 as Controls
 
 Controls.Button {
     id: control
+    hoverEnabled: true
     
     property Gradient colorNormal :  Gradient {
         GradientStop { position: 0.0; color: "#f1f2f3" }
         GradientStop { position: 1.0; color: "#e8e9ea" }
     }
     
+    property Gradient colorHighlight :  Gradient {
+        GradientStop { position: 0.0; color: "#3daee9" }
+        GradientStop { position: 1.0; color: "#1894d4" }
+    }
+    
     palette.highlight: "#3daee9"
+    palette.highlightedText: "#fafafa"
+    
+    contentItem: Text {
+        text: control.text
+        font: control.font
+        color: control.visualFocus ? palette.highlightedText : palette.text
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideRight
+    }
     
     background: Rectangle {
         implicitWidth: 100
         implicitHeight: 40
         visible: !control.flat || control.down || control.checked || control.highlighted
-        gradient: colorNormal
-        border.color: control.visualFocus ? control.palette.highlight : control.palette.mid
-        border.width: control.visualFocus ? 2 : 1
+
+        gradient: control.visualFocus ? colorHighlight : colorNormal
+        border.color: control.hovered ? control.palette.highlight : control.palette.mid
+        
     }
 }
