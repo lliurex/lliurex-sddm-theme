@@ -1,3 +1,14 @@
+lliurex-sddm-theme (1.9.0.0) bionic; urgency=medium
+
+  * Master tag: 4cc4fec9639c45f0f927c35a8b3c4811500a92c4
+  * Improved low screen resolution behavior
+  * Better Breeze-like buttons
+  * Added a user list frame
+  * Some ui improvements
+  * Some code clean-up
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Mon, 30 Sep 2019 14:24:46 +0200
+
 lliurex-sddm-theme (1.8.2.1) bionic; urgency=medium
 
   * Fixed translation install
