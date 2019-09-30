@@ -72,7 +72,6 @@ FocusScope {
         
         scroll.Controls.ScrollBar.vertical.position=0;
         grid.rows=(visibles/grid.columns)+0.5;
-        
     }
     
     MouseArea {
@@ -125,31 +124,26 @@ FocusScope {
                 }
                 
                 onModelChanged: {
-                    for (var m in model) {
-                        console.log(m)
-                    }
                     
                     var component=Qt.createComponent("UserSlot.qml");
                     
                     for (var n=0;n< model.count;n++) {
                         var index=model.index(n,0);
                         var name=model.data(index,0x0100+1);
-                        var home=model.data(index,0x0100+3);
                         var icon=model.data(index,0x0100+4);
-                        console.log(name);
-                        console.log(icon);
-                        for (var j=0;j<10;j++)console.log(model.data(index,0x0100+j))
                         var o = component.createObject(grid,{name:name,image:icon});
                         
                         o.selected.connect(selected);
                     }
                     
                     //TEST
+                    /*
                     for (var n=0;n<96;n++) {
                         var o = component.createObject(grid,{name:"alu"+n,image:"file:///usr/share/sddm/faces/.face.icon"})
                         
                         o.selected.connect(selected)
                     }
+                    */
                 }
             }
         }
