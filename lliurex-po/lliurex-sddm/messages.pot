@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-30 12:16+0200\n"
+"POT-Creation-Date: 2019-09-30 13:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,42 +17,46 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: Main.qml:233
+#: lliurex-desktop/Main.qml:358
 msgid "User name"
 msgstr ""
 
-#: Main.qml:246
+#: lliurex-desktop/Main.qml:386
 msgid "Password"
 msgstr ""
 
-#: Main.qml:270
+#: lliurex-desktop/Main.qml:412
 msgid "Login failed"
 msgstr ""
 
-#: Main.qml:270
+#: lliurex-desktop/Main.qml:412
 msgid "No connection to server"
 msgstr ""
 
-#: Main.qml:276
+#: lliurex-desktop/Main.qml:419
 msgid "Login"
 msgstr ""
 
-#: Main.qml:364
+#: lliurex-desktop/Main.qml:507
 msgid "Power off"
 msgstr ""
 
-#: Main.qml:372
+#: lliurex-desktop/Main.qml:515
 msgid "Reboot"
 msgstr ""
 
-#: Main.qml:380
+#: lliurex-desktop/Main.qml:523
 msgid "Suspend"
 msgstr ""
 
-#: Main.qml:388
+#: lliurex-desktop/Main.qml:531
 msgid "Hibernate"
 msgstr ""
 
-#: Main.qml:397
+#: lliurex-desktop/Main.qml:540 lliurex-desktop/ui/UserGrid.qml:153
 msgid "Cancel"
+msgstr ""
+
+#: lliurex-desktop/ui/UserGrid.qml:99
+msgid "Search..."
 msgstr ""
