@@ -513,7 +513,7 @@ Rectangle {
 
                 Image {
                         id: guestImage
-                        source: "images/guest-32.svg"
+                        source: "images/guest_32.svg"
                         anchors.horizontalCenter: guestImageHighlight.horizontalCenter
                         anchors.verticalCenter: guestImageHighlight.verticalCenter
 
@@ -542,7 +542,7 @@ Rectangle {
                                         else {
                                                 loginColumn.visible = true
                                                 guestLoginRectangle.visible = false
-                                                parent.source= "images/guest-32.svg"
+                                                parent.source= "images/guest_32.svg"
                                                 tooltipGuest.text = i18nd("lliurex-sddm","Guest User")
                                         }
                                 }
@@ -559,7 +559,7 @@ Rectangle {
                         visible: false
                         Image {
                                 id: guestLogo
-                                source: "images/guest-hover.svg"
+                                source: "images/guest.svg"
                                 anchors.horizontalCenter: parent.horizontalCenter
                         }
 
