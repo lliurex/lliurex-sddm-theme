@@ -233,7 +233,7 @@ Rectangle {
         
         Rectangle {
             id: userTop
-            
+            visible: true
             width: theme.width*0.8
             height: theme.height*0.8
             
@@ -296,7 +296,7 @@ Rectangle {
             height: 400
             
             Column {
-                
+                id: loginColumn
                 spacing: 16
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -465,6 +465,141 @@ Rectangle {
                 
             }
         }
+
+        /* Guest User Panels */
+
+        Item {
+                width: loginTop.width
+                height: loginTop.height
+                anchors.bottom: loginTop.bottom
+                anchors.right: loginTop.right
+                visible: {
+                        var x=false
+                        for (var n=0;n< userModel.count;n++) {
+                                var index=userModel.index(n,0);
+                                var name=userModel.data(index,0x0100+1);
+                                if ( name === "guest-user" )
+                                {
+                                        x=true
+                                        break
+                                }
+                        }
+                        return x
+
+                }
+
+                Rectangle {
+                        id: guestImageHighlight
+                        width: guestImage.width+2
+                        height: guestImage.height+2
+                        anchors.bottom: parent.bottom
+                        anchors.right: parent.right
+                        anchors.rightMargin: 30
+                        anchors.bottomMargin: 30
+                        border.color:"#3daee9"
+                        border.width:0
+                        color:"transparent"
+                }
+
+                Text {
+                        id: tooltipGuest
+                        text:  i18nd("lliurex-sddm","Guest User")
+                        visible: false
+                        color: "#3daee9"
+                        anchors.verticalCenter: guestImage.verticalCenter
+                        anchors.right: guestImage.left
+                        anchors.rightMargin: 10
+                }
+
+                Image {
+                        id: guestImage
+                        source: "images/guest-32.svg"
+                        anchors.horizontalCenter: guestImageHighlight.horizontalCenter
+                        anchors.verticalCenter: guestImageHighlight.verticalCenter
+
+                        MouseArea {
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                acceptedButtons: Qt.LeftButton
+
+                                onEntered: {
+                                        tooltipGuest.visible = true
+                                        guestImageHighlight.border.width=1
+                                }
+
+                                onExited: {
+                                        tooltipGuest.visible = false
+                                        guestImageHighlight.border.width=0
+                                }
+
+                                onClicked: {
+                                        if (loginColumn.visible) {
+                                                loginColumn.visible = false
+                                                guestLoginRectangle.visible = true
+                                                parent.source= "images/go-back.svg"
+                                                tooltipGuest.text = i18nd("lliurex-sddm","Go back")
+                                        }
+                                        else {
+                                                loginColumn.visible = true
+                                                guestLoginRectangle.visible = false
+                                                parent.source= "images/guest-32.svg"
+                                                tooltipGuest.text = i18nd("lliurex-sddm","Guest User")
+                                        }
+                                }
+                        }
+
+                }
+
+                Item {
+                        id: guestLoginRectangle
+                        width: loginColumn.width
+                        height: loginColumn.height
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: false
+                        Image {
+                                id: guestLogo
+                                source: "images/guest-hover.svg"
+                                anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        Text {
+                                id: guestTitle
+                                text: i18nd("lliurex-sddm","Guest User")
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.top: guestLogo.bottom
+                                anchors.topMargin: 5
+                                 font.pointSize: 18
+                        }
+
+                        Text {
+                                id: guestDescription
+                                wrapMode: Text.WordWrap
+                                horizontalAlignment: Text.AlignJustify
+                                width:300
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.top: guestTitle.bottom
+                                anchors.topMargin: 5
+                                text: i18nd("lliurex-sddm","Access this computer using a guest account. Everything stored with this account will be deleted after you log out.")
+                                font.pointSize: 10
+                                color: "#444444"
+                        }
+
+                        Lliurex.Button {
+                                id: guestLoginButton
+                                text: i18nd("lliurex-sddm","Enter")
+                                width: 250
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.top: guestDescription.bottom
+                                anchors.topMargin: 25
+
+                                onClicked: {
+                                        loginFrame.enabled=false
+                                        sddm.login("guest-user","",cmbSession.currentIndex)
+                                }
+                        }
+                }
+        } // Guest Panels
     }
     
     /* Shutdown frame */
