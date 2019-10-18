@@ -52,6 +52,18 @@ msgstr "Suspender"
 msgid "Hibernate"
 msgstr "Hibernar"
 
+#: lliurex-desktop/Main.qml
+msgid "Guest User"
+msgstr "Usuario Invitado"
+
+#: lliurex-desktop/Main.qml
+msgid "Go back"
+msgstr "Volver"
+
+#: lliurex-desktop/Main.qml
+msgid "Access this computer using a guest account. Everything stored with this account will be deleted after you log out."
+msgstr "Acceso a este PC usando una cuenta de invitado. Todo lo guardado con esta cuenta será borrado cuando desconectes."
+
 #: lliurex-desktop/Main.qml:540 lliurex-desktop/ui/UserGrid.qml:153
 msgid "Cancel"
 msgstr "Cancelar"
