@@ -131,6 +131,10 @@ FocusScope {
                         var index=model.index(n,0);
                         var name=model.data(index,0x0100+1);
                         var icon=model.data(index,0x0100+4);
+
+                        if (name === "guest-user")
+                            continue;
+
                         var o = component.createObject(grid,{name:name,image:icon});
                         
                         o.selected.connect(selected);
