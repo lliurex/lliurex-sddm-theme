@@ -1,3 +1,9 @@
+lliurex-sddm-theme (1.10.1.0) bionic; urgency=medium
+
+  * Added numlock by default
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 21 Oct 2019 14:37:35 +0200
+
 lliurex-sddm-theme (1.10.0.0) bionic; urgency=medium
 
   * Added guest-user support
