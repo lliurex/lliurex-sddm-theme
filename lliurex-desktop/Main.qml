@@ -364,7 +364,7 @@ Rectangle {
                         }
                         palette.highlight: "#3daee9"
                         
-                        //Component.onCompleted: focus=true;
+                        Component.onCompleted: focus=true;
                         
                     }
                 }
