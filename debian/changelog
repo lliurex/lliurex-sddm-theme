@@ -1,3 +1,9 @@
+lliurex-sddm-theme (1.10.2.0) bionic; urgency=medium
+
+  * Fixed user entry focus when sddm spawns
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Tue, 29 Oct 2019 10:27:44 +0100
+
 lliurex-sddm-theme (1.10.1.0) bionic; urgency=medium
 
   * Added numlock by default
