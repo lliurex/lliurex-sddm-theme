@@ -62,42 +62,61 @@ Rectangle {
             txtPass.focus = true;
         }
     }
-    /*
-    Sddm.Background {
-        anchors.fill: parent
-        source: config.background
-        fillMode: Image.PreserveAspectCrop
-        
-        onStatusChanged: {
-            if (status == Image.Error && source != config.defaultBackground) {
-                source = config.defaultBackground
-            }
-        }
-    }
-    */
     
     Canvas {
         anchors.fill: parent
+        property var buffer : null
+        property int dwidth : 0
+        property int dheight : 0
+        
         
         onPaint: {
             var ctx = getContext("2d");
             //ctx.fillStyle = "#f0f0f0";
             //ctx.fillRect(0, 0, width, height);
             
-            var buffer = ctx.createImageData(width,height);//ctx.getImageData(0,0,width,height);
-            console.log("image data:",width,height);
-            for (var index=0;index<buffer.data.length;index+=4) {
-                    var grey = 0xff * Math.random();
-                    buffer.data[index+0]=grey;
-                    buffer.data[index+1]=grey;
-                    buffer.data[index+2]=grey;
-                    buffer.data[index+3]=0xff;
-                    
+            if (width!=dwidth || height!=dheight) {
+                dwidth = width;
+                dheight = height
                 
-                
+                var buffer = ctx.createImageData(width,height);
+                console.log("recomputing image data:",width,height);
+                for (var index=0;index<buffer.data.length;index+=4) {
+                        var grey = 256-(16 * Math.random());
+                        buffer.data[index+0]=grey;
+                        buffer.data[index+1]=grey;
+                        buffer.data[index+2]=grey;
+                        buffer.data[index+3]=0xff;
+                }
             }
             
             ctx.drawImage(buffer,0,0);
+            
+            ctx.strokeStyle = "#bdc3c7";
+            
+            var gridSize = 40.0
+            
+            var numH=height/gridSize;
+            
+            for (var j=0;j<numH;j++) {
+                ctx.beginPath();
+                
+                ctx.moveTo(0,gridSize*j);
+                ctx.lineTo(width,gridSize*j);
+                
+                ctx.stroke();
+            }
+            
+            var numW=width/gridSize;
+            
+            for (var i=0;i<numW;i++) {
+                ctx.beginPath();
+                
+                ctx.moveTo(gridSize*i,0);
+                ctx.lineTo(gridSize*i,height);
+                
+                ctx.stroke();
+            }
         }
         
     }
@@ -168,9 +187,9 @@ Rectangle {
             text: sddm.hostName
             anchors.horizontalCenter: parent.horizontalCenter
             
-            color:"white"
+            color:"#3daee9"
             font.pointSize: 32
-            style:Text.Outline
+            //style:Text.Outline
             styleColor: "#40000000"
         }
         
@@ -179,9 +198,9 @@ Rectangle {
             text: "--"
             anchors.horizontalCenter: parent.horizontalCenter
             
-            color:"white"
+            color:"#3daee9"
             font.pointSize: 32
-            style:Text.Outline
+            //style:Text.Outline
             styleColor: "#40000000"
         }
         
@@ -190,9 +209,9 @@ Rectangle {
             text: "--"
             anchors.horizontalCenter: parent.horizontalCenter
             
-            color:"white"
+            color:"#3daee9"
             font.pointSize: 96
-            style:Text.Outline
+            //style:Text.Outline
             styleColor: "#40000000"
         }
     }
