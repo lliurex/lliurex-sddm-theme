@@ -62,7 +62,7 @@ Rectangle {
             txtPass.focus = true;
         }
     }
-    
+    /*
     Sddm.Background {
         anchors.fill: parent
         source: config.background
@@ -73,6 +73,33 @@ Rectangle {
                 source = config.defaultBackground
             }
         }
+    }
+    */
+    
+    Canvas {
+        anchors.fill: parent
+        
+        onPaint: {
+            var ctx = getContext("2d");
+            //ctx.fillStyle = "#f0f0f0";
+            //ctx.fillRect(0, 0, width, height);
+            
+            var buffer = ctx.createImageData(width,height);//ctx.getImageData(0,0,width,height);
+            console.log("image data:",width,height);
+            for (var index=0;index<buffer.data.length;index+=4) {
+                    var grey = 0xff * Math.random();
+                    buffer.data[index+0]=grey;
+                    buffer.data[index+1]=grey;
+                    buffer.data[index+2]=grey;
+                    buffer.data[index+3]=0xff;
+                    
+                
+                
+            }
+            
+            ctx.drawImage(buffer,0,0);
+        }
+        
     }
     
     function request(url, callback) {
