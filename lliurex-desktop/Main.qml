@@ -18,6 +18,7 @@
 */
 
 import "ui" as Lliurex
+import "perlin.js" as Perlin
 
 import QtQuick 2.0
 import QtQuick.Controls 2.0
@@ -81,12 +82,17 @@ Rectangle {
                 
                 var buffer = ctx.createImageData(width,height);
                 console.log("recomputing image data:",width,height);
-                for (var index=0;index<buffer.data.length;index+=4) {
-                        var grey = 256-(16 * Math.random());
+                
+                for (var j=0;j<height;j++) {
+                    for (var i=0;i<width;i++) {
+                        var index = (i*4) + (j*4*width);
+                        var grey = 256*Perlin.perlin2d(i,j,0.1,4);
+                        
                         buffer.data[index+0]=grey;
                         buffer.data[index+1]=grey;
                         buffer.data[index+2]=grey;
                         buffer.data[index+3]=0xff;
+                    }
                 }
             }
             
