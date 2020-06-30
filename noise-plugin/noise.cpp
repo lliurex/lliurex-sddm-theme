@@ -98,7 +98,7 @@ static float perlin_2d(float x, float y, float freq, int depth)
     return fin/div;
 }
 
-QImage* Noise::perlin(int width,int height,float freq,int depth,int seed)
+QImage* noise::perlin(int width,int height,float freq,int depth,int seed)
 {
     //ugly
     SEED = seed;
@@ -109,8 +109,8 @@ QImage* Noise::perlin(int width,int height,float freq,int depth,int seed)
         for (int i=0;i<width;i++) {
             float value = perlin_2d(i,j,freq,depth);
             uint8_t grey = 255.0 * value;
-            QRgb pixel(grey,grey,grey);
-            img->setPixel(i,j,value);
+            QColor pixel(grey,grey,grey);
+            img->setPixelColor(i,j,pixel);
         }
     }
     

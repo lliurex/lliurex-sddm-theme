@@ -26,7 +26,7 @@
 
 #include <QImage>
 
-namespace Noise
+namespace noise
 {
     QImage* perlin(int width,int height,float freq,int depth,int seed=0);
 }

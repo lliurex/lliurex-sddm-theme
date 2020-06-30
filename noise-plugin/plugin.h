@@ -24,8 +24,28 @@
 #ifndef QML_LLIUREX_NOISE_PLUGIN
 #define QML_LLIUREX_NOISE_PLUGIN
 
+#include "noise.h"
+
 #include <QQmlExtensionPlugin>
 #include <QObject>
+#include <QQuickItem>
+#include <QSGGeometryNode>
+
+class NoiseSurface : public QQuickItem
+{
+    Q_OBJECT
+
+public:
+    explicit NoiseSurface(QQuickItem* parent = nullptr);
+
+protected:
+    virtual QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updatePaintNodeData) override;
+
+private:
+    QSGGeometryNode* m_Texture;
+    double m_width;
+    double m_height;
+};
 
 class NoisePlugin : public QQmlExtensionPlugin
 {
