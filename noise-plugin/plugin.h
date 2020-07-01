@@ -34,7 +34,10 @@
 class NoiseSurface : public QQuickItem
 {
     Q_OBJECT
-
+    
+    Q_PROPERTY(float frequency MEMBER m_frequency)
+    Q_PROPERTY(int depth MEMBER m_depth)
+    
 public:
     explicit NoiseSurface(QQuickItem* parent = nullptr);
 
@@ -45,6 +48,9 @@ private:
     QSGGeometryNode* m_Texture;
     double m_width;
     double m_height;
+    
+    float m_frequency;
+    int m_depth;
 };
 
 class NoisePlugin : public QQmlExtensionPlugin

@@ -35,28 +35,28 @@
 #include <QSGImageNode>
 
 #include <iostream>
+#include <chrono>
 
 using namespace std;
 
 NoiseSurface::NoiseSurface(QQuickItem* parent)
 {
-    clog<<"NoiseSurface"<<endl;
+    m_depth=2;
+    m_frequency=0.01f;
+    
     setFlag(ItemHasContents);
 }
 
 QSGNode* NoiseSurface::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updatePaintNodeData)
 {
     QSGImageNode  *node = static_cast<QSGImageNode  *>(oldNode);
-    static int seed = 0;
-    
-    clog<<"updatePaintNode"<<endl;
+    //static int seed = 0;
     
     if (!node) {
-        clog<<"creating new node..."<<endl;
         node = window()->createImageNode();
         node->setOwnsTexture(true);
         
-        QImage* surface = noise::perlin(width(),height(),0.01f,4);
+        QImage* surface = noise::perlin(width(),height(),m_frequency,m_depth);
         QSGTexture* texture = window()->createTextureFromImage(*surface,QQuickWindow::TextureHasAlphaChannel);
         node->setTexture(texture);
         delete surface;
@@ -69,19 +69,21 @@ QSGNode* NoiseSurface::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* up
         double eh = std::abs(m_height-height());
         
         if (ew>0.01 || eh>0.01) {
-            clog<<"resize!"<<endl;
             m_width=width();
             m_height=height();
             
-            QImage* surface = noise::perlin(width(),height(),0.01f,4,seed++);
+            auto t0 = std::chrono::steady_clock::now();
+            QImage* surface = noise::perlin(width(),height(),m_frequency,m_depth);
+            auto t1 = std::chrono::steady_clock::now();
+            double us = std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count();
+            clog<<"time: "<<us<<" us"<<endl;
+            
             QSGTexture* texture = window()->createTextureFromImage(*surface,QQuickWindow::TextureHasAlphaChannel);
             node->setTexture(texture);
             delete surface;
         }
         
-        
     }
-
     node->setRect(boundingRect());
     
     return node;
@@ -89,7 +91,6 @@ QSGNode* NoiseSurface::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* up
 
 NoisePlugin::NoisePlugin(QObject* parent) : QQmlExtensionPlugin(parent)
 {
-    clog<<"NoisePlugin"<<endl;
 }
 
 void NoisePlugin::registerTypes(const char* uri)
