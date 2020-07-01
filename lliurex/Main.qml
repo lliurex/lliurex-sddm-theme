@@ -74,23 +74,24 @@ Rectangle {
         method: "lliurex_version"
         
         onError: {
-            console.log("oh my log!:",what)
+            theme.lliurexType="unknown";
         }
         
         onResponse: {
-            console.log(value[0])
             if (value[0]==true) {
-                var version = value[1]
-                theme.lliurexVersion=version
-                var tmp = version.split(",")
-                console.log(tmp)
+                var version = value[1];
+                theme.lliurexVersion=version;
+                var tmp = version.split(",");
+                console.log(tmp);
                 
                 if (tmp.length==3) {
-                    theme.lliurexType=tmp[1]
+                    theme.lliurexType=tmp[1];
                 }
                 else {
-                    theme.lliurexType="unknown"
+                    theme.lliurexType="unknown";
                 }
+                
+                console.log("Lliurex type:",theme.lliurexType);
             }
             
         }
@@ -104,16 +105,18 @@ Rectangle {
         method: "lliurex_version"
         
         onError: {
+            theme.serverStatus=false;
+            theme.programmedCheck=3000;
         }
         
         onResponse: {
-            console.log("server:",value)
+            console.log("server:",value);
+            theme.serverStatus=true;
         }
     }
     
     Component.onCompleted: {
-        local_lliurex_version.call([])
-        //server_lliurex_version.call([])
+        local_lliurex_version.call([]);
     }
     
     /* catch login events */
@@ -214,26 +217,12 @@ Rectangle {
             
             theme.checkTime+=timerClock.interval
             
-            if (config.classroom === 'true'  && theme.programmedCheck>=0 && theme.checkTime>=theme.programmedCheck) {
+            if (theme.lliurexType=="client"  && theme.programmedCheck>=0 && theme.checkTime>=theme.programmedCheck) {
                 
                 // avoid trigger another server check
                 theme.programmedCheck=-1;
-                
-                request(config.server, function (o) {
-                    if (o.status === 200) {
-                        console.log("Connected to server!");
-                        // two minutes
-                        theme.serverStatus=true;
-                        theme.programmedCheck=theme.checkTime+120000;
-                    }
-                    else {
-                        console.log("Some error has occurred");
-                        
-                        //program another check in 5 seconds
-                        theme.serverStatus=false;
-                        theme.programmedCheck=theme.checkTime+5000;
-                    }
-                    });
+                console.log("checking server...")
+                server_lliurex_version.call([])
             }
         }
     }
