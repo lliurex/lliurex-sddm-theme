@@ -18,6 +18,8 @@
 */
 
 import "ui" as Lliurex
+import Edupals.N4D 1.0 as N4D
+import Lliurex.Noise 1.0 as Noise
 
 import QtQuick 2.0
 import QtQuick.Controls 2.0
@@ -32,6 +34,9 @@ Rectangle {
     property bool loginStatus: true
     property bool serverStatus: true
     
+    property string lliurexVersion: ""
+    property string lliurexType: ""
+    
     property bool compact: (loginFrame.width+dateFrame.width+60) > theme.width
     
     property variant geometry: screenModel.geometry(screenModel.primary)
@@ -44,6 +49,75 @@ Rectangle {
     LayoutMirroring.childrenInherit: true
 
     Sddm.TextConstants { id: textConstants }
+    
+    N4D.Client
+    {
+        id: n4dLocal
+        address: "https://localhost"
+        port:9779
+        anonymous: true
+    }
+    
+    N4D.Client
+    {
+        id: n4dServer
+        address: "https://server"
+        port:9779
+        anonymous: true
+    }
+
+    N4D.Proxy
+    {
+        id: local_lliurex_version
+        client: n4dLocal
+        plugin: "LliurexVersion"
+        method: "lliurex_version"
+        
+        onError: {
+            theme.lliurexType="unknown";
+        }
+        
+        onResponse: {
+            if (value[0]==true) {
+                var version = value[1];
+                theme.lliurexVersion=version;
+                var tmp = version.split(",");
+                console.log(tmp);
+                
+                if (tmp.length==3) {
+                    theme.lliurexType=tmp[1];
+                }
+                else {
+                    theme.lliurexType="unknown";
+                }
+                
+                console.log("Lliurex type:",theme.lliurexType);
+            }
+            
+        }
+    }
+    
+    N4D.Proxy
+    {
+        id: server_lliurex_version
+        client: n4dServer
+        plugin: "LliurexVersion"
+        method: "lliurex_version"
+        
+        onError: {
+            theme.serverStatus=false;
+            theme.programmedCheck=3000;
+        }
+        
+        onResponse: {
+            console.log("server:",value);
+            theme.serverStatus=true;
+        }
+    }
+    
+    Component.onCompleted: {
+        local_lliurex_version.call([]);
+    }
     
     /* catch login events */
     Connections {
@@ -63,15 +137,59 @@ Rectangle {
         }
     }
     
-    Sddm.Background {
+    Rectangle {
         anchors.fill: parent
-        source: config.background
-        fillMode: Image.PreserveAspectCrop
+        color: "white"
         
-        onStatusChanged: {
-            if (status == Image.Error && source != config.defaultBackground) {
-                source = config.defaultBackground
+        Noise.NoiseSurface
+        {
+            //opacity: 0.1
+            anchors.fill: parent
+            
+            frequency:0.01
+            depth:4
+            
+            Canvas {
+                opacity: 0.9
+                anchors.fill: parent
+                property var buffer : null
+                property int dwidth : 0
+                property int dheight : 0
+                
+                onPaint: {
+                    var ctx = getContext("2d");
+                    ctx.fillStyle = "#fbfbfb";
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.lineWidth = 0.5
+                    ctx.strokeStyle = "#bdc3c7";
+                    
+                    var gridSize = 40.0
+                    
+                    var numH=height/gridSize;
+                    
+                    for (var j=0;j<numH;j++) {
+                        ctx.beginPath();
+                        
+                        ctx.moveTo(0,gridSize*j);
+                        ctx.lineTo(width,gridSize*j);
+                        
+                        ctx.stroke();
+                    }
+                    
+                    var numW=width/gridSize;
+                    
+                    for (var i=0;i<numW;i++) {
+                        ctx.beginPath();
+                        
+                        ctx.moveTo(gridSize*i,0);
+                        ctx.lineTo(gridSize*i,height);
+                        
+                        ctx.stroke();
+                    }
+                }
+                
             }
+            
         }
     }
     
@@ -99,26 +217,12 @@ Rectangle {
             
             theme.checkTime+=timerClock.interval
             
-            if (config.classroom === 'true'  && theme.programmedCheck>=0 && theme.checkTime>=theme.programmedCheck) {
+            if (theme.lliurexType=="client"  && theme.programmedCheck>=0 && theme.checkTime>=theme.programmedCheck) {
                 
                 // avoid trigger another server check
                 theme.programmedCheck=-1;
-                
-                request(config.server, function (o) {
-                    if (o.status === 200) {
-                        console.log("Connected to server!");
-                        // two minutes
-                        theme.serverStatus=true;
-                        theme.programmedCheck=theme.checkTime+120000;
-                    }
-                    else {
-                        console.log("Some error has occurred");
-                        
-                        //program another check in 5 seconds
-                        theme.serverStatus=false;
-                        theme.programmedCheck=theme.checkTime+5000;
-                    }
-                    });
+                console.log("checking server...")
+                server_lliurex_version.call([])
             }
         }
     }
@@ -141,9 +245,19 @@ Rectangle {
             text: sddm.hostName
             anchors.horizontalCenter: parent.horizontalCenter
             
-            color:"white"
+            color:"#3daee9"
             font.pointSize: 32
-            style:Text.Outline
+            //style:Text.Outline
+            styleColor: "#40000000"
+        }
+        
+        Text {
+            text: theme.lliurexVersion
+            anchors.horizontalCenter: parent.horizontalCenter
+            
+            color:"#3daee9"
+            font.pointSize: 11
+            //style:Text.Outline
             styleColor: "#40000000"
         }
         
@@ -152,9 +266,9 @@ Rectangle {
             text: "--"
             anchors.horizontalCenter: parent.horizontalCenter
             
-            color:"white"
+            color:"#3daee9"
             font.pointSize: 32
-            style:Text.Outline
+            //style:Text.Outline
             styleColor: "#40000000"
         }
         
@@ -163,9 +277,9 @@ Rectangle {
             text: "--"
             anchors.horizontalCenter: parent.horizontalCenter
             
-            color:"white"
+            color:"#3daee9"
             font.pointSize: 96
-            style:Text.Outline
+            //style:Text.Outline
             styleColor: "#40000000"
         }
     }
