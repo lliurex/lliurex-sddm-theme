@@ -1,4 +1,4 @@
-lliurex-sddm-theme (1.10.2.0ubuntu1) UNRELEASED; urgency=medium
+lliurex-sddm-theme (2.0.0.0) bionic; urgency=medium
 
   * Master tag: 7e9fa179225ceae7a5531c8a2cc4a0d90e18c126
   * Using a custom qml plugin for noise generation
