@@ -1,3 +1,0 @@
-lliurex-desktop	/usr/share/sddm/themes/
-conf/80-lliurex-desktop.conf /usr/lib/sddm/sddm.conf.d/
-sddm.service.d /usr/lib/systemd/system/
