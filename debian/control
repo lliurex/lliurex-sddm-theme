@@ -9,5 +9,7 @@ Package: lliurex-sddm-theme
 Architecture: all
 Section: x11
 Depends: sddm, ${shlibs:Depends}, ${misc:Depends}, qml-module-edupals-n4d
+Provides: lliurex-desktop-sddm-theme, lliurex-classroom-sddm-theme, lliurex-server-sddm-theme
+Conflicts: lliurex-desktop-sddm-theme, lliurex-classroom-sddm-theme, lliurex-server-sddm-theme
 Description: LliureX sddm theme
  LliureX 19+1 custom sddm theme

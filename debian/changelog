@@ -1,3 +1,9 @@
+lliurex-sddm-theme (2.0.0.1) bionic; urgency=medium
+
+  * Added provides and conflicts
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Fri, 10 Jul 2020 10:24:21 +0200
+
 lliurex-sddm-theme (2.0.0.0) bionic; urgency=medium
 
   * Master tag: 7e9fa179225ceae7a5531c8a2cc4a0d90e18c126
