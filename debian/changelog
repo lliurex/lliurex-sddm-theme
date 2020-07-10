@@ -1,3 +1,9 @@
+lliurex-sddm-theme (2.0.0.2) bionic; urgency=medium
+
+  * Added replaces
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Fri, 10 Jul 2020 12:27:30 +0200
+
 lliurex-sddm-theme (2.0.0.1) bionic; urgency=medium
 
   * Added provides and conflicts
