@@ -84,11 +84,11 @@ Rectangle {
                 var tmp = version.split(",");
                 console.log(tmp);
                 
-                if (tmp.length==3) {
-                    theme.lliurexType=tmp[1];
-                }
-                else {
-                    theme.lliurexType="unknown";
+                theme.lliurexType="unknown";
+                for (var n=0;n<tmp.length;n++) {
+                    if (tmp[n]==="client" || tmp[n]==="client-lite") {
+                        theme.lliurexType="client";
+                    }
                 }
                 
                 console.log("Lliurex type:",theme.lliurexType);
