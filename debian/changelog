@@ -1,3 +1,10 @@
+lliurex-sddm-theme (2.0.1.0) bionic; urgency=medium
+
+  * Master tag: 817067fdaa9328dcf3aa751b9d8357d0bbb99caf
+  * Improved client detection code
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Wed, 29 Jul 2020 08:52:37 +0200
+
 lliurex-sddm-theme (2.0.0.2) bionic; urgency=medium
 
   * Added replaces
