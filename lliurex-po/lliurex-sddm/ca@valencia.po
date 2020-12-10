@@ -8,66 +8,80 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-30 13:55+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-12-11 14:40+0000\n"
+"Last-Translator: Raul Rodrigo <raurodse@gmail.com>\n"
+"Language-Team: Valencian <http://weblate.lliurex.net/projects/"
+"lliurex-sddm-theme/lliurex-sddm-theme/ca@valencia/>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.1\n"
 
 #: lliurex-desktop/Main.qml:358
+#, fuzzy
 msgid "User name"
-msgstr ""
+msgstr "Nom de l'usuari"
 
 #: lliurex-desktop/Main.qml:386
+#, fuzzy
 msgid "Password"
-msgstr ""
+msgstr "Contrasenya"
 
 #: lliurex-desktop/Main.qml:412
+#, fuzzy
 msgid "Login failed"
-msgstr ""
+msgstr "Ha fallat l'entrada."
 
 #: lliurex-desktop/Main.qml:412
 msgid "No connection to server"
 msgstr ""
 
 #: lliurex-desktop/Main.qml:419
+#, fuzzy
 msgid "Login"
-msgstr ""
+msgstr "Inici de sessió"
 
 #: lliurex-desktop/Main.qml:507
+#, fuzzy
 msgid "Power off"
-msgstr ""
+msgstr "Para"
 
 #: lliurex-desktop/Main.qml:515
+#, fuzzy
 msgid "Reboot"
-msgstr ""
+msgstr "Reinicia"
 
 #: lliurex-desktop/Main.qml:523
+#, fuzzy
 msgid "Suspend"
-msgstr ""
+msgstr "Para temporalment"
 
 #: lliurex-desktop/Main.qml:531
+#, fuzzy
 msgid "Hibernate"
-msgstr ""
+msgstr "Hiberna"
 
 #: lliurex-desktop/Main.qml
 msgid "Guest User"
 msgstr ""
 
 #: lliurex-desktop/Main.qml
+#, fuzzy
 msgid "Go back"
-msgstr ""
+msgstr "Vés arrere"
 
 #: lliurex-desktop/Main.qml
 msgid "Access this computer using a guest account. Everything stored with this account will be deleted after you log out."
 msgstr ""
 
 #: lliurex-desktop/Main.qml:540 lliurex-desktop/ui/UserGrid.qml:153
+#, fuzzy
 msgid "Cancel"
-msgstr ""
+msgstr "Cancela"
 
 #: lliurex-desktop/ui/UserGrid.qml:99
+#, fuzzy
 msgid "Search..."
-msgstr ""
+msgstr "Busca..."
