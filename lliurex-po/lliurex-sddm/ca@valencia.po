@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-30 13:55+0200\n"
-"PO-Revision-Date: 2020-12-11 14:40+0000\n"
-"Last-Translator: Raul Rodrigo <raurodse@gmail.com>\n"
+"PO-Revision-Date: 2021-01-19 11:40+0000\n"
+"Last-Translator: Angels <gimenez_angcam@gva.es>\n"
 "Language-Team: Valencian <http://weblate.lliurex.net/projects/"
 "lliurex-sddm-theme/lliurex-sddm-theme/ca@valencia/>\n"
 "Language: ca@valencia\n"
@@ -20,68 +20,59 @@ msgstr ""
 "X-Generator: Weblate 4.3.1\n"
 
 #: lliurex-desktop/Main.qml:358
-#, fuzzy
 msgid "User name"
-msgstr "Nom de l'usuari"
+msgstr "Usuari"
 
 #: lliurex-desktop/Main.qml:386
-#, fuzzy
 msgid "Password"
 msgstr "Contrasenya"
 
 #: lliurex-desktop/Main.qml:412
-#, fuzzy
 msgid "Login failed"
-msgstr "Ha fallat l'entrada."
+msgstr "L'inici de sessió ha fallat"
 
 #: lliurex-desktop/Main.qml:412
 msgid "No connection to server"
-msgstr ""
+msgstr "No hi ha connexió amb el servidor"
 
 #: lliurex-desktop/Main.qml:419
-#, fuzzy
 msgid "Login"
 msgstr "Inici de sessió"
 
 #: lliurex-desktop/Main.qml:507
-#, fuzzy
 msgid "Power off"
-msgstr "Para"
+msgstr "Apaga"
 
 #: lliurex-desktop/Main.qml:515
-#, fuzzy
 msgid "Reboot"
 msgstr "Reinicia"
 
 #: lliurex-desktop/Main.qml:523
-#, fuzzy
 msgid "Suspend"
 msgstr "Para temporalment"
 
 #: lliurex-desktop/Main.qml:531
-#, fuzzy
 msgid "Hibernate"
 msgstr "Hiberna"
 
 #: lliurex-desktop/Main.qml
 msgid "Guest User"
-msgstr ""
+msgstr "Usuari convidat"
 
 #: lliurex-desktop/Main.qml
-#, fuzzy
 msgid "Go back"
-msgstr "Vés arrere"
+msgstr "Torna arrere"
 
 #: lliurex-desktop/Main.qml
 msgid "Access this computer using a guest account. Everything stored with this account will be deleted after you log out."
 msgstr ""
+"Accedeix a aquest ordinador amb un compte de convidat. Tot el que es guarde "
+"amb aquest compte s'eliminarà després de tancar la sessió."
 
 #: lliurex-desktop/Main.qml:540 lliurex-desktop/ui/UserGrid.qml:153
-#, fuzzy
 msgid "Cancel"
-msgstr "Cancela"
+msgstr "Cancel·la"
 
 #: lliurex-desktop/ui/UserGrid.qml:99
-#, fuzzy
 msgid "Search..."
-msgstr "Busca..."
+msgstr "Cerca..."
