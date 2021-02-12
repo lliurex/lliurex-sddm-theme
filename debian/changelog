@@ -1,4 +1,4 @@
-lliurex-sddm-theme (2.0.2.0) bionic; urgency=medium
+lliurex-sddm-theme (2.0.2.0) focal; urgency=medium
 
   * Master tag: e8e89e6abcb6a6dde34086d9c82ca505ac7b7b2f 
   * Added valencian translation
