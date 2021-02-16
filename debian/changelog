@@ -1,3 +1,10 @@
+lliurex-sddm-theme (2.0.3.0) focal; urgency=medium
+
+  * Master tag: 09434b5e54d2b1046c6ce3ac848837c493553ea1
+  * Updated n4d api
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Tue, 16 Feb 2021 22:04:14 +0100
+
 lliurex-sddm-theme (2.0.2.0) focal; urgency=medium
 
   * Master tag: e8e89e6abcb6a6dde34086d9c82ca505ac7b7b2f 
