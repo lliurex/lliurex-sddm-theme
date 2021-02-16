@@ -53,17 +53,15 @@ Rectangle {
     N4D.Client
     {
         id: n4dLocal
-        address: "https://localhost"
-        port:9779
-        anonymous: true
+        address: "https://localhost:9779"
+        credential: N4D.Client.Anonymous
     }
     
     N4D.Client
     {
         id: n4dServer
-        address: "https://server"
-        port:9779
-        anonymous: true
+        address: "https://server:9779"
+        credential: N4D.Client.Anonymous
     }
 
     N4D.Proxy
