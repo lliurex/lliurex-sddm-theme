@@ -17,12 +17,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import Lliurex.Locale 1.0 as LLX
+
 import QtQuick 2.0
 import QtQuick.Controls 2.0 as QQC2
 import QtQuick.Layouts 1.15
 import SddmComponents 2.0 as Sddm
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.kirigami 2.10 as Kirigami
+import org.kde.kirigami 2.16 as Kirigami
 
 Rectangle {
     id: theme
@@ -35,22 +37,8 @@ Rectangle {
     
     color: "#2980b9"
     
-    ListModel {
-        id: langs
-            ListElement {
-                displayName: "Spanish"
-                name: "es"
-            }
-            
-            ListElement {
-                displayName: "Valencia"
-                name: "ca@valencia"
-            }
-            
-            ListElement {
-                displayName: "English"
-                name: "en"
-            }
+    LLX.Locale {
+        id: llx
     }
     
     QQC2.Pane {
@@ -67,7 +55,7 @@ Rectangle {
                     text: "Language"
                 }
                 QQC2.Frame {
-                    Layout.preferredWidth: 200
+                    Layout.preferredWidth: 250
                     Layout.preferredHeight: 300
                     
                     ListView {
@@ -78,11 +66,27 @@ Rectangle {
                         
                         highlightFollowsCurrentItem: true
                         
-                        model: langs
+                        model: llx.languagesModel
                         
                         delegate: Kirigami.BasicListItem {
-                            label: displayName + ": " + name
+                            label: modelData.longName
                         }
+                        
+                        onCurrentIndexChanged: {
+                            var tmp = model[currentIndex].name;
+                            var lang = tmp.split("_")[0];
+                            console.log("match:",lang);
+                            
+                            for (var n=0;n<llx.layoutsModel.length;n++) {
+                                console.log(llx.layoutsModel[n].name);
+                                if (llx.layoutsModel[n].name==lang) {
+                                    cmbLayout.currentIndex = n;
+                                    break;
+                                }
+                            }
+                            
+                        }
+                        
                     }
                 }
                 Text {
@@ -91,8 +95,16 @@ Rectangle {
                     text: "Layout"
                 }
                 QQC2.ComboBox {
-                    Layout.preferredWidth: 200
-                    model: ["es","en"]
+                    id: cmbLayout
+                    Layout.preferredWidth: 250
+                    model: llx.layoutsModel
+                    
+                    displayText: model[currentIndex].name
+                    
+                    delegate: Kirigami.BasicListItem {
+                        label: modelData.name
+                    }
+                    
                 }
         
             }

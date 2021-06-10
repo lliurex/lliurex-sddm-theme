@@ -26,28 +26,56 @@
 
 #include <QQmlExtensionPlugin>
 #include <QObject>
-#include <QQuickItem>
+#include <QList>
 
-class NoiseSurface : public QQuickItem
+class X11KeyLayout: public QObject
 {
     Q_OBJECT
     
-    Q_PROPERTY(float frequency MEMBER m_frequency)
-    Q_PROPERTY(int depth MEMBER m_depth)
-    
+    Q_PROPERTY(QString name MEMBER m_name CONSTANT)
 public:
-    explicit NoiseSurface(QQuickItem* parent = nullptr);
-
-protected:
-    virtual QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updatePaintNodeData) override;
+    
+    explicit X11KeyLayout(QObject* parent = nullptr);
+    X11KeyLayout(QString name);
 
 private:
-    QSGGeometryNode* m_Texture;
-    double m_width;
-    double m_height;
     
-    float m_frequency;
-    int m_depth;
+    QString m_name;
+};
+
+class Language: public QObject
+{
+    Q_OBJECT
+    
+    Q_PROPERTY(QString name MEMBER m_name CONSTANT)
+    Q_PROPERTY(QString longName MEMBER m_longName CONSTANT)
+    
+public:
+    
+    explicit Language(QObject* parent = nullptr);
+    Language(QString name,QString longName);
+    
+private:
+    
+    QString m_name;
+    QString m_longName;
+    
+};
+
+class Locale: public QObject
+{
+    Q_OBJECT
+    
+    Q_PROPERTY(QList<QObject *> languagesModel MEMBER m_languagesModel CONSTANT)
+    Q_PROPERTY(QList<QObject *> layoutsModel MEMBER m_layoutsModel CONSTANT)
+    
+public:
+    
+    explicit Locale(QObject* parent = nullptr);
+    
+private:
+    QList<QObject*> m_languagesModel;
+    QList<QObject*> m_layoutsModel;
 };
 
 class LocalePlugin : public QQmlExtensionPlugin
@@ -56,7 +84,7 @@ class LocalePlugin : public QQmlExtensionPlugin
     Q_PLUGIN_METADATA (IID "Lliurex.Locale")
 
 public:
-    explicit NoisePlugin(QObject *parent = nullptr);
+    explicit LocalePlugin(QObject *parent = nullptr);
     void registerTypes(const char *uri) override;
 };
 
