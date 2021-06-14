@@ -32,23 +32,16 @@
 #include <QLocale>
 
 #include <iostream>
+#include <fstream>
 #include <chrono>
 
 using namespace std;
-
-X11KeyVariant::X11KeyVariant(QObject* parent): QObject(parent)
-{
-}
-
-X11KeyVariant::X11KeyVariant(QString name) : QObject(nullptr), m_name(name)
-{
-}
 
 X11KeyLayout::X11KeyLayout(QObject* parent): QObject(parent)
 {
 }
 
-X11KeyLayout::X11KeyLayout(QString name) : QObject(nullptr), m_name(name)
+X11KeyLayout::X11KeyLayout(QString name,QString longName) : QObject(nullptr), m_name(name), m_longName(longName)
 {
 }
 
@@ -56,7 +49,7 @@ Language::Language(QObject* parent): QObject(parent)
 {
 }
 
-Language::Language(QString name,QString longName) : QObject(nullptr), m_name(name),m_longName(longName)
+Language::Language(QString name,QString longName) : QObject(nullptr), m_name(name), m_longName(longName)
 {
 }
 
@@ -89,8 +82,46 @@ static QStringList run(QString cmd,QStringList args)
     return ret;
 }
 
+QMap<QString,QString> Locale::variantNames;
+
 Locale::Locale(QObject* parent): QObject(parent)
 {
+    
+    fstream file;
+    
+    file.open("/usr/share/X11/xkb/rules/evdev.lst",std::fstream::in);
+    
+    std::string tmp;
+    bool start = false;
+    
+    while(std::getline(file,tmp)) {
+        if (start) {
+            
+            if (tmp.size()==0) {
+                break;
+            }
+            //TODO: some extra checks
+            QString p = QString::fromStdString(tmp);
+            QStringList q = p.split(QLatin1Char(':'));
+            QString a = q[0].simplified();
+            QString b = q[1].simplified();
+            
+            QStringList r = a.split(QLatin1Char(' '));
+            QString name = r[1]+QStringLiteral(":")+r[0];
+            Locale::variantNames[name]=b;
+            
+            //clog<<name.toStdString()<<"--->"<<b.toStdString()<<endl;
+            
+        }
+        else {
+            if (tmp=="! variant") {
+                start = true;
+            }
+        }
+        
+    }
+    
+    file.close();
     
     QStringList lines = run(QStringLiteral("localectl"),{QStringLiteral("list-locales")});
     
@@ -115,8 +146,8 @@ Locale::Locale(QObject* parent): QObject(parent)
         QStringList variants = run(QStringLiteral("localectl"),{QStringLiteral("list-x11-keymap-variants"),line});
         
         for (QString variant: variants) {
-            
-            m_layoutsModel.append(new X11KeyLayout(line+QStringLiteral(":")+variant));
+            QString index = line+QStringLiteral(":")+variant;
+            m_layoutsModel.append(new X11KeyLayout(index,Locale::variantNames[index]));
         }
     }
     
@@ -125,10 +156,16 @@ Locale::Locale(QObject* parent): QObject(parent)
 QString Locale::findBestLayout(QString localeName)
 {
     if (localeName.startsWith(QStringLiteral("ca_ES@valencia"))) {
-        return QStringLiteral("es");
+        return QStringLiteral("es:cat");
     }
     
-    return QStringLiteral("en");
+    QLocale ql(localeName);
+    
+    if (ql.country()==QLocale::Spain) {
+        return QStringLiteral("es:deadtilde");
+    }
+    
+    return QStringLiteral("us:intl");
 }
 
 void LocalePlugin::registerTypes(const char* uri)

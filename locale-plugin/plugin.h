@@ -27,35 +27,23 @@
 #include <QQmlExtensionPlugin>
 #include <QObject>
 #include <QList>
-
-class X11KeyVariant: public QObject
-{
-    Q_OBJECT
-    
-    Q_PROPERTY(QString name MEMBER m_name CONSTANT)
-public:
-    
-    explicit X11KeyVariant(QObject* parent = nullptr);
-    X11KeyVariant(QString name);
-
-private:
-    
-    QString m_name;
-};
+#include <QMap>
 
 class X11KeyLayout: public QObject
 {
     Q_OBJECT
     
     Q_PROPERTY(QString name MEMBER m_name CONSTANT)
+    Q_PROPERTY(QString longName MEMBER m_longName CONSTANT)
 public:
     
     explicit X11KeyLayout(QObject* parent = nullptr);
-    X11KeyLayout(QString name);
+    X11KeyLayout(QString name,QString longName);
 
 private:
     
     QString m_name;
+    QString m_longName;
 };
 
 class Language: public QObject
@@ -89,6 +77,8 @@ public:
     explicit Locale(QObject* parent = nullptr);
     
     Q_INVOKABLE QString findBestLayout(QString localeName);
+    
+    static QMap<QString,QString> variantNames;
     
 private:
     QList<QObject*> m_languagesModel;

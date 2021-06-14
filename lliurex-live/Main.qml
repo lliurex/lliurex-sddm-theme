@@ -75,11 +75,15 @@ Rectangle {
                         onCurrentIndexChanged: {
                             var tmp = model[currentIndex].name;
                             var lang = tmp.split("_")[0];
-                            console.log("match:",lang);
+                            console.log("lang:",tmp);
+                            console.log("lang:",lang);
+                            
+                            var x = llx.findBestLayout(tmp);
+                            console.log("find:",x);
                             
                             for (var n=0;n<llx.layoutsModel.length;n++) {
-                                console.log(llx.layoutsModel[n].name);
-                                if (llx.layoutsModel[n].name==lang) {
+                                //console.log(llx.layoutsModel[n].name);
+                                if (llx.layoutsModel[n].name==x) {
                                     cmbLayout.currentIndex = n;
                                     break;
                                 }
@@ -99,10 +103,10 @@ Rectangle {
                     Layout.preferredWidth: 250
                     model: llx.layoutsModel
                     
-                    displayText: model[currentIndex].name
+                    displayText: model[currentIndex].longName
                     
                     delegate: Kirigami.BasicListItem {
-                        label: modelData.name
+                        label: modelData.longName
                     }
                     
                 }
