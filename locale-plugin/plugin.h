@@ -28,6 +28,21 @@
 #include <QObject>
 #include <QList>
 
+class X11KeyVariant: public QObject
+{
+    Q_OBJECT
+    
+    Q_PROPERTY(QString name MEMBER m_name CONSTANT)
+public:
+    
+    explicit X11KeyVariant(QObject* parent = nullptr);
+    X11KeyVariant(QString name);
+
+private:
+    
+    QString m_name;
+};
+
 class X11KeyLayout: public QObject
 {
     Q_OBJECT
@@ -72,6 +87,8 @@ class Locale: public QObject
 public:
     
     explicit Locale(QObject* parent = nullptr);
+    
+    Q_INVOKABLE QString findBestLayout(QString localeName);
     
 private:
     QList<QObject*> m_languagesModel;
