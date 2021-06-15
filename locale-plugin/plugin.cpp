@@ -125,9 +125,16 @@ Locale::Locale(QObject* parent): QObject(parent)
     
     QStringList lines = run(QStringLiteral("localectl"),{QStringLiteral("list-locales")});
     
+    Language* firsts[4];
+    
     for (QString line:lines) {
         
         if (line.startsWith(QStringLiteral("C."))) {
+            continue;
+        }
+        
+        if (line.startsWith(QStringLiteral("ca_ES.UTF-8@valencia"))) {
+            firsts[3]=new Language(line,QStringLiteral("Valencià (Espanya)"));
             continue;
         }
         
@@ -137,7 +144,27 @@ Locale::Locale(QObject* parent): QObject(parent)
         
         longName[0] = longName[0].toUpper();
         
+        if (line.startsWith(QStringLiteral("es_ES.UTF-8"))) {
+            firsts[2]=new Language(line,longName);
+            continue;
+        }
+        
+        if (line.startsWith(QStringLiteral("ca_ES.UTF-8"))) {
+            firsts[1]=new Language(line,longName);
+            continue;
+        }
+        
+        if (line.startsWith(QStringLiteral("en_US.UTF-8"))) {
+            firsts[0]=new Language(line,longName);
+            continue;
+        }
+        
         m_languagesModel.append(new Language(line,longName));
+    }
+    
+    //sort work arround
+    for (int n=0;n<4;n++) {
+        m_languagesModel.push_front(firsts[n]);
     }
     
     lines = run(QStringLiteral("localectl"),{QStringLiteral("list-x11-keymap-layouts")});
@@ -155,14 +182,23 @@ Locale::Locale(QObject* parent): QObject(parent)
 
 QString Locale::findBestLayout(QString localeName)
 {
-    if (localeName.startsWith(QStringLiteral("ca_ES@valencia"))) {
+    if (localeName.startsWith(QStringLiteral("ca_ES.UTF-8@valencia"))) {
         return QStringLiteral("es:cat");
     }
     
     QLocale ql(localeName);
     
-    if (ql.country()==QLocale::Spain) {
-        return QStringLiteral("es:deadtilde");
+    if (ql.language()==QLocale::Spanish) {
+        if (ql.country()==QLocale::Spain) {
+            return QStringLiteral("es:deadtilde");
+        }
+        else {
+            return QStringLiteral("latam:deadtilde");
+        }
+    }
+    
+    if (ql.language()==QLocale::Catalan) {
+        return QStringLiteral("es:cat");
     }
     
     return QStringLiteral("us:intl");

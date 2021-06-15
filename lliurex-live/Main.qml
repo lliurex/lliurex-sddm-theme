@@ -113,6 +113,7 @@ Rectangle {
         
             }
             QQC2.Pane {
+                Layout.preferredWidth: 300
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 ColumnLayout {
@@ -125,9 +126,17 @@ Rectangle {
                         text: "Welcome to Lliurex 21 live"
                     }
                     
-                    QQC2.Button {
+                    RowLayout {
                         Layout.alignment: Qt.AlignBottom | Qt.AlignRight
-                        text: "Ok"
+                        
+                        QQC2.Button {
+                            Layout.alignment: Qt.AlignBottom | Qt.AlignLeft
+                            text: "Shutdown"
+                        }
+                        QQC2.Button {
+                            Layout.alignment: Qt.AlignBottom | Qt.AlignRight
+                            text: "Ok"
+                        }
                     }
                 }
             }
