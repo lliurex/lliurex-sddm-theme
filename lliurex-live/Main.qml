@@ -18,6 +18,7 @@
 */
 
 import Lliurex.Locale 1.0 as LLX
+import Edupals.N4D 1.0 as N4D
 
 import QtQuick 2.0
 import QtQuick.Controls 2.0 as QQC2
@@ -37,11 +38,49 @@ Rectangle {
     
     color: "#2980b9"
     
+    N4D.Client {
+        id: n4dLocal
+        address: "https://localhost:9779"
+        credential: N4D.Client.LocalKey
+    }
+    
+    N4D.Proxy {
+        id: n4d_set_locale
+        client: n4dLocal
+        plugin: "LocaleManager"
+        method: "set_locale"
+        property var ready: false
+        
+        onError: {
+            console.log(what);
+        }
+        
+        onResponse: {
+            ready=true;
+        }
+    }
+    
+    N4D.Proxy {
+        id: n4d_set_keyboard
+        client: n4dLocal
+        plugin: "LocaleManager"
+        method: "set_keyboard"
+        property var ready: false;
+        onError: {
+            console.log(what);
+        }
+        
+        onResponse: {
+            ready=true;
+        }
+    }
+    
     LLX.Locale {
         id: llx
     }
     
     QQC2.Pane {
+        id: paneMain
         width:700
         height:500
         anchors.centerIn:parent
@@ -59,7 +98,7 @@ Rectangle {
                     Layout.preferredHeight: 300
                     
                     ListView {
-                        id: layoutsView
+                        id: languagesView
                         //Layout.fillWidth: true
                         //Layout.fillHeight: true
                         anchors.fill:parent
@@ -132,15 +171,77 @@ Rectangle {
                         QQC2.Button {
                             Layout.alignment: Qt.AlignBottom | Qt.AlignLeft
                             text: "Shutdown"
+                            
+                            onClicked: {
+                                paneMain.visible=false;
+                                paneShutdown.visible=true;
+                            }
                         }
                         QQC2.Button {
+                            id: btnOk
                             Layout.alignment: Qt.AlignBottom | Qt.AlignRight
                             text: "Ok"
+                            
+                            onClicked: {
+                                btnOk.enabled=false;
+                                
+                                console.log("setting environment...");
+                                console.log(llx.languagesModel[languagesView.currentIndex].name);
+                                console.log(llx.layoutsModel[cmbLayout.currentIndex].name);
+                            }
                         }
                     }
                 }
             }
             
+        }
+    }
+    
+    QQC2.Pane {
+        id: paneShutdown
+        visible:false
+        width:400
+        height:200
+        anchors.centerIn:parent
+        
+        ColumnLayout {
+            anchors.fill:parent
+            
+            RowLayout {
+                Layout.fillWidth:true
+                Layout.fillHeight:true
+                
+                Layout.alignment: Qt.AlignCenter
+                
+                QQC2.Button {
+                    text: "Power off"
+                    
+                    enabled:sddm.canPowerOff
+                        onClicked: {
+                            sddm.powerOff()
+                        }
+                }
+                
+                QQC2.Button {
+                    text: "Reboot"
+                    
+                    enabled: sddm.canReboot
+                        onClicked: {
+                            sddm.reboot()
+                        }
+                }
+                
+            }
+            
+            QQC2.Button {
+                Layout.alignment: Qt.AlignBottom | Qt.AlignRight
+                text: "cancel"
+                
+                onClicked: {
+                    paneMain.visible=true;
+                    paneShutdown.visible=false;
+                }
+            }
         }
     }
 }
