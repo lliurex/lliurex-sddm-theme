@@ -26,7 +26,7 @@ import QtQuick.Layouts 1.15
 import SddmComponents 2.0 as Sddm
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.16 as Kirigami
-Kirigami.BasicThemeDefinition{
+
 Rectangle {
     id: theme
     
@@ -276,5 +276,4 @@ Rectangle {
             }
         }
     }
-}
 }
