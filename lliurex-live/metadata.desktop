@@ -1,0 +1,16 @@
+[SddmGreeterTheme]
+Name=Lliurex Live
+
+Description=Lliurex live theme
+Type=sddm-theme
+Author=Enrique Medina Gremaldos
+Copyright=(c) 2021 Enrique Medina Gremaldos
+License=GPL
+Version=1.0
+MainScript=Main.qml
+ConfigFile=theme.conf
+TranslationsDirectory=translations
+Theme-Id=lliurex-live
+Theme-API=2.0
+
+
