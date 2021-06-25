@@ -1,3 +1,10 @@
+lliurex-sddm-theme (21.0.0.0) focal; urgency=medium
+
+  * Moved version to 21x series
+  * Added a live theme, not tested yet
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Fri, 25 Jun 2021 10:58:20 +0200
+
 lliurex-sddm-theme (2.0.3.0) focal; urgency=medium
 
   * Master tag: 09434b5e54d2b1046c6ce3ac848837c493553ea1
