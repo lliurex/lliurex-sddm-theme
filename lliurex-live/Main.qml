@@ -26,7 +26,7 @@ import QtQuick.Layouts 1.15
 import SddmComponents 2.0 as Sddm
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.16 as Kirigami
-
+Kirigami.BasicThemeDefinition{
 Rectangle {
     id: theme
     
@@ -37,6 +37,9 @@ Rectangle {
     height: geometry.height
     
     color: "#2980b9"
+    
+    property var call0: 0;
+    property var call1: 0;
     
     N4D.Client {
         id: n4dLocal
@@ -49,14 +52,14 @@ Rectangle {
         client: n4dLocal
         plugin: "LocaleManager"
         method: "set_locale"
-        property var ready: false
         
         onError: {
             console.log(what);
+            call0 = -1;
         }
         
         onResponse: {
-            ready=true;
+            call0 = 1;
         }
     }
     
@@ -65,18 +68,38 @@ Rectangle {
         client: n4dLocal
         plugin: "LocaleManager"
         method: "set_keyboard"
-        property var ready: false;
+        
         onError: {
             console.log(what);
+            call1 = -1;
         }
         
         onResponse: {
-            ready=true;
+            call1 = 1;
         }
     }
     
     LLX.Locale {
         id: llx
+    }
+    
+    Timer {
+        id: timer
+        interval:500
+        repeat: true
+        
+        onTriggered: {
+            
+            if (call0 == -1 || call1 == -1) {
+                stop();
+                btnOk.enabled=true;
+            }
+            
+            if (call0 == 1 && call1 == 1) {
+                console.log("log in...");
+                sddm.login("lliurex","",0);
+            }
+        }
     }
     
     QQC2.Pane {
@@ -188,6 +211,15 @@ Rectangle {
                                 console.log("setting environment...");
                                 console.log(llx.languagesModel[languagesView.currentIndex].name);
                                 console.log(llx.layoutsModel[cmbLayout.currentIndex].name);
+                                
+                                call0 = 0;
+                                call1 = 0;
+                                
+                                n4d_set_locale.call([llx.languagesModel[languagesView.currentIndex].name]);
+                                var tmp = llx.layoutsModel[cmbLayout.currentIndex].name.split(":");
+                                n4d_set_keyboard.call([tmp[0],tmp[1]]);
+                                
+                                timer.start();
                             }
                         }
                     }
@@ -244,4 +276,5 @@ Rectangle {
             }
         }
     }
+}
 }
