@@ -41,9 +41,40 @@ Rectangle {
     property var call0: 0;
     property var call1: 0;
     
+    property var ts : [ 
+    ["C",["Language","Keyboard layout","Welcome to LliureX 21 live"]],
+    ["ca_ES.UTF-8@valencia",["Llanguatge","Teclat","Benvingut a LliureX 21 live"]] , 
+    ["es_ES.UTF-8",["Lenguage","Teclado","Bienvenido a LliureX 21 live"]] 
+        ];
+    property var strings : ["","",""];
+    
+    function retranslate(lang) {
+        var index = -1;
+        for (var n=0;n<ts.length;n++) {
+            console.log(ts[n][0]," versus ",lang);
+            if (ts[n][0]===lang) {
+                index=n;
+                break;
+            }
+        }
+        
+        if (index==-1) {
+            index = 0;
+        }
+        console.log(index);
+        var tmp = []
+        for (var n=0;n<ts[index][1].length;n++) {
+            tmp.push(ts[index][1][n]);
+            console.log(ts[index][1][n]);
+        }
+        
+        strings = tmp;
+    }
+    
     N4D.Client {
         id: n4dLocal
         address: "https://localhost:9779"
+        user: "quique"
         credential: N4D.Client.LocalKey
     }
     
@@ -97,6 +128,7 @@ Rectangle {
             
             if (call0 == 1 && call1 == 1) {
                 console.log("log in...");
+                stop();
                 sddm.login("lliurex","",0);
             }
         }
@@ -114,7 +146,7 @@ Rectangle {
                 Text {
                     Layout.alignment: Qt.AlignCenter
                     Layout.fillWidth: true
-                    text: "Language"
+                    text: strings[0]
                 }
                 QQC2.Frame {
                     Layout.preferredWidth: 250
@@ -151,6 +183,8 @@ Rectangle {
                                 }
                             }
                             
+                            retranslate(model[currentIndex].name);
+                            
                         }
                         
                     }
@@ -158,7 +192,7 @@ Rectangle {
                 Text {
                     Layout.alignment: Qt.AlignCenter
                     Layout.fillWidth: true
-                    text: "Layout"
+                    text: strings[1]
                 }
                 QQC2.ComboBox {
                     id: cmbLayout
@@ -185,7 +219,7 @@ Rectangle {
                     //Layout.alignment: Qt.AlignBottom
                     Text {
                         Layout.alignment: Qt.AlignCenter
-                        text: "Welcome to Lliurex 21 live"
+                        text: strings[2]
                     }
                     
                     RowLayout {
