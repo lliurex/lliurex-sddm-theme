@@ -1,3 +1,10 @@
+lliurex-sddm-theme (21.0.1.0) focal; urgency=medium
+
+  * Mastar tag: d0b7ac7dd799148d5867c76c9217aeca862630ab
+  * Live theme is in Working state, testing needed
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Tue, 29 Jun 2021 14:04:19 +0200
+
 lliurex-sddm-theme (21.0.0.0) focal; urgency=medium
 
   * Moved version to 21x series
