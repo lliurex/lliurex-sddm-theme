@@ -23,6 +23,8 @@
 
 #include "noise.h"
 
+#include <random>
+
 /*
  * Based on code from:
  * https://gist.github.com/nowl/828013
@@ -112,6 +114,24 @@ QImage* noise::perlin(int width,int height,float freq,int depth,int seed)
         for (int i=0;i<width;i++) {
             float value = perlin_2d(i,j,freq,depth);
             uint8_t grey = 255.0 * value;
+            QColor pixel(grey,grey,grey);
+            img->setPixelColor(i,j,pixel);
+        }
+    }
+    
+    return img;
+}
+
+QImage* noise::uniform(int width,int height,int seed)
+{
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution(0,255);
+    
+    QImage* img = new QImage(width,height,QImage::Format_RGB32);
+    
+    for (int j=0;j<height;j++) {
+        for (int i=0;i<width;i++) {
+            uint8_t grey = distribution(generator);
             QColor pixel(grey,grey,grey);
             img->setPixelColor(i,j,pixel);
         }

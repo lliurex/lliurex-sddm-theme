@@ -29,6 +29,7 @@
 namespace noise
 {
     QImage* perlin(int width,int height,float freq,int depth,int seed=0);
+    QImage* uniform(int width,int height,int seed=0);
 }
 
 #endif

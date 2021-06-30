@@ -18,13 +18,17 @@
 */
 
 import "ui" as Lliurex
+
 import Edupals.N4D 1.0 as N4D
 import Lliurex.Noise 1.0 as Noise
 
-import QtQuick 2.0
-import QtQuick.Controls 2.0
 import SddmComponents 2.0 as Sddm
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.16 as Kirigami
+
+import QtQuick 2.6
+import QtQuick.Controls 2.6 as QQC2
+import QtQuick.Layouts 1.15
 
 Rectangle {
     
@@ -37,7 +41,7 @@ Rectangle {
     property string lliurexVersion: ""
     property string lliurexType: ""
     
-    property bool compact: (loginFrame.width+dateFrame.width+60) > theme.width
+    //property bool compact: (loginFrame.width+dateFrame.width+60) > theme.width
     
     property variant geometry: screenModel.geometry(screenModel.primary)
     x: geometry.x
@@ -137,70 +141,18 @@ Rectangle {
     
     Rectangle {
         anchors.fill: parent
-        color: "white"
+        //color: "#3498db"
+        color: "#2980b9"
         
-        Noise.NoiseSurface
+        Noise.UniformSurface
         {
-            //opacity: 0.1
+            opacity: 0.025
+            
             anchors.fill: parent
             
-            frequency:0.01
-            depth:4
-            
-            Canvas {
-                opacity: 0.9
-                anchors.fill: parent
-                property var buffer : null
-                property int dwidth : 0
-                property int dheight : 0
-                
-                onPaint: {
-                    var ctx = getContext("2d");
-                    ctx.fillStyle = "#fbfbfb";
-                    ctx.fillRect(0, 0, width, height);
-                    ctx.lineWidth = 0.5
-                    ctx.strokeStyle = "#bdc3c7";
-                    
-                    var gridSize = 40.0
-                    
-                    var numH=height/gridSize;
-                    
-                    for (var j=0;j<numH;j++) {
-                        ctx.beginPath();
-                        
-                        ctx.moveTo(0,gridSize*j);
-                        ctx.lineTo(width,gridSize*j);
-                        
-                        ctx.stroke();
-                    }
-                    
-                    var numW=width/gridSize;
-                    
-                    for (var i=0;i<numW;i++) {
-                        ctx.beginPath();
-                        
-                        ctx.moveTo(gridSize*i,0);
-                        ctx.lineTo(gridSize*i,height);
-                        
-                        ctx.stroke();
-                    }
-                }
-                
-            }
-            
+            //frequency:0.01
+            //depth:4
         }
-    }
-    
-    function request(url, callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = (function(myxhr) {
-            return function() {
-                if(myxhr.readyState === 4) { callback(myxhr); }
-            }
-        })(xhr);
-
-        xhr.open("GET", url);
-        xhr.send();
     }
     
     /* Clock refresh timer */
@@ -210,10 +162,12 @@ Rectangle {
         running: true
         repeat: true
         onTriggered: {
-            txtDate.text = Qt.formatDateTime(new Date(), "ddd d MMMM yyyy");
-            txtClock.text = Qt.formatDateTime(new Date(), "HH:mm");
             
-            theme.checkTime+=timerClock.interval
+            var date = Qt.formatDateTime(new Date(), "ddd d MMMM yyyy");
+            var time = Qt.formatDateTime(new Date(), "HH:mm");
+            widgetClock.text = date+" "+time;
+            
+            theme.checkTime+=timerClock.interval;
             
             if (theme.lliurexType=="client"  && theme.programmedCheck>=0 && theme.checkTime>=theme.programmedCheck) {
                 
@@ -221,102 +175,6 @@ Rectangle {
                 theme.programmedCheck=-1;
                 console.log("checking server...")
                 server_lliurex_version.call([])
-            }
-        }
-    }
-
-    /* Clock and date */
-    Column {
-        
-        id:dateFrame
-        
-        spacing: 10
-        anchors.verticalCenter: parent.verticalCenter
-        //x: parent.width*0.7
-        anchors.right: parent.right
-        anchors.rightMargin:60
-        
-        visible: !theme.compact && loginFrame.visible
-        
-        Text {
-            id: txtHostname
-            text: sddm.hostName
-            anchors.horizontalCenter: parent.horizontalCenter
-            
-            color:"#3daee9"
-            font.pointSize: 32
-            //style:Text.Outline
-            styleColor: "#40000000"
-        }
-        
-        Text {
-            text: theme.lliurexVersion
-            anchors.horizontalCenter: parent.horizontalCenter
-            
-            color:"#3daee9"
-            font.pointSize: 11
-            //style:Text.Outline
-            styleColor: "#40000000"
-        }
-        
-        Text {
-            id: txtDate
-            text: "--"
-            anchors.horizontalCenter: parent.horizontalCenter
-            
-            color:"#3daee9"
-            font.pointSize: 32
-            //style:Text.Outline
-            styleColor: "#40000000"
-        }
-        
-        Text {
-            id: txtClock
-            text: "--"
-            anchors.horizontalCenter: parent.horizontalCenter
-            
-            color:"#3daee9"
-            font.pointSize: 96
-            //style:Text.Outline
-            styleColor: "#40000000"
-        }
-    }
-    
-    Rectangle {
-        id: btnShutdown
-        width:48
-        height:48
-        color: "transparent"
-
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.rightMargin:40
-        anchors.bottomMargin: 40
-
-        Image {
-            id: imgShutdown
-            source: "images/shutdown.svg"
-            anchors.centerIn: parent
-            
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                
-                acceptedButtons: Qt.LeftButton
-                
-                onEntered: {
-                    parent.source="images/shutdown-hover.svg"
-                }
-                
-                onExited: {
-                    parent.source="images/shutdown.svg"
-                }
-                
-                onClicked: {
-                    loginFrame.visible=false
-                    userFrame.visible=false
-                    shutdownFrame.visible=true
-                }
             }
         }
     }
@@ -384,9 +242,10 @@ Rectangle {
         width: loginShadow.width
         height: loginShadow.height
         visible: true
-        x: theme.compact ? ((theme.width*0.5)-(width*0.5)) : ((dateFrame.x-width)<200 ? (dateFrame.x-width) : 200)
+        //x: theme.compact ? ((theme.width*0.5)-(width*0.5)) : ((dateFrame.x-width)<200 ? (dateFrame.x-width) : 200)
         
         anchors.verticalCenter: theme.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
         
         Rectangle {
             id: loginShadow
@@ -464,7 +323,7 @@ Rectangle {
                         }
                     }
                     
-                    TextField {
+                    QQC2.TextField {
                         id: txtUser
                         width: 200
                         placeholderText: i18nd("lliurex-sddm","User name")
@@ -491,7 +350,7 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                     }
                     
-                    TextField {
+                    QQC2.TextField {
                         id: txtPass
                         width: 200
                         echoMode: TextInput.Password
@@ -538,7 +397,7 @@ Rectangle {
                     }
                 }
                 
-                ComboBox {
+                QQC2.ComboBox {
                     id: cmbSession
                     flat: true
                     anchors.left:parent.left
@@ -794,6 +653,50 @@ Rectangle {
                 
             }
             
+        }
+    }
+    
+    QQC2.Pane {
+        
+        padding:2
+        width:parent.width
+        height:50
+        
+        x:0
+        y:parent.height-height
+        
+        RowLayout {
+            anchors.fill: parent
+            spacing: 8
+            
+            Item {
+                Layout.fillWidth:true
+            }
+            
+            QQC2.Label {
+                id: widgetClock
+                Layout.alignment: Qt.AlignRight
+                
+                text: ""
+                
+            }
+            
+            QQC2.Button {
+                Layout.alignment: Qt.AlignRight
+                Layout.preferredWidth: 40
+                flat:true
+                
+                Image {
+                    anchors.centerIn: parent
+                    source: "images/shutdown.svg"
+                }
+                
+                onClicked: {
+                    loginFrame.visible=false
+                    userFrame.visible=false
+                    shutdownFrame.visible=true
+                }
+            }
         }
     }
     

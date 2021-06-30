@@ -53,6 +53,24 @@ private:
     int m_depth;
 };
 
+class UniformSurface : public QQuickItem
+{
+    Q_OBJECT
+    
+    
+public:
+    explicit UniformSurface(QQuickItem* parent = nullptr);
+
+protected:
+    virtual QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updatePaintNodeData) override;
+
+private:
+    QSGGeometryNode* m_Texture;
+    double m_width;
+    double m_height;
+    
+};
+
 class NoisePlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
