@@ -423,9 +423,9 @@ Rectangle {
                              * 
                              * Warning! this may break easily!
                             */
-                            var name=model.data(index,0x0100+4)
+                            var name=model.data(index,Qt.UserRole+4)
                             
-                            if (name==="Plasma") {
+                            if (name==="Plasma (X11)") {
                                 currentIndex=n
                             }
                         }

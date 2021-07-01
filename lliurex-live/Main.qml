@@ -18,6 +18,7 @@
 */
 
 import Lliurex.Locale 1.0 as LLX
+import Lliurex.Noise 1.0 as Noise
 import Edupals.N4D 1.0 as N4D
 
 import QtQuick 2.0
@@ -41,10 +42,12 @@ Rectangle {
     property var call0: 0;
     property var call1: 0;
     
+    property var plasmaIndex: 0;
+    
     property var ts : [ 
-    ["C",["Language","Keyboard layout","Welcome to LliureX 21 live"]],
-    ["ca_ES.UTF-8@valencia",["Llanguatge","Teclat","Benvingut a LliureX 21 live"]] , 
-    ["es_ES.UTF-8",["Lenguage","Teclado","Bienvenido a LliureX 21 live"]] 
+    ["C",["Language","Keyboard layout","Welcome to LliureX 21 live","Ok","Shutdown"]],
+    ["ca_ES.UTF-8@valencia",["Llanguatge","Teclat","Benvingut a LliureX 21 live","Acepta","Apaga"]] , 
+    ["es_ES.UTF-8",["Lenguage","Teclado","Bienvenido a LliureX 21 live","Aceptar","Apagar"]] 
         ];
     property var strings : ["","",""];
     
@@ -69,6 +72,16 @@ Rectangle {
         }
         
         strings = tmp;
+    }
+    
+    Component.onCompleted: {
+            
+        for (var n=0;n<sessionModel.rowCount();n++) {
+            var name = sessionModel.data(sessionModel.index(n,0),Qt.UserRole+4);
+            if (name==="Plasma (X11)") {
+                plasmaIndex=n;
+            }
+        }
     }
     
     N4D.Client {
@@ -129,11 +142,20 @@ Rectangle {
             if (call0 == 1 && call1 == 1) {
                 console.log("log in...");
                 stop();
-                sddm.login("lliurex","",0);
+                sddm.login("lliurex","",plasmaIndex);
             }
         }
     }
     
+    Noise.UniformSurface {
+        opacity: 0.025
+        
+        anchors.fill: parent
+        
+        //frequency:0.01
+        //depth:4
+    }
+        
     QQC2.Pane {
         id: paneMain
         width:700
@@ -142,7 +164,11 @@ Rectangle {
         
         RowLayout {
             anchors.fill:parent
+            spacing: 12
+            
             ColumnLayout {
+                spacing: 12
+                
                 Text {
                     Layout.alignment: Qt.AlignCenter
                     Layout.fillWidth: true
@@ -151,6 +177,7 @@ Rectangle {
                 QQC2.Frame {
                     Layout.preferredWidth: 250
                     Layout.preferredHeight: 300
+                    padding: 24
                     
                     ListView {
                         id: languagesView
@@ -227,7 +254,7 @@ Rectangle {
                         
                         QQC2.Button {
                             Layout.alignment: Qt.AlignBottom | Qt.AlignLeft
-                            text: "Shutdown"
+                            text: strings[4]
                             
                             onClicked: {
                                 paneMain.visible=false;
@@ -237,7 +264,7 @@ Rectangle {
                         QQC2.Button {
                             id: btnOk
                             Layout.alignment: Qt.AlignBottom | Qt.AlignRight
-                            text: "Ok"
+                            text: strings[3]
                             
                             onClicked: {
                                 btnOk.enabled=false;
