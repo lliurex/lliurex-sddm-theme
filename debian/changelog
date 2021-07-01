@@ -1,3 +1,9 @@
+lliurex-sddm-theme (21.1.0.1) focal; urgency=medium
+
+  * rebuild
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Thu, 01 Jul 2021 17:34:19 +0200
+
 lliurex-sddm-theme (21.1.0.0) focal; urgency=medium
 
   * Overhauled lliurex theme
