@@ -87,7 +87,7 @@ Rectangle {
     N4D.Client {
         id: n4dLocal
         address: "https://localhost:9779"
-        user: "quique"
+        user: "sddm"
         credential: N4D.Client.LocalKey
     }
     
