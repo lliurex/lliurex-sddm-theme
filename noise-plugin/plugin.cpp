@@ -89,6 +89,52 @@ QSGNode* NoiseSurface::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* up
     return node;
 }
 
+UniformSurface::UniformSurface(QQuickItem* parent)
+{
+    setFlag(ItemHasContents);
+}
+
+QSGNode* UniformSurface::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updatePaintNodeData)
+{
+    QSGImageNode  *node = static_cast<QSGImageNode  *>(oldNode);
+    
+    if (!node) {
+        node = window()->createImageNode();
+        node->setOwnsTexture(true);
+        
+        QImage* surface = noise::uniform(width(),height());
+        QSGTexture* texture = window()->createTextureFromImage(*surface,QQuickWindow::TextureHasAlphaChannel);
+        node->setTexture(texture);
+        delete surface;
+        
+        m_width=width();
+        m_height=height();
+    }
+    else {
+        double ew = std::abs(m_width-width());
+        double eh = std::abs(m_height-height());
+        
+        if (ew>0.01 || eh>0.01) {
+            m_width=width();
+            m_height=height();
+            
+            auto t0 = std::chrono::steady_clock::now();
+            QImage* surface = noise::uniform(width(),height());
+            auto t1 = std::chrono::steady_clock::now();
+            double us = std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count();
+            clog<<"time: "<<us<<" us"<<endl;
+            
+            QSGTexture* texture = window()->createTextureFromImage(*surface,QQuickWindow::TextureHasAlphaChannel);
+            node->setTexture(texture);
+            delete surface;
+        }
+        
+    }
+    node->setRect(boundingRect());
+    
+    return node;
+}
+
 NoisePlugin::NoisePlugin(QObject* parent) : QQmlExtensionPlugin(parent)
 {
 }
@@ -96,6 +142,7 @@ NoisePlugin::NoisePlugin(QObject* parent) : QQmlExtensionPlugin(parent)
 void NoisePlugin::registerTypes(const char* uri)
 {
     qmlRegisterType<NoiseSurface> (uri, 1, 0, "NoiseSurface");
+    qmlRegisterType<UniformSurface> (uri, 1, 0, "UniformSurface");
     qmlRegisterAnonymousType<QMimeData>(uri, 1);
     
 }
