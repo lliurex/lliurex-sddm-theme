@@ -17,7 +17,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import Lliurex.Locale 1.0 as LLX
+import "../lliurex/ui" as Lliurex
+import Lliurex.Locale 1.0 as Locale
 import Lliurex.Noise 1.0 as Noise
 import Edupals.N4D 1.0 as N4D
 
@@ -123,7 +124,7 @@ Rectangle {
         }
     }
     
-    LLX.Locale {
+    Locale.Locale {
         id: llx
     }
     
@@ -155,11 +156,13 @@ Rectangle {
         //frequency:0.01
         //depth:4
     }
-        
-    QQC2.Pane {
+    
+    Lliurex.Window {
+    //QQC2.Pane {
         id: paneMain
         width:700
         height:500
+        
         anchors.centerIn:parent
         
         RowLayout {
@@ -235,66 +238,69 @@ Rectangle {
                 }
         
             }
-            QQC2.Pane {
-                Layout.preferredWidth: 300
+            ColumnLayout {
+                //anchors.fill:parent
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                ColumnLayout {
-                    anchors.fill:parent
-                    //Layout.fillWidth: true
-                    //Layout.fillHeight: true
-                    //Layout.alignment: Qt.AlignBottom
-                    Text {
-                        Layout.alignment: Qt.AlignCenter
-                        text: strings[2]
-                    }
+                Layout.preferredWidth: 200
+                
+                Layout.alignment:Qt.AlignRight
+                
+                Text {
+                    Layout.alignment: Qt.AlignCenter
+                    text: strings[2]
+                }
+                
+                Item {
+                    height: 300
+                }
+                
+                RowLayout {
+                    Layout.alignment: Qt.AlignBottom | Qt.AlignRight
                     
-                    RowLayout {
-                        Layout.alignment: Qt.AlignBottom | Qt.AlignRight
+                    Lliurex.Button {
+                        Layout.alignment: Qt.AlignBottom | Qt.AlignLeft
+                        text: strings[4]
                         
-                        QQC2.Button {
-                            Layout.alignment: Qt.AlignBottom | Qt.AlignLeft
-                            text: strings[4]
-                            
-                            onClicked: {
-                                paneMain.visible=false;
-                                paneShutdown.visible=true;
-                            }
+                        onClicked: {
+                            paneMain.visible=false;
+                            paneShutdown.visible=true;
                         }
-                        QQC2.Button {
-                            id: btnOk
-                            Layout.alignment: Qt.AlignBottom | Qt.AlignRight
-                            text: strings[3]
+                    }
+                    Lliurex.Button {
+                        id: btnOk
+                        Layout.alignment: Qt.AlignBottom | Qt.AlignRight
+                        text: strings[3]
+                        
+                        onClicked: {
+                            btnOk.enabled=false;
                             
-                            onClicked: {
-                                btnOk.enabled=false;
-                                
-                                console.log("setting environment...");
-                                console.log(llx.languagesModel[languagesView.currentIndex].name);
-                                console.log(llx.layoutsModel[cmbLayout.currentIndex].name);
-                                
-                                call0 = 0;
-                                call1 = 0;
-                                
-                                n4d_set_locale.call([llx.languagesModel[languagesView.currentIndex].name]);
-                                var tmp = llx.layoutsModel[cmbLayout.currentIndex].name.split(":");
-                                n4d_set_keyboard.call([tmp[0],tmp[1]]);
-                                
-                                timer.start();
-                            }
+                            console.log("setting environment...");
+                            console.log(llx.languagesModel[languagesView.currentIndex].name);
+                            console.log(llx.layoutsModel[cmbLayout.currentIndex].name);
+                            
+                            call0 = 0;
+                            call1 = 0;
+                            
+                            n4d_set_locale.call([llx.languagesModel[languagesView.currentIndex].name]);
+                            var tmp = llx.layoutsModel[cmbLayout.currentIndex].name.split(":");
+                            n4d_set_keyboard.call([tmp[0],tmp[1]]);
+                            
+                            timer.start();
                         }
                     }
                 }
             }
             
+            
         }
     }
     
-    QQC2.Pane {
+    Lliurex.Window {
         id: paneShutdown
         visible:false
-        width:400
-        height:200
+        width:300
+        height:180
         anchors.centerIn:parent
         
         ColumnLayout {
@@ -306,7 +312,7 @@ Rectangle {
                 
                 Layout.alignment: Qt.AlignCenter
                 
-                QQC2.Button {
+                Lliurex.Button {
                     text: "Power off"
                     
                     enabled:sddm.canPowerOff
@@ -315,7 +321,7 @@ Rectangle {
                         }
                 }
                 
-                QQC2.Button {
+                Lliurex.Button {
                     text: "Reboot"
                     
                     enabled: sddm.canReboot
@@ -326,7 +332,7 @@ Rectangle {
                 
             }
             
-            QQC2.Button {
+            Lliurex.Button {
                 Layout.alignment: Qt.AlignBottom | Qt.AlignRight
                 text: "cancel"
                 

@@ -180,59 +180,34 @@ Rectangle {
     }
     
     /* user frame */
-    Item {
+    Lliurex.Window {
         id: userFrame
         visible: false
-        width: userShadow.width
-        height: userShadow.height
-        z:5000
-        anchors.horizontalCenter: theme.horizontalCenter
-        anchors.verticalCenter: theme.verticalCenter
+        width: theme.width*0.8
+        height: theme.height*0.8
+            
+        anchors.centerIn: parent
         
-        Rectangle {
-            id: userShadow
-            color: "#40000000"
+        Lliurex.UserGrid {
+            //anchors.fill : parent
+            width:parent.width*0.95
+            height:parent.height*0.95
+            anchors.centerIn:parent
             
-            width: userTop.width+6
-            height: userTop.height+6
-            radius:5
+            model: userModel
+            focus: true
             
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-        }
-        
-        Rectangle {
-            id: userTop
-            visible: true
-            width: theme.width*0.8
-            height: theme.height*0.8
-            
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            
-            Lliurex.UserGrid {
-                //anchors.fill : parent
-                width:parent.width*0.95
-                height:parent.height*0.95
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                
-                model: userModel
-                focus: true
-                
-                onCancel: {
-                    userFrame.visible = false
-                    loginFrame.visible = true
-                }
-                
-                onSelected: {
-                    userFrame.visible = false
-                    loginFrame.visible = true
-                    txtUser.text = name
-                    txtPass.focus = true
-                }
+            onCancel: {
+                userFrame.visible = false
+                loginFrame.visible = true
             }
             
+            onSelected: {
+                userFrame.visible = false
+                loginFrame.visible = true
+                txtUser.text = name
+                txtPass.focus = true
+            }
         }
     }
     
@@ -574,86 +549,66 @@ Rectangle {
     }
     
     /* Shutdown frame */
-    Item {
+    Lliurex.Window {
         id: shutdownFrame
         visible: false
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-            
-         Rectangle {
-            color: "#40000000"
-            
-            width: shutdownTop.width+5
-            height: shutdownTop.height+5
-            radius:5
-            
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-        }
+        anchors.centerIn: parent
         
-        Rectangle {
-            id: shutdownTop
-            color: "#eff0f1"
-            width: 480
-            height: 180
+        width: 460
+        height: 180
             
-            radius: 5
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
+        Column {
+            spacing: 40
+            anchors.centerIn: parent
             
-            Column {
-                spacing: 40
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
+            Row {
+                spacing: 10
                 
-                Row {
-                    spacing: 10
-                    
-                    Lliurex.Button {
-                        text: i18nd("lliurex-sddm","Power off")
-                        enabled:sddm.canPowerOff
-                        onClicked: {
-                            sddm.powerOff()
-                        }
-                    }
-                    
-                    Lliurex.Button {
-                        text: i18nd("lliurex-sddm","Reboot")
-                        enabled: sddm.canReboot
-                        onClicked: {
-                            sddm.reboot()
-                        }
-                    }
-                    
-                    Lliurex.Button {
-                        text: i18nd("lliurex-sddm","Suspend")
-                        enabled: sddm.canSuspend
-                        onClicked: {
-                            sddm.suspend()
-                        }
-                    }
-                    
-                    Lliurex.Button {
-                        text: i18nd("lliurex-sddm","Hibernate")
-                        enabled: sddm.canHibernate
-                        onClicked: {
-                            sddm.hibernate()
-                        }
-                    }
-                }
-
                 Lliurex.Button {
-                    text: i18nd("lliurex-sddm","Cancel")
-                    anchors.right: parent.right
+                    text: i18nd("lliurex-sddm","Power off")
+                    enabled:sddm.canPowerOff
                     onClicked: {
-                        loginFrame.visible=true
-                        shutdownFrame.visible=false
+                        sddm.powerOff()
                     }
                 }
                 
+                Lliurex.Button {
+                    text: i18nd("lliurex-sddm","Reboot")
+                    enabled: sddm.canReboot
+                    onClicked: {
+                        sddm.reboot()
+                    }
+                }
+                
+                Lliurex.Button {
+                    text: i18nd("lliurex-sddm","Suspend")
+                    enabled: sddm.canSuspend
+                    onClicked: {
+                        sddm.suspend()
+                    }
+                }
+                
+                Lliurex.Button {
+                    text: i18nd("lliurex-sddm","Hibernate")
+                    enabled: sddm.canHibernate
+                    onClicked: {
+                        sddm.hibernate()
+                    }
+                }
+            }
+
+            Lliurex.Button {
+                text: i18nd("lliurex-sddm","Cancel")
+                anchors.right: parent.right
+                onClicked: {
+                    loginFrame.visible=true
+                    shutdownFrame.visible=false
+                }
             }
             
         }
+            
+        
     }
     
     QQC2.Pane {
