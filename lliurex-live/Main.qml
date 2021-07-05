@@ -162,6 +162,7 @@ Rectangle {
         id: paneMain
         width:700
         height:500
+        title: "LliureX 21 Live"
         
         anchors.centerIn:parent
         
@@ -301,6 +302,8 @@ Rectangle {
         visible:false
         width:300
         height:180
+        title: "Shutdown"
+        
         anchors.centerIn:parent
         
         ColumnLayout {

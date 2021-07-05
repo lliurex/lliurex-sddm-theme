@@ -76,6 +76,7 @@ Rectangle {
         method: "lliurex_version"
         
         onError: {
+            console.log("failed to request lliurex version");
             theme.lliurexType="unknown";
         }
         
@@ -94,6 +95,9 @@ Rectangle {
                 }
                 
                 console.log("Lliurex type:",theme.lliurexType);
+                
+                widgetHost.version=theme.lliurexVersion;
+                widgetHost.type=theme.lliurexType;
             }
             
         }
@@ -118,6 +122,7 @@ Rectangle {
     }
     
     Component.onCompleted: {
+        console.log("looking for lliurex version...");
         local_lliurex_version.call([]);
     }
     
@@ -125,13 +130,13 @@ Rectangle {
     Connections {
         target: sddm
         
-        onLoginSucceeded: {
+        function onLoginSucceeded() {
             theme.loginStatus=true;
             loginFrame.enabled=true;
             message.text="";
         }
         
-        onLoginFailed: {
+        function onLoginFailed() {
             theme.loginStatus=false;
             loginFrame.enabled=true;
             txtPass.text = "";
@@ -165,7 +170,8 @@ Rectangle {
             
             var date = Qt.formatDateTime(new Date(), "ddd d MMMM yyyy");
             var time = Qt.formatDateTime(new Date(), "HH:mm");
-            widgetClock.text = date+" "+time;
+            widgetClock.date = date;
+            widgetClock.time = time;
             
             theme.checkTime+=timerClock.interval;
             
@@ -183,6 +189,7 @@ Rectangle {
     Lliurex.Window {
         id: userFrame
         visible: false
+        title: "User selection"
         width: theme.width*0.8
         height: theme.height*0.8
             
@@ -192,7 +199,8 @@ Rectangle {
             //anchors.fill : parent
             width:parent.width*0.95
             height:parent.height*0.95
-            anchors.centerIn:parent
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
             
             model: userModel
             focus: true
@@ -212,205 +220,186 @@ Rectangle {
     }
     
     /* login frame */
-    Item {
+    Lliurex.Window {
         id: loginFrame
-        width: loginShadow.width
-        height: loginShadow.height
+        width: 400
+        height: 340
         visible: true
+        margin:24
+        
         //x: theme.compact ? ((theme.width*0.5)-(width*0.5)) : ((dateFrame.x-width)<200 ? (dateFrame.x-width) : 200)
         
-        anchors.verticalCenter: theme.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.centerIn: parent
         
-        Rectangle {
-            id: loginShadow
-            color: "#40000000"
+        ColumnLayout {
+            id: loginColumn
+            spacing: 8
+            anchors.fill: parent
             
-            width: loginTop.width+6
-            height: loginTop.height+6
-            radius:5
+            Image {
+                source: "images/lliurex.svg"
+                Layout.alignment: Qt.AlignHCenter
+            }
             
-            anchors.horizontalCenter: loginTop.horizontalCenter
-            anchors.verticalCenter: loginTop.verticalCenter
-        }
-        
-        Rectangle {
-            id: loginTop
-            color: "#eff0f1"
-            radius: 5
-            width: 400
-            height: 400
+            Rectangle {
+                color: "#7f8c8d"
+                height: 5
+                width: 320
+                Layout.alignment: Qt.AlignHCenter
+            }
             
-            Column {
-                id: loginColumn
-                spacing: 16
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                
-                Image {
-                    source: "images/lliurex.svg"
-                }
+            Item {
+                Layout.fillHeight:true
+            }
+            
+            RowLayout {
+                //anchors.horizontalCenter: parent.horizontalCenter
+                //anchors.right: btnLogin.right
+                Layout.alignment: Qt.AlignHCenter
+                spacing: 6
                 
                 Rectangle {
-                    color: "#7f8c8d"
-                    height: 5
-                    width: 320
-                }
-                
-                Row {
-                    //anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.right: btnLogin.right
-                    spacing: 6
-                    
-                    Rectangle {
-                        color: "transparent"
-                        width:imgUsername.width
-                        height: imgUsername.height
-                        anchors.verticalCenter: parent.verticalCenter
-                        
-                        Image {
-                            id: imgUsername
-                            source: "images/username.svg"
-                            
-                        }
-                        
-                        MouseArea {
-                            id: mouseArea
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            
-                            onEntered: {
-                                parent.border.color= "#3daee9"
-                                parent.border.width=1
-                            }
-                            onExited: {
-                                parent.border.color= "transparent"
-                                parent.border.width=0
-
-                            }
-                            
-                            onClicked: {
-                                if (mouse.button == Qt.LeftButton) {
-                                    loginFrame.visible=false
-                                    userFrame.visible=true
-                                }
-                            }
-                        }
-                    }
-                    
-                    QQC2.TextField {
-                        id: txtUser
-                        width: 200
-                        placeholderText: i18nd("lliurex-sddm","User name")
-                        anchors.verticalCenter: parent.verticalCenter
-                        //anchors.horizontalCenter: parent.horizontalCenter
-                        onEditingFinished: {
-                            theme.loginStatus=true
-                            txtPass.focus=true
-                        }
-                        palette.highlight: "#3daee9"
-                        
-                        Component.onCompleted: focus=true;
-                        
-                    }
-                }
-                
-                Row {
-                    //anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.right: btnLogin.right
-                    spacing: 6
+                    id: btnUserSelector
+                    color: "transparent"
+                    width:imgUsername.width
+                    height: imgUsername.height
+                    //anchors.verticalCenter: parent.verticalCenter
                     
                     Image {
-                        source: "images/password.svg"
-                        anchors.verticalCenter: parent.verticalCenter
+                        id: imgUsername
+                        source: "images/username.svg"
+                        
                     }
                     
-                    QQC2.TextField {
-                        id: txtPass
-                        width: 200
-                        echoMode: TextInput.Password
-                        placeholderText: i18nd("lliurex-sddm","Password")
-                        //anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        palette.highlight: "#3daee9"
+                    MouseArea {
+                        id: mouseArea
+                        anchors.fill: parent
+                        hoverEnabled: true
                         
-                        Keys.onReturnPressed: {
-                            loginFrame.enabled=false
-                            sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
+                        onEntered: {
+                            parent.border.color= "#3daee9"
+                            parent.border.width=1
                         }
-                        
-                        Image {
-                            source: "images/upcase.svg"
-                            anchors.right: parent.right
-                            anchors.rightMargin:5
-                            anchors.verticalCenter: parent.verticalCenter
-                            
-                            visible: keyboard.capsLock
-                        }
-                    }
-                }
-                
-                Text {
-                    id: message
-                    color: "red"
-                    height: 32
+                        onExited: {
+                            parent.border.color= "transparent"
+                            parent.border.width=0
 
-                    text: (theme.loginStatus==false) ? i18nd("lliurex-sddm","Login failed") : ((theme.serverStatus==false) ? i18nd("lliurex-sddm","No connection to server") : "")
-                    
-                    anchors.horizontalCenter: parent.horizontalCenter
+                        }
+                        
+                        onClicked: {
+                            if (mouse.button == Qt.LeftButton) {
+                                loginFrame.visible=false
+                                userFrame.visible=true
+                            }
+                        }
+                    }
                 }
                 
-                Lliurex.Button {
-                    id: btnLogin
-                    text: i18nd("lliurex-sddm","Login");
-                    implicitWidth: 200
-                    anchors.horizontalCenter: parent.horizontalCenter
+                QQC2.TextField {
+                    id: txtUser
+                    width: 200
+                    placeholderText: i18nd("lliurex-sddm","User name")
+                    //anchors.verticalCenter: parent.verticalCenter
+                    //anchors.horizontalCenter: parent.horizontalCenter
+                    onEditingFinished: {
+                        theme.loginStatus=true
+                        txtPass.focus=true
+                    }
+                    palette.highlight: "#3daee9"
                     
-                    onClicked: {
+                    Component.onCompleted: focus=true;
+                    
+                }
+                
+                Item {
+                    width: btnUserSelector.width
+                }
+            }
+            
+            RowLayout {
+                //anchors.horizontalCenter: parent.horizontalCenter
+                //anchors.right: btnLogin.right
+                Layout.alignment: Qt.AlignHCenter
+                spacing: 6
+                
+                Image {
+                    id: imgPassword
+                    source: "images/password.svg"
+                    //anchors.verticalCenter: parent.verticalCenter
+                }
+                
+                QQC2.TextField {
+                    id: txtPass
+                    width: 200
+                    echoMode: TextInput.Password
+                    placeholderText: i18nd("lliurex-sddm","Password")
+                    //anchors.horizontalCenter: parent.horizontalCenter
+                    //anchors.verticalCenter: parent.verticalCenter
+                    palette.highlight: "#3daee9"
+                    
+                    Keys.onReturnPressed: {
                         loginFrame.enabled=false
                         sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
                     }
-                }
-                
-                QQC2.ComboBox {
-                    id: cmbSession
-                    flat: true
-                    anchors.left:parent.left
-                    model: sessionModel
-                    currentIndex: sessionModel.lastIndex
-                    textRole: "name"
-                    palette.highlight: "#3daee9"
                     
-                    indicator: Item {}
-                    
-                    Component.onCompleted: {
+                    Image {
+                        source: "images/upcase.svg"
+                        anchors.right: parent.right
+                        anchors.rightMargin:5
+                        anchors.verticalCenter: parent.verticalCenter
                         
-                        for (var n=0;n<count;n++) {
-                            var index=model.index(n,0)
-                            /*
-                             * Ok, lets explain this crap
-                             * Role is an enum (integer) with quite a
-                             * bit of predefined role types. 0x0100 is the equivalent
-                             * for Qt::UserRole, from the docs:
-                             * The first role that can be used for application-specific purposes.
-                             * 
-                             * The +4 is the "name" offset
-                             * 
-                             * Warning! this may break easily!
-                            */
-                            var name=model.data(index,Qt.UserRole+4)
-                            
-                            if (name==="Plasma (X11)") {
-                                currentIndex=n
-                            }
-                        }
-                        
+                        visible: keyboard.capsLock
                     }
-                    
                 }
                 
+                Item {
+                    width: imgPassword.width
+                }
             }
+            /*
+            Text {
+                id: message
+                color: "red"
+                height: 128
+                Layout.alignment: Qt.AlignHCenter
+
+                text: (theme.loginStatus==false) ? i18nd("lliurex-sddm","Login failed") : ((theme.serverStatus==false) ? i18nd("lliurex-sddm","No connection to server") : "")
+                
+                //anchors.horizontalCenter: parent.horizontalCenter
+            }
+            */
+            Item {
+                Layout.fillWidth:true;
+                height:32
+                
+                Kirigami.InlineMessage {
+                    id: message
+                    anchors.fill:parent
+                    type: Kirigami.MessageType.Error
+                    //width:parent.width
+                    
+                    
+                    text: (theme.loginStatus==false) ? i18nd("lliurex-sddm","Login failed") : ((theme.serverStatus==false) ? i18nd("lliurex-sddm","No connection to server") : "")
+                    
+                    visible: text.length>0
+                }
+            }
+            
+            Lliurex.Button {
+                id: btnLogin
+                text: i18nd("lliurex-sddm","Login");
+                implicitWidth: 200
+                //anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
+                
+                onClicked: {
+                    loginFrame.enabled=false
+                    sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
+                }
+            }
+            
         }
+        
 
         /* Guest User Panels */
 
@@ -551,15 +540,17 @@ Rectangle {
     /* Shutdown frame */
     Lliurex.Window {
         id: shutdownFrame
+        title: "Shutdown"
         visible: false
         anchors.centerIn: parent
         
         width: 460
-        height: 180
+        height: 200
             
         Column {
             spacing: 40
-            anchors.centerIn: parent
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
             
             Row {
                 spacing: 10
@@ -622,18 +613,74 @@ Rectangle {
         
         RowLayout {
             anchors.fill: parent
-            spacing: 8
+            spacing: 12
+            
+            QQC2.ComboBox {
+                id: cmbSession
+                flat: true
+                
+                model: sessionModel
+                currentIndex: sessionModel.lastIndex
+                textRole: "name"
+                palette.highlight: "#3daee9"
+                
+                indicator: Item {}
+                    
+                Component.onCompleted: {
+                    
+                    for (var n=0;n<count;n++) {
+                        var index=model.index(n,0)
+                        /*
+                            * Ok, lets explain this crap
+                            * Role is an enum (integer) with quite a
+                            * bit of predefined role types. 0x0100 is the equivalent
+                            * for Qt::UserRole, from the docs:
+                            * The first role that can be used for application-specific purposes.
+                            * 
+                            * The +4 is the "name" offset
+                            * 
+                            * Warning! this may break easily!
+                        */
+                        var name=model.data(index,Qt.UserRole+4)
+                        
+                        if (name==="Plasma (X11)") {
+                            currentIndex=n
+                        }
+                    }
+                    
+                }
+                    
+            }
             
             Item {
                 Layout.fillWidth:true
             }
             
             QQC2.Label {
+                id: widgetHost
+                property string version:""
+                property string type:""
+                Layout.alignment: Qt.AlignCenter
+                
+                text: sddm.hostName + " "+version+" "+type
+                
+            }
+            
+            ColumnLayout {
                 id: widgetClock
                 Layout.alignment: Qt.AlignRight
                 
-                text: ""
+                property alias time: wTime.text
+                property alias date: wDate.text
                 
+                QQC2.Label {
+                    id: wTime
+                    Layout.alignment: Qt.AlignCenter
+                }
+                QQC2.Label {
+                    id: wDate
+                    Layout.alignment: Qt.AlignCenter
+                }
             }
             
             QQC2.Button {
