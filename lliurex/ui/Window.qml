@@ -19,14 +19,16 @@
 
 import QtQuick 2.6
 import QtQuick.Controls 2.6 as QQC2
+import QtQuick.Layouts 1.15
 
 Item {
     
     id: root
     default property Item contentItem: null
-    property int margin: 24
+    property int margin: 12
     property int shadowMargin: 6
     property int roundRadius: 5
+    property alias title: lblTitle.text
     
     Rectangle {
         id: shadow
@@ -44,14 +46,31 @@ Item {
         anchors.centerIn: parent
         width:shadow.width-shadowMargin
         height:shadow.height-shadowMargin
-    }
-    
-    Item {
-        id: container
-        anchors.centerIn: parent
         
-        width: background.width-margin
-        height: background.height-margin
+        ColumnLayout {
+            anchors.leftMargin: root.margin
+            anchors.rightMargin: root.margin
+            anchors.bottomMargin: root.margin
+            anchors.topMargin: 8
+            anchors.centerIn: parent
+            anchors.fill:parent
+            
+            
+            Text {
+                id: lblTitle
+                Layout.alignment: Qt.AlignHCenter
+            }
+            
+            Item {
+                id: container
+                Layout.alignment: Qt.AlignHCenter
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                //width: background.width-margin
+                //height: background.height-margin-y
+            }
+        }
+        
     }
     
     onContentItemChanged: {
