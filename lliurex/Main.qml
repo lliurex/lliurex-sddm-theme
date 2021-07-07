@@ -356,18 +356,7 @@ Rectangle {
                     width: imgPassword.width
                 }
             }
-            /*
-            Text {
-                id: message
-                color: "red"
-                height: 128
-                Layout.alignment: Qt.AlignHCenter
-
-                text: (theme.loginStatus==false) ? i18nd("lliurex-sddm","Login failed") : ((theme.serverStatus==false) ? i18nd("lliurex-sddm","No connection to server") : "")
-                
-                //anchors.horizontalCenter: parent.horizontalCenter
-            }
-            */
+            
             Item {
                 Layout.fillWidth:true;
                 height:32
@@ -402,7 +391,7 @@ Rectangle {
         
 
         /* Guest User Panels */
-
+/*
         Item {
                 width: loginTop.width
                 height: loginTop.height
@@ -535,6 +524,7 @@ Rectangle {
                         }
                 }
         } // Guest Panels
+        */
     }
     
     /* Shutdown frame */
@@ -598,7 +588,6 @@ Rectangle {
             }
             
         }
-            
         
     }
     
@@ -688,10 +677,7 @@ Rectangle {
                 Layout.preferredWidth: 40
                 flat:true
                 
-                Image {
-                    anchors.centerIn: parent
-                    source: "images/shutdown.svg"
-                }
+                icon.name: "system-shutdown"
                 
                 onClicked: {
                     loginFrame.visible=false
