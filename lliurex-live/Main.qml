@@ -153,8 +153,6 @@ Rectangle {
         
         anchors.fill: parent
         
-        //frequency:0.01
-        //depth:4
     }
     
     Lliurex.Window {
@@ -200,11 +198,8 @@ Rectangle {
                         onCurrentIndexChanged: {
                             var tmp = model[currentIndex].name;
                             var lang = tmp.split("_")[0];
-                            console.log("lang:",tmp);
-                            console.log("lang:",lang);
                             
                             var x = llx.findBestLayout(tmp);
-                            console.log("find:",x);
                             
                             for (var n=0;n<llx.layoutsModel.length;n++) {
                                 //console.log(llx.layoutsModel[n].name);
@@ -243,9 +238,13 @@ Rectangle {
                 //anchors.fill:parent
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.preferredWidth: 200
+                Layout.preferredWidth: 400
                 
-                Layout.alignment:Qt.AlignRight
+                Layout.alignment:Qt.AlignRight | Qt.AlignBottom
+                
+                Item {
+                    height:100
+                }
                 
                 Text {
                     Layout.alignment: Qt.AlignCenter
@@ -253,25 +252,29 @@ Rectangle {
                 }
                 
                 Item {
-                    height: 300
+                    Layout.fillHeight: true
                 }
                 
                 RowLayout {
                     Layout.alignment: Qt.AlignBottom | Qt.AlignRight
                     
-                    Lliurex.Button {
+                    QQC2.Button {
                         Layout.alignment: Qt.AlignBottom | Qt.AlignLeft
                         text: strings[4]
+                        icon.name: "system-shutdown"
+                        display: QQC2.AbstractButton.TextBesideIcon
                         
                         onClicked: {
                             paneMain.visible=false;
                             paneShutdown.visible=true;
                         }
                     }
-                    Lliurex.Button {
+                    QQC2.Button {
                         id: btnOk
                         Layout.alignment: Qt.AlignBottom | Qt.AlignRight
                         text: strings[3]
+                        icon.name: "dialog-ok"
+                        display: QQC2.AbstractButton.TextBesideIcon
                         
                         onClicked: {
                             btnOk.enabled=false;
@@ -315,8 +318,10 @@ Rectangle {
                 
                 Layout.alignment: Qt.AlignCenter
                 
-                Lliurex.Button {
+                QQC2.Button {
                     text: "Power off"
+                    icon.name: "system-shutdown"
+                    display: QQC2.AbstractButton.TextUnderIcon
                     
                     enabled:sddm.canPowerOff
                         onClicked: {
@@ -324,8 +329,11 @@ Rectangle {
                         }
                 }
                 
-                Lliurex.Button {
+                QQC2.Button {
                     text: "Reboot"
+                    
+                    icon.name: "system-reboot"
+                    display: QQC2.AbstractButton.TextUnderIcon
                     
                     enabled: sddm.canReboot
                         onClicked: {
@@ -335,7 +343,7 @@ Rectangle {
                 
             }
             
-            Lliurex.Button {
+            QQC2.Button {
                 Layout.alignment: Qt.AlignBottom | Qt.AlignRight
                 text: "cancel"
                 
