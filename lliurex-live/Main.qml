@@ -26,6 +26,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0 as QQC2
 import QtQuick.Layouts 1.15
 import SddmComponents 2.0 as Sddm
+import org.kde.breeze 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.16 as Kirigami
 
@@ -177,7 +178,7 @@ Rectangle {
                     text: strings[0]
                 }
                 QQC2.Frame {
-                    Layout.preferredWidth: 250
+                    Layout.preferredWidth: 300
                     Layout.preferredHeight: 300
                     padding: 24
                     
@@ -222,7 +223,7 @@ Rectangle {
                 }
                 QQC2.ComboBox {
                     id: cmbLayout
-                    Layout.preferredWidth: 250
+                    Layout.preferredWidth: 300
                     model: llx.layoutsModel
                     
                     displayText: model[currentIndex].longName
@@ -263,6 +264,7 @@ Rectangle {
                         text: strings[4]
                         icon.name: "system-shutdown"
                         display: QQC2.AbstractButton.TextBesideIcon
+                        implicitWidth:96
                         
                         onClicked: {
                             paneMain.visible=false;
@@ -275,6 +277,7 @@ Rectangle {
                         text: strings[3]
                         icon.name: "dialog-ok"
                         display: QQC2.AbstractButton.TextBesideIcon
+                        Layout.preferredWidth: 96
                         
                         onClicked: {
                             btnOk.enabled=false;

@@ -305,7 +305,7 @@ Rectangle {
                         theme.loginStatus=true
                         txtPass.focus=true
                     }
-                    palette.highlight: "#3daee9"
+                    //palette.highlight: "#3daee9"
                     
                     Component.onCompleted: focus=true;
                     
@@ -335,7 +335,7 @@ Rectangle {
                     placeholderText: i18nd("lliurex-sddm","Password")
                     //anchors.horizontalCenter: parent.horizontalCenter
                     //anchors.verticalCenter: parent.verticalCenter
-                    palette.highlight: "#3daee9"
+                    //palette.highlight: "#3daee9"
                     
                     Keys.onReturnPressed: {
                         loginFrame.enabled=false
@@ -374,7 +374,7 @@ Rectangle {
                 }
             }
             
-            Lliurex.Button {
+            QQC2.Button {
                 id: btnLogin
                 text: i18nd("lliurex-sddm","Login");
                 implicitWidth: 200
@@ -545,7 +545,7 @@ Rectangle {
             Row {
                 spacing: 10
                 
-                Lliurex.Button {
+                QQC2.Button {
                     text: i18nd("lliurex-sddm","Power off")
                     enabled:sddm.canPowerOff
                     onClicked: {
@@ -553,7 +553,7 @@ Rectangle {
                     }
                 }
                 
-                Lliurex.Button {
+                QQC2.Button {
                     text: i18nd("lliurex-sddm","Reboot")
                     enabled: sddm.canReboot
                     onClicked: {
@@ -561,7 +561,7 @@ Rectangle {
                     }
                 }
                 
-                Lliurex.Button {
+                QQC2.Button {
                     text: i18nd("lliurex-sddm","Suspend")
                     enabled: sddm.canSuspend
                     onClicked: {
@@ -569,7 +569,7 @@ Rectangle {
                     }
                 }
                 
-                Lliurex.Button {
+                QQC2.Button {
                     text: i18nd("lliurex-sddm","Hibernate")
                     enabled: sddm.canHibernate
                     onClicked: {
@@ -578,7 +578,7 @@ Rectangle {
                 }
             }
 
-            Lliurex.Button {
+            QQC2.Button {
                 text: i18nd("lliurex-sddm","Cancel")
                 anchors.right: parent.right
                 onClicked: {
@@ -611,7 +611,7 @@ Rectangle {
                 model: sessionModel
                 currentIndex: sessionModel.lastIndex
                 textRole: "name"
-                palette.highlight: "#3daee9"
+                //palette.highlight: "#3daee9"
                 
                 indicator: Item {}
                     
@@ -678,6 +678,7 @@ Rectangle {
                 flat:true
                 
                 icon.name: "system-shutdown"
+                icon.width:32
                 
                 onClicked: {
                     loginFrame.visible=false

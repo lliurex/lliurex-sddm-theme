@@ -152,10 +152,12 @@ FocusScope {
             }
         }
         
-        Lliurex.Button {
+        Controls.Button {
             Layouts.Layout.alignment: Qt.AlignRight
             text: i18nd("lliurex-sddm","Cancel")
-            
+            icon.name: "dialog-cancel"
+            display: Controls.AbstractButton.TextBesideIcon
+                        
             onClicked: {
                 cancel();
             }
