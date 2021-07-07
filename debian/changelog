@@ -1,3 +1,10 @@
+lliurex-sddm-theme (21.2.0.0) focal; urgency=medium
+
+  * Fixed sddm.service override
+  * Lots of ui works (still wip)
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Wed, 07 Jul 2021 23:59:22 +0200
+
 lliurex-sddm-theme (21.1.3.0) focal; urgency=medium
 
   * Antoher refactor sprint
