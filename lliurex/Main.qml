@@ -534,7 +534,7 @@ Rectangle {
         visible: false
         anchors.centerIn: parent
         
-        width: 460
+        width: 500
         height: 200
             
         Column {
@@ -548,6 +548,10 @@ Rectangle {
                 QQC2.Button {
                     text: i18nd("lliurex-sddm","Power off")
                     enabled:sddm.canPowerOff
+                    implicitWidth: PlasmaCore.Units.gridUnit*6
+                    icon.name: "system-shutdown"
+                    display: QQC2.AbstractButton.TextUnderIcon
+                    
                     onClicked: {
                         sddm.powerOff()
                     }
@@ -556,6 +560,10 @@ Rectangle {
                 QQC2.Button {
                     text: i18nd("lliurex-sddm","Reboot")
                     enabled: sddm.canReboot
+                    implicitWidth: PlasmaCore.Units.gridUnit*6
+                    icon.name: "system-reboot"
+                    display: QQC2.AbstractButton.TextUnderIcon
+                    
                     onClicked: {
                         sddm.reboot()
                     }
@@ -564,6 +572,10 @@ Rectangle {
                 QQC2.Button {
                     text: i18nd("lliurex-sddm","Suspend")
                     enabled: sddm.canSuspend
+                    implicitWidth: PlasmaCore.Units.gridUnit*6
+                    icon.name: "system-suspend"
+                    display: QQC2.AbstractButton.TextUnderIcon
+                    
                     onClicked: {
                         sddm.suspend()
                     }
@@ -572,6 +584,10 @@ Rectangle {
                 QQC2.Button {
                     text: i18nd("lliurex-sddm","Hibernate")
                     enabled: sddm.canHibernate
+                    implicitWidth: PlasmaCore.Units.gridUnit*6
+                    icon.name: "system-suspend-hibernate"
+                    display: QQC2.AbstractButton.TextUnderIcon
+                    
                     onClicked: {
                         sddm.hibernate()
                     }
@@ -581,6 +597,10 @@ Rectangle {
             QQC2.Button {
                 text: i18nd("lliurex-sddm","Cancel")
                 anchors.right: parent.right
+                implicitWidth: PlasmaCore.Units.gridUnit*6
+                icon.name: "dialog-cancel"
+                display: QQC2.AbstractButton.TextBesideIcon
+                
                 onClicked: {
                     loginFrame.visible=true
                     shutdownFrame.visible=false
@@ -606,7 +626,7 @@ Rectangle {
             
             QQC2.ComboBox {
                 id: cmbSession
-                flat: true
+                //flat: true
                 
                 model: sessionModel
                 currentIndex: sessionModel.lastIndex
@@ -639,6 +659,11 @@ Rectangle {
                     
                 }
                     
+            }
+            QQC2.Button {
+                visible: false
+                icon.source:"images/guest_32.svg"
+                implicitWidth: 32
             }
             
             Item {
@@ -674,11 +699,12 @@ Rectangle {
             
             QQC2.Button {
                 Layout.alignment: Qt.AlignRight
-                Layout.preferredWidth: 40
-                flat:true
                 
+                flat:true
+                implicitWidth: 32
                 icon.name: "system-shutdown"
                 icon.width:32
+                icon.height:32
                 
                 onClicked: {
                     loginFrame.visible=false

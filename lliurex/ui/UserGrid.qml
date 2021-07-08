@@ -22,6 +22,8 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.1 as Layouts
 import QtQuick.Controls 2.5 as Controls
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 3.0 as PC3
+
 
 
 FocusScope {
@@ -156,6 +158,7 @@ FocusScope {
             Layouts.Layout.alignment: Qt.AlignRight
             text: i18nd("lliurex-sddm","Cancel")
             icon.name: "dialog-cancel"
+            implicitWidth: PlasmaCore.Units.gridUnit*6
             display: Controls.AbstractButton.TextBesideIcon
                         
             onClicked: {

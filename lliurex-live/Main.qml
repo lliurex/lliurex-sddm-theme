@@ -26,8 +26,8 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0 as QQC2
 import QtQuick.Layouts 1.15
 import SddmComponents 2.0 as Sddm
-import org.kde.breeze 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 3.0 as PC3
 import org.kde.kirigami 2.16 as Kirigami
 
 Rectangle {
@@ -47,16 +47,18 @@ Rectangle {
     property var plasmaIndex: 0;
     
     property var ts : [ 
-    ["C",["Language","Keyboard layout","Welcome to LliureX 21 live","Ok","Shutdown"]],
-    ["ca_ES.UTF-8@valencia",["Llanguatge","Teclat","Benvingut a LliureX 21 live","Acepta","Apaga"]] , 
-    ["es_ES.UTF-8",["Lenguage","Teclado","Bienvenido a LliureX 21 live","Aceptar","Apagar"]] 
+    //      0           1                       2                   3       4       5           6   
+    ["C",["Language","Keyboard layout","Welcome to LliureX 21 live","Ok","Cancel","Shutdown","Reboot"]],
+    ["ca_ES.UTF-8@valencia",["Idioma","Teclat","Benvingut a LliureX 21 live","Acepta","Cancel·la","Atura","Reinicia"]] , 
+    ["es_ES.UTF-8",["Lenguage","Teclado","Bienvenido a LliureX 21 live","Aceptar","Cancelar","Apagar","Reiniciar"]],
+    ["ca_ES.UTF-8",["Idioma","Teclat","Benvingut a LliureX 21 live","Acepta","Cancel·la","Atura","Reinicia"]] , 
         ];
     property var strings : ["","",""];
     
     function retranslate(lang) {
         var index = -1;
         for (var n=0;n<ts.length;n++) {
-            console.log(ts[n][0]," versus ",lang);
+            //console.log(ts[n][0]," versus ",lang);
             if (ts[n][0]===lang) {
                 index=n;
                 break;
@@ -66,11 +68,11 @@ Rectangle {
         if (index==-1) {
             index = 0;
         }
-        console.log(index);
+        //console.log(index);
         var tmp = []
         for (var n=0;n<ts[index][1].length;n++) {
             tmp.push(ts[index][1][n]);
-            console.log(ts[index][1][n]);
+            //console.log(ts[index][1][n]);
         }
         
         strings = tmp;
@@ -214,6 +216,8 @@ Rectangle {
                             
                         }
                         
+                        
+                        
                     }
                 }
                 Text {
@@ -221,7 +225,7 @@ Rectangle {
                     Layout.fillWidth: true
                     text: strings[1]
                 }
-                QQC2.ComboBox {
+                PC3.ComboBox {
                     id: cmbLayout
                     Layout.preferredWidth: 300
                     model: llx.layoutsModel
@@ -231,6 +235,7 @@ Rectangle {
                     delegate: Kirigami.BasicListItem {
                         label: modelData.longName
                     }
+                    
                     
                 }
         
@@ -259,25 +264,25 @@ Rectangle {
                 RowLayout {
                     Layout.alignment: Qt.AlignBottom | Qt.AlignRight
                     
-                    QQC2.Button {
+                    PC3.Button {
                         Layout.alignment: Qt.AlignBottom | Qt.AlignLeft
-                        text: strings[4]
+                        text: strings[5]
                         icon.name: "system-shutdown"
                         display: QQC2.AbstractButton.TextBesideIcon
-                        implicitWidth:96
+                        implicitWidth: PlasmaCore.Units.gridUnit*6
                         
                         onClicked: {
                             paneMain.visible=false;
                             paneShutdown.visible=true;
                         }
                     }
-                    QQC2.Button {
+                    PC3.Button {
                         id: btnOk
                         Layout.alignment: Qt.AlignBottom | Qt.AlignRight
                         text: strings[3]
                         icon.name: "dialog-ok"
                         display: QQC2.AbstractButton.TextBesideIcon
-                        Layout.preferredWidth: 96
+                        implicitWidth: PlasmaCore.Units.gridUnit*6
                         
                         onClicked: {
                             btnOk.enabled=false;
@@ -308,7 +313,7 @@ Rectangle {
         visible:false
         width:300
         height:180
-        title: "Shutdown"
+        title: strings[5]
         
         anchors.centerIn:parent
         
@@ -321,10 +326,11 @@ Rectangle {
                 
                 Layout.alignment: Qt.AlignCenter
                 
-                QQC2.Button {
-                    text: "Power off"
+                PC3.Button {
+                    text: strings[5]
                     icon.name: "system-shutdown"
                     display: QQC2.AbstractButton.TextUnderIcon
+                    implicitWidth: PlasmaCore.Units.gridUnit*6
                     
                     enabled:sddm.canPowerOff
                         onClicked: {
@@ -332,11 +338,12 @@ Rectangle {
                         }
                 }
                 
-                QQC2.Button {
-                    text: "Reboot"
+                PC3.Button {
+                    text: strings[6]
                     
                     icon.name: "system-reboot"
                     display: QQC2.AbstractButton.TextUnderIcon
+                    implicitWidth: PlasmaCore.Units.gridUnit*6
                     
                     enabled: sddm.canReboot
                         onClicked: {
@@ -346,10 +353,13 @@ Rectangle {
                 
             }
             
-            QQC2.Button {
+            PC3.Button {
                 Layout.alignment: Qt.AlignBottom | Qt.AlignRight
-                text: "cancel"
-                
+                text: strings[4]
+                implicitWidth: PlasmaCore.Units.gridUnit*6
+                icon.name: "dialog-cancel"
+                display: QQC2.AbstractButton.TextBesideIcon
+                        
                 onClicked: {
                     paneMain.visible=true;
                     paneShutdown.visible=false;
