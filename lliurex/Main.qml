@@ -374,6 +374,7 @@ Rectangle {
                 }
             }
             
+                
             QQC2.Button {
                 id: btnLogin
                 text: i18nd("lliurex-sddm","Login");
@@ -527,6 +528,65 @@ Rectangle {
         */
     }
     
+    /* guest frame */
+    Lliurex.Window {
+        id: guestFrame
+        width: 400
+        height: 340
+        visible: false
+        margin:24
+        title: i18nd("lliurex-sddm","Guest User")
+        anchors.centerIn: parent
+        
+        ColumnLayout {
+            anchors.fill:parent
+            
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: "images/guest.svg"
+            }
+            
+            QQC2.Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth:true
+                wrapMode: Text.WordWrap
+                horizontalAlignment: Text.AlignJustify
+                
+                text: i18nd("lliurex-sddm","Access this computer using a guest account. Everything stored with this account will be deleted after you log out.")
+                
+            }
+            
+            QQC2.Button {
+                Layout.alignment: Qt.AlignCenter
+                text: i18nd("lliurex-sddm","Enter")
+                implicitWidth: PlasmaCore.Units.gridUnit*6
+                
+                onClicked: {
+                    guestFrame.enabled=false;
+                    sddm.login("guest-user","",cmbSession.currentIndex)
+                }
+            }
+            
+            Item {
+                implicitHeight:PlasmaCore.Units.gridUnit*2
+            }
+            
+            QQC2.Button {
+                text: i18nd("lliurex-sddm","Cancel")
+                implicitWidth: PlasmaCore.Units.gridUnit*6
+                icon.name: "dialog-cancel"
+                display: QQC2.AbstractButton.TextBesideIcon
+                
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+                
+                onClicked: {
+                    loginFrame.visible=true;
+                    guestFrame.visible=false;
+                }
+            }
+        }
+    }
+    
     /* Shutdown frame */
     Lliurex.Window {
         id: shutdownFrame
@@ -661,9 +721,29 @@ Rectangle {
                     
             }
             QQC2.Button {
-                visible: false
+                
                 icon.source:"images/guest_32.svg"
-                implicitWidth: 32
+                icon.width:24
+                icon.height:24
+                display: QQC2.AbstractButton.TextBesideIcon
+                text: i18nd("lliurex-sddm","Guest User")
+                
+                visible: {
+                    for (var n=0;n< userModel.count;n++) {
+                        var index=userModel.index(n,0);
+                        var name=userModel.data(index,Qt.UserRole+1);
+                        if ( name === "guest-user" ) {
+                            console.log("Guest user found");
+                            return true;
+                        }
+                    }
+                    return false;
+
+                }
+                onClicked: {
+                    loginFrame.visible=false;
+                    guestFrame.visible=true;
+                }
             }
             
             Item {

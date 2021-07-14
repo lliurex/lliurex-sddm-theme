@@ -49,9 +49,9 @@ Rectangle {
     property var ts : [ 
     //      0           1                       2                   3       4       5           6   
     ["C",["Language","Keyboard layout","Welcome to LliureX 21 live","Ok","Cancel","Shutdown","Reboot"]],
-    ["ca_ES.UTF-8@valencia",["Idioma","Teclat","Benvingut a LliureX 21 live","Acepta","Cancel·la","Atura","Reinicia"]] , 
+    ["ca_ES.UTF-8@valencia",["Idioma","Teclat","Benvingut a LliureX 21 live","Accepta","Cancel·la","Atura","Reinicia"]] , 
     ["es_ES.UTF-8",["Lenguage","Teclado","Bienvenido a LliureX 21 live","Aceptar","Cancelar","Apagar","Reiniciar"]],
-    ["ca_ES.UTF-8",["Idioma","Teclat","Benvingut a LliureX 21 live","Acepta","Cancel·la","Atura","Reinicia"]] , 
+    ["ca_ES.UTF-8",["Idioma","Teclat","Benvingut a LliureX 21 live","Accepta","Cancel·la","Atura","Reinicia"]] , 
         ];
     property var strings : ["","",""];
     
