@@ -68,11 +68,10 @@ Rectangle {
         if (index==-1) {
             index = 0;
         }
-        //console.log(index);
+        
         var tmp = []
         for (var n=0;n<ts[index][1].length;n++) {
             tmp.push(ts[index][1][n]);
-            //console.log(ts[index][1][n]);
         }
         
         strings = tmp;
@@ -225,7 +224,7 @@ Rectangle {
                     Layout.fillWidth: true
                     text: strings[1]
                 }
-                PC3.ComboBox {
+                QQC2.ComboBox {
                     id: cmbLayout
                     Layout.preferredWidth: 300
                     model: llx.layoutsModel

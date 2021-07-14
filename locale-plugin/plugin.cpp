@@ -125,7 +125,7 @@ Locale::Locale(QObject* parent): QObject(parent)
     
     QStringList lines = run(QStringLiteral("localectl"),{QStringLiteral("list-locales")});
     
-    Language* firsts[4];
+    Language* firsts[4] = {nullptr,nullptr,nullptr,nullptr};
     
     for (QString line:lines) {
         
@@ -164,7 +164,9 @@ Locale::Locale(QObject* parent): QObject(parent)
     
     //sort work arround
     for (int n=0;n<4;n++) {
-        m_languagesModel.push_front(firsts[n]);
+        if (firsts[n]!=nullptr) {
+            m_languagesModel.push_front(firsts[n]);
+        }
     }
     
     lines = run(QStringLiteral("localectl"),{QStringLiteral("list-x11-keymap-layouts")});
