@@ -1,3 +1,10 @@
+lliurex-sddm-theme (21.5.0.0) focal; urgency=medium
+
+  * Enabled guest user feature
+  * Fixed valencian string
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Wed, 14 Jul 2021 12:27:06 +0200
+
 lliurex-sddm-theme (21.4.0.0) focal; urgency=medium
 
   * ui work and translations
