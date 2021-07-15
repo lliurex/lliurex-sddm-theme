@@ -1,8 +1,21 @@
+lliurex-sddm-theme (21.5.2.0) focal; urgency=medium
+
+  * Refactor completed, bugs are expected
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Thu, 15 Jul 2021 23:58:17 +0200
+
+lliurex-sddm-theme (21.5.1.0) focal; urgency=medium
+
+  * fixed segfault on locale-plugin
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Wed, 14 Jul 2021 23:42:56 +0200
+
 lliurex-sddm-theme (21.5.0.0) focal; urgency=medium
 
-  * Refactor complete, some bugs expected
+  * Enabled guest user feature
+  * Fixed valencian string
 
- -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Thu, 15 Jul 2021 23:56:10 +0200
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Wed, 14 Jul 2021 12:27:06 +0200
 
 lliurex-sddm-theme (21.4.0.0) focal; urgency=medium
 
