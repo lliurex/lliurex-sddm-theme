@@ -76,7 +76,7 @@ QSGNode* NoiseSurface::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* up
             QImage* surface = noise::perlin(width(),height(),m_frequency,m_depth);
             auto t1 = std::chrono::steady_clock::now();
             double us = std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count();
-            clog<<"time: "<<us<<" us"<<endl;
+            //clog<<"time: "<<us<<" us"<<endl;
             
             QSGTexture* texture = window()->createTextureFromImage(*surface,QQuickWindow::TextureHasAlphaChannel);
             node->setTexture(texture);
@@ -122,7 +122,7 @@ QSGNode* UniformSurface::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* 
             QImage* surface = noise::uniform(width(),height());
             auto t1 = std::chrono::steady_clock::now();
             double us = std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count();
-            clog<<"time: "<<us<<" us"<<endl;
+            //clog<<"time: "<<us<<" us"<<endl;
             
             QSGTexture* texture = window()->createTextureFromImage(*surface,QQuickWindow::TextureHasAlphaChannel);
             node->setTexture(texture);
