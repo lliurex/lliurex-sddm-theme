@@ -81,24 +81,19 @@ Rectangle {
         }
         
         onResponse: {
-            if (value[0]==true) {
-                var version = value[1];
-                theme.lliurexVersion=version;
-                var tmp = version.split(",");
-                console.log(tmp);
-                
-                theme.lliurexType="unknown";
-                for (var n=0;n<tmp.length;n++) {
-                    if (tmp[n]==="client" || tmp[n]==="client-lite") {
-                        theme.lliurexType="client";
-                    }
+            console.log("version:",value);
+            
+            theme.lliurexVersion=value;
+            var tmp = value.split(",");
+            
+            theme.lliurexType="unknown";
+            for (var n=0;n<tmp.length;n++) {
+                if (tmp[n]==="client" || tmp[n]==="client-lite") {
+                    theme.lliurexType="client";
                 }
-                
-                console.log("Lliurex type:",theme.lliurexType);
-                
-                widgetHost.version=theme.lliurexVersion;
-                widgetHost.type=theme.lliurexType;
             }
+            
+            console.log("Lliurex type:",theme.lliurexType);
             
         }
     }
@@ -682,11 +677,12 @@ Rectangle {
         
         RowLayout {
             anchors.fill: parent
-            spacing: 12
+            spacing: PlasmaCore.Units.largeSpacing
             
             QQC2.ComboBox {
                 id: cmbSession
                 //flat: true
+                Layout.alignment: Qt.AlignLeft
                 
                 model: sessionModel
                 currentIndex: sessionModel.lastIndex
@@ -721,7 +717,7 @@ Rectangle {
                     
             }
             QQC2.Button {
-                
+                Layout.alignment: Qt.AlignLeft
                 icon.source:"images/guest_32.svg"
                 icon.width:24
                 icon.height:24
@@ -750,13 +746,15 @@ Rectangle {
                 Layout.fillWidth:true
             }
             
+            
             QQC2.Label {
                 id: widgetHost
-                property string version:""
-                property string type:""
-                Layout.alignment: Qt.AlignCenter
+                Layout.alignment: Qt.AlignRight
+                //Layout.fillWidth: true
                 
-                text: sddm.hostName + " "+version+" "+type
+                horizontalAlignment: Text.AlignHCenter
+                
+                text: sddm.hostName + " "+theme.lliurexVersion
                 
             }
             
