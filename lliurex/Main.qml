@@ -35,8 +35,6 @@ Rectangle {
     id: theme
     property int checkTime:0
     property int programmedCheck:0
-    property bool loginStatus: true
-    property bool serverStatus: true
     
     property string lliurexVersion: ""
     property string lliurexType: ""
@@ -81,24 +79,19 @@ Rectangle {
         }
         
         onResponse: {
-            if (value[0]==true) {
-                var version = value[1];
-                theme.lliurexVersion=version;
-                var tmp = version.split(",");
-                console.log(tmp);
-                
-                theme.lliurexType="unknown";
-                for (var n=0;n<tmp.length;n++) {
-                    if (tmp[n]==="client" || tmp[n]==="client-lite") {
-                        theme.lliurexType="client";
-                    }
+            console.log("version:",value);
+            
+            theme.lliurexVersion=value;
+            var tmp = value.split(",");
+            
+            theme.lliurexType="unknown";
+            for (var n=0;n<tmp.length;n++) {
+                if (tmp[n]==="client" || tmp[n]==="client-lite") {
+                    theme.lliurexType="client";
                 }
-                
-                console.log("Lliurex type:",theme.lliurexType);
-                
-                widgetHost.version=theme.lliurexVersion;
-                widgetHost.type=theme.lliurexType;
             }
+            
+            console.log("Lliurex type:",theme.lliurexType);
             
         }
     }
@@ -111,13 +104,15 @@ Rectangle {
         method: "lliurex_version"
         
         onError: {
-            theme.serverStatus=false;
+            message.type=Kirigami.MessageType.Warning;
+            message.text=i18nd("lliurex-sddm","No connection to server");
+            message.visible=true;
             theme.programmedCheck=3000;
         }
         
         onResponse: {
             console.log("server:",value);
-            theme.serverStatus=true;
+            message.visible=false;
         }
     }
     
@@ -131,13 +126,16 @@ Rectangle {
         target: sddm
         
         function onLoginSucceeded() {
-            theme.loginStatus=true;
+            
             loginFrame.enabled=true;
-            message.text="";
+            message.visible=false;
         }
         
         function onLoginFailed() {
-            theme.loginStatus=false;
+            message.type=Kirigami.MessageType.Error;
+            message.text=i18nd("lliurex-sddm","Login failed");
+            message.visible=true;
+            
             loginFrame.enabled=true;
             txtPass.text = "";
             txtPass.focus = true;
@@ -302,7 +300,6 @@ Rectangle {
                     //anchors.verticalCenter: parent.verticalCenter
                     //anchors.horizontalCenter: parent.horizontalCenter
                     onEditingFinished: {
-                        theme.loginStatus=true
                         txtPass.focus=true
                     }
                     //palette.highlight: "#3daee9"
@@ -364,16 +361,11 @@ Rectangle {
                 Kirigami.InlineMessage {
                     id: message
                     anchors.fill:parent
-                    type: Kirigami.MessageType.Error
-                    //width:parent.width
                     
-                    
-                    text: (theme.loginStatus==false) ? i18nd("lliurex-sddm","Login failed") : ((theme.serverStatus==false) ? i18nd("lliurex-sddm","No connection to server") : "")
-                    
-                    visible: text.length>0
                 }
             }
             
+                
             QQC2.Button {
                 id: btnLogin
                 text: i18nd("lliurex-sddm","Login");
@@ -389,142 +381,65 @@ Rectangle {
             
         }
         
-
-        /* Guest User Panels */
-/*
-        Item {
-                width: loginTop.width
-                height: loginTop.height
-                anchors.bottom: loginTop.bottom
-                anchors.right: loginTop.right
-                visible: {
-                        var x=false
-                        for (var n=0;n< userModel.count;n++) {
-                                var index=userModel.index(n,0);
-                                var name=userModel.data(index,0x0100+1);
-                                if ( name === "guest-user" )
-                                {
-                                        x=true
-                                        break
-                                }
-                        }
-                        return x
-
+    }
+    
+    /* guest frame */
+    Lliurex.Window {
+        id: guestFrame
+        width: 400
+        height: 340
+        visible: false
+        margin:24
+        title: i18nd("lliurex-sddm","Guest User")
+        anchors.centerIn: parent
+        
+        ColumnLayout {
+            anchors.fill:parent
+            
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: "images/guest.svg"
+            }
+            
+            QQC2.Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth:true
+                wrapMode: Text.WordWrap
+                horizontalAlignment: Text.AlignJustify
+                
+                text: i18nd("lliurex-sddm","Access this computer using a guest account. Everything stored with this account will be deleted after you log out.")
+                
+            }
+            
+            QQC2.Button {
+                Layout.alignment: Qt.AlignCenter
+                text: i18nd("lliurex-sddm","Enter")
+                implicitWidth: PlasmaCore.Units.gridUnit*6
+                
+                onClicked: {
+                    guestFrame.enabled=false;
+                    sddm.login("guest-user","",cmbSession.currentIndex)
                 }
-
-                Rectangle {
-                        id: guestImageHighlight
-                        width: guestImage.width+2
-                        height: guestImage.height+2
-                        anchors.bottom: parent.bottom
-                        anchors.right: parent.right
-                        anchors.rightMargin: 30
-                        anchors.bottomMargin: 30
-                        border.color:"#3daee9"
-                        border.width:0
-                        color:"transparent"
+            }
+            
+            Item {
+                implicitHeight:PlasmaCore.Units.gridUnit*2
+            }
+            
+            QQC2.Button {
+                text: i18nd("lliurex-sddm","Cancel")
+                implicitWidth: PlasmaCore.Units.gridUnit*6
+                icon.name: "dialog-cancel"
+                display: QQC2.AbstractButton.TextBesideIcon
+                
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+                
+                onClicked: {
+                    loginFrame.visible=true;
+                    guestFrame.visible=false;
                 }
-
-                Text {
-                        id: tooltipGuest
-                        text:  i18nd("lliurex-sddm","Guest User")
-                        visible: false
-                        color: "#3daee9"
-                        anchors.verticalCenter: guestImage.verticalCenter
-                        anchors.right: guestImage.left
-                        anchors.rightMargin: 10
-                }
-
-                Image {
-                        id: guestImage
-                        source: "images/guest_32.svg"
-                        anchors.horizontalCenter: guestImageHighlight.horizontalCenter
-                        anchors.verticalCenter: guestImageHighlight.verticalCenter
-
-                        MouseArea {
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                acceptedButtons: Qt.LeftButton
-
-                                onEntered: {
-                                        tooltipGuest.visible = true
-                                        guestImageHighlight.border.width=1
-                                }
-
-                                onExited: {
-                                        tooltipGuest.visible = false
-                                        guestImageHighlight.border.width=0
-                                }
-
-                                onClicked: {
-                                        if (loginColumn.visible) {
-                                                loginColumn.visible = false
-                                                guestLoginRectangle.visible = true
-                                                parent.source= "images/go-back.svg"
-                                                tooltipGuest.text = i18nd("lliurex-sddm","Go back")
-                                        }
-                                        else {
-                                                loginColumn.visible = true
-                                                guestLoginRectangle.visible = false
-                                                parent.source= "images/guest_32.svg"
-                                                tooltipGuest.text = i18nd("lliurex-sddm","Guest User")
-                                        }
-                                }
-                        }
-
-                }
-
-                Item {
-                        id: guestLoginRectangle
-                        width: loginColumn.width
-                        height: loginColumn.height
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        visible: false
-                        Image {
-                                id: guestLogo
-                                source: "images/guest.svg"
-                                anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        Text {
-                                id: guestTitle
-                                text: i18nd("lliurex-sddm","Guest User")
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.top: guestLogo.bottom
-                                anchors.topMargin: 5
-                                 font.pointSize: 18
-                        }
-
-                        Text {
-                                id: guestDescription
-                                wrapMode: Text.WordWrap
-                                horizontalAlignment: Text.AlignJustify
-                                width:300
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.top: guestTitle.bottom
-                                anchors.topMargin: 5
-                                text: i18nd("lliurex-sddm","Access this computer using a guest account. Everything stored with this account will be deleted after you log out.")
-                                font.pointSize: 10
-                                color: "#444444"
-                        }
-
-                        Lliurex.Button {
-                                id: guestLoginButton
-                                text: i18nd("lliurex-sddm","Enter")
-                                width: 250
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.top: guestDescription.bottom
-                                anchors.topMargin: 25
-
-                                onClicked: {
-                                        loginFrame.enabled=false
-                                        sddm.login("guest-user","",cmbSession.currentIndex)
-                                }
-                        }
-                }
-        } // Guest Panels
-        */
+            }
+        }
     }
     
     /* Shutdown frame */
@@ -622,11 +537,12 @@ Rectangle {
         
         RowLayout {
             anchors.fill: parent
-            spacing: 12
+            spacing: PlasmaCore.Units.largeSpacing
             
             QQC2.ComboBox {
                 id: cmbSession
                 //flat: true
+                Layout.alignment: Qt.AlignLeft
                 
                 model: sessionModel
                 currentIndex: sessionModel.lastIndex
@@ -661,22 +577,44 @@ Rectangle {
                     
             }
             QQC2.Button {
-                visible: false
+                Layout.alignment: Qt.AlignLeft
                 icon.source:"images/guest_32.svg"
-                implicitWidth: 32
+                icon.width:24
+                icon.height:24
+                display: QQC2.AbstractButton.TextBesideIcon
+                text: i18nd("lliurex-sddm","Guest User")
+                
+                visible: {
+                    for (var n=0;n< userModel.count;n++) {
+                        var index=userModel.index(n,0);
+                        var name=userModel.data(index,Qt.UserRole+1);
+                        if ( name === "guest-user" ) {
+                            console.log("Guest user found");
+                            return true;
+                        }
+                    }
+                    return false;
+
+                }
+                onClicked: {
+                    loginFrame.visible=false;
+                    guestFrame.visible=true;
+                }
             }
             
             Item {
                 Layout.fillWidth:true
             }
             
+            
             QQC2.Label {
                 id: widgetHost
-                property string version:""
-                property string type:""
-                Layout.alignment: Qt.AlignCenter
+                Layout.alignment: Qt.AlignRight
+                //Layout.fillWidth: true
                 
-                text: sddm.hostName + " "+version+" "+type
+                horizontalAlignment: Text.AlignHCenter
+                
+                text: sddm.hostName + " "+theme.lliurexVersion
                 
             }
             
