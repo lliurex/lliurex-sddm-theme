@@ -1,3 +1,9 @@
+lliurex-sddm-theme (21.5.2.0) focal; urgency=medium
+
+  * Fixed lliurex version n4d query
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Thu, 15 Jul 2021 12:31:52 +0200
+
 lliurex-sddm-theme (21.5.1.0) focal; urgency=medium
 
   * fixed segfault on locale-plugin
