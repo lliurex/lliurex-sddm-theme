@@ -105,7 +105,7 @@ Rectangle {
         
         onError: {
             message.type=Kirigami.MessageType.Warning;
-            message.text=i18nd("lliurex-sddm","No connection to server");
+            message.text=i18nd("lliurex-sddm-theme","No connection to server");
             message.visible=true;
             theme.programmedCheck=3000;
         }
@@ -133,7 +133,7 @@ Rectangle {
         
         function onLoginFailed() {
             message.type=Kirigami.MessageType.Error;
-            message.text=i18nd("lliurex-sddm","Login failed");
+            message.text=i18nd("lliurex-sddm-theme","Login failed");
             message.visible=true;
             
             loginFrame.enabled=true;
@@ -296,7 +296,7 @@ Rectangle {
                 QQC2.TextField {
                     id: txtUser
                     width: 200
-                    placeholderText: i18nd("lliurex-sddm","User name")
+                    placeholderText: i18nd("lliurex-sddm-theme","User name")
                     //anchors.verticalCenter: parent.verticalCenter
                     //anchors.horizontalCenter: parent.horizontalCenter
                     onEditingFinished: {
@@ -329,7 +329,7 @@ Rectangle {
                     id: txtPass
                     width: 200
                     echoMode: TextInput.Password
-                    placeholderText: i18nd("lliurex-sddm","Password")
+                    placeholderText: i18nd("lliurex-sddm-theme","Password")
                     //anchors.horizontalCenter: parent.horizontalCenter
                     //anchors.verticalCenter: parent.verticalCenter
                     //palette.highlight: "#3daee9"
@@ -368,7 +368,7 @@ Rectangle {
                 
             QQC2.Button {
                 id: btnLogin
-                text: i18nd("lliurex-sddm","Login");
+                text: i18nd("lliurex-sddm-theme","Login");
                 implicitWidth: 200
                 //anchors.horizontalCenter: parent.horizontalCenter
                 Layout.alignment: Qt.AlignHCenter
@@ -390,7 +390,7 @@ Rectangle {
         height: 340
         visible: false
         margin:24
-        title: i18nd("lliurex-sddm","Guest User")
+        title: i18nd("lliurex-sddm-theme","Guest User")
         anchors.centerIn: parent
         
         ColumnLayout {
@@ -407,13 +407,13 @@ Rectangle {
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignJustify
                 
-                text: i18nd("lliurex-sddm","Access this computer using a guest account. Everything stored with this account will be deleted after you log out.")
+                text: i18nd("lliurex-sddm-theme","Access this computer using a guest account. Everything stored with this account will be deleted after you log out.")
                 
             }
             
             QQC2.Button {
                 Layout.alignment: Qt.AlignCenter
-                text: i18nd("lliurex-sddm","Enter")
+                text: i18nd("lliurex-sddm-theme","Enter")
                 implicitWidth: PlasmaCore.Units.gridUnit*6
                 
                 onClicked: {
@@ -427,7 +427,7 @@ Rectangle {
             }
             
             QQC2.Button {
-                text: i18nd("lliurex-sddm","Cancel")
+                text: i18nd("lliurex-sddm-theme","Cancel")
                 implicitWidth: PlasmaCore.Units.gridUnit*6
                 icon.name: "dialog-cancel"
                 display: QQC2.AbstractButton.TextBesideIcon
@@ -461,7 +461,7 @@ Rectangle {
                 spacing: 10
                 
                 QQC2.Button {
-                    text: i18nd("lliurex-sddm","Power off")
+                    text: i18nd("lliurex-sddm-theme","Power off")
                     enabled:sddm.canPowerOff
                     implicitWidth: PlasmaCore.Units.gridUnit*6
                     icon.name: "system-shutdown"
@@ -473,7 +473,7 @@ Rectangle {
                 }
                 
                 QQC2.Button {
-                    text: i18nd("lliurex-sddm","Reboot")
+                    text: i18nd("lliurex-sddm-theme","Reboot")
                     enabled: sddm.canReboot
                     implicitWidth: PlasmaCore.Units.gridUnit*6
                     icon.name: "system-reboot"
@@ -485,7 +485,7 @@ Rectangle {
                 }
                 
                 QQC2.Button {
-                    text: i18nd("lliurex-sddm","Suspend")
+                    text: i18nd("lliurex-sddm-theme","Suspend")
                     enabled: sddm.canSuspend
                     implicitWidth: PlasmaCore.Units.gridUnit*6
                     icon.name: "system-suspend"
@@ -497,7 +497,7 @@ Rectangle {
                 }
                 
                 QQC2.Button {
-                    text: i18nd("lliurex-sddm","Hibernate")
+                    text: i18nd("lliurex-sddm-theme","Hibernate")
                     enabled: sddm.canHibernate
                     implicitWidth: PlasmaCore.Units.gridUnit*6
                     icon.name: "system-suspend-hibernate"
@@ -510,7 +510,7 @@ Rectangle {
             }
 
             QQC2.Button {
-                text: i18nd("lliurex-sddm","Cancel")
+                text: i18nd("lliurex-sddm-theme","Cancel")
                 anchors.right: parent.right
                 implicitWidth: PlasmaCore.Units.gridUnit*6
                 icon.name: "dialog-cancel"
@@ -582,7 +582,7 @@ Rectangle {
                 icon.width:24
                 icon.height:24
                 display: QQC2.AbstractButton.TextBesideIcon
-                text: i18nd("lliurex-sddm","Guest User")
+                text: i18nd("lliurex-sddm-theme","Guest User")
                 
                 visible: {
                     for (var n=0;n< userModel.count;n++) {
