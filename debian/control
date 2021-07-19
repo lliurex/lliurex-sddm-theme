@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 10), python3-poinstaller, cmake, extra-cmake-module
 Standards-Version: 4.1.2
 
 Package: lliurex-sddm-theme
-Architecture: all
+Architecture: any
 Section: x11
 Depends: sddm, ${shlibs:Depends}, ${misc:Depends}, qml-module-edupals-n4d, n4d-lliurex-base
 Description: LliureX sddm theme
