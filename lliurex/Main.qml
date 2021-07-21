@@ -445,7 +445,7 @@ Rectangle {
     /* Shutdown frame */
     Lliurex.Window {
         id: shutdownFrame
-        title: "Shutdown"
+        title: i18nd("lliurex-sddm-theme","Power off")
         visible: false
         anchors.centerIn: parent
         

@@ -98,7 +98,7 @@ FocusScope {
                 userGrid.filter=text
             }
             
-            placeholderText: i18nd("lliurex-sddm","Search...")
+            placeholderText: i18nd("lliurex-sddm-theme","Search...")
             palette.highlight: "#3daee9"
         }
         
@@ -156,7 +156,7 @@ FocusScope {
         
         Controls.Button {
             Layouts.Layout.alignment: Qt.AlignRight
-            text: i18nd("lliurex-sddm","Cancel")
+            text: i18nd("lliurex-sddm-theme","Cancel")
             icon.name: "dialog-cancel"
             implicitWidth: PlasmaCore.Units.gridUnit*6
             display: Controls.AbstractButton.TextBesideIcon
