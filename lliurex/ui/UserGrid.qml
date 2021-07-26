@@ -24,8 +24,6 @@ import QtQuick.Controls 2.5 as Controls
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PC3
 
-
-
 FocusScope {
     id: userGrid
     
@@ -126,6 +124,10 @@ FocusScope {
                 }
                 
                 onModelChanged: {
+                
+                    for (var n=0;n<grid.children.length;n++) {
+                        grid.children[n].destroy();
+                    }
                     
                     var component=Qt.createComponent("UserSlot.qml");
                     
@@ -142,14 +144,6 @@ FocusScope {
                         o.selected.connect(selected);
                     }
                     
-                    //TEST
-                    /*
-                    for (var n=0;n<96;n++) {
-                        var o = component.createObject(grid,{name:"alu"+n,image:"file:///usr/share/sddm/faces/.face.icon"})
-                        
-                        o.selected.connect(selected)
-                    }
-                    */
                 }
             }
         }
