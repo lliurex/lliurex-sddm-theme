@@ -18,11 +18,13 @@
 */
 
 import "." as Lliurex
+import net.lliurex.ui 1.0 as LLX
+
 import QtQuick 2.0
 import QtQuick.Layouts 1.1 as Layouts
 import QtQuick.Controls 2.5 as Controls
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 3.0 as PC3
+import org.kde.plasma.components 3.0 as PlasmaComponents
 
 FocusScope {
     id: userGrid
@@ -87,7 +89,7 @@ FocusScope {
     Layouts.ColumnLayout {
         anchors.fill:parent
         
-        Controls.TextField {
+        PlasmaComponents.TextField {
             height:32
             width: 200
             focus:true
@@ -148,7 +150,7 @@ FocusScope {
             }
         }
         
-        Controls.Button {
+        PlasmaComponents.Button {
             Layouts.Layout.alignment: Qt.AlignRight
             text: i18nd("lliurex-sddm-theme","Cancel")
             icon.name: "dialog-cancel"

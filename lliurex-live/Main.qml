@@ -18,8 +18,9 @@
 */
 
 import "../lliurex/ui" as Lliurex
-import Lliurex.Locale 1.0 as Locale
-import Lliurex.Noise 1.0 as Noise
+
+import net.lliurex.locale 1.0 as Locale
+import net.lliurex.ui 1.0 as LLX
 import Edupals.N4D 1.0 as N4D
 
 import QtQuick 2.0
@@ -30,16 +31,18 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PC3
 import org.kde.kirigami 2.16 as Kirigami
 
-Rectangle {
+Item {
     id: theme
+    
+    property string lliurexType:""
+    property string lliurexFullVersion:""
+    property string lliurexVersion:""
     
     property variant geometry: screenModel.geometry(screenModel.primary)
     x: geometry.x
     y: geometry.y
     width: geometry.width
     height: geometry.height
-    
-    color: "#2980b9"
     
     property var call0: 0;
     property var call1: 0;
@@ -48,10 +51,10 @@ Rectangle {
     
     property var ts : [ 
     //      0           1                       2                   3       4       5           6   
-    ["C",["Language","Keyboard layout","Welcome to LliureX 21 live","Ok","Cancel","Shutdown","Reboot"]],
-    ["ca_ES.UTF-8@valencia",["Idioma","Teclat","Benvingut a LliureX 21 live","Accepta","Cancel·la","Atura","Reinicia"]] , 
-    ["es_ES.UTF-8",["Lenguaje","Teclado","Bienvenido a LliureX 21 live","Aceptar","Cancelar","Apagar","Reiniciar"]],
-    ["ca_ES.UTF-8",["Idioma","Teclat","Benvingut a LliureX 21 live","Accepta","Cancel·la","Atura","Reinicia"]] , 
+    ["C",["Language","Keyboard layout","Welcome to LliureX 22 live","Ok","Cancel","Shutdown","Reboot"]],
+    ["ca_ES.UTF-8@valencia",["Idioma","Teclat","Benvingut a LliureX 22 live","Accepta","Cancel·la","Atura","Reinicia"]] , 
+    ["es_ES.UTF-8",["Lenguaje","Teclado","Bienvenido a LliureX 22 live","Aceptar","Cancelar","Apagar","Reiniciar"]],
+    ["ca_ES.UTF-8",["Idioma","Teclat","Benvingut a LliureX 22 live","Accepta","Cancel·la","Atura","Reinicia"]] , 
         ];
     property var strings : ["","",""];
     
@@ -78,7 +81,8 @@ Rectangle {
     }
     
     Component.onCompleted: {
-            
+        lliurex_version.call([]);
+        
         for (var n=0;n<sessionModel.rowCount();n++) {
             var name = sessionModel.data(sessionModel.index(n,0),Qt.UserRole+4);
             if (name==="Plasma (X11)") {
@@ -92,6 +96,42 @@ Rectangle {
         address: "https://localhost:9779"
         user: "sddm"
         credential: N4D.Client.LocalKey
+    }
+    
+    N4D.Client {
+        id: n4dLocalAnonymous
+        address: "https://localhost:9779"
+    }
+    
+    N4D.Proxy
+    {
+        id: lliurex_version
+        client: n4dLocalAnonymous
+        plugin: "LliurexVersion"
+        method: "lliurex_version"
+        
+        onError: {
+            console.log("failed to request lliurex version");
+            theme.lliurexType="unknown";
+        }
+        
+        onResponse: {
+            console.log("version:",value);
+            
+            theme.lliurexFullVersion=value;
+            var tmp = value.split(",");
+            theme.lliurexVersion = tmp[tmp.length-1];
+            
+            theme.lliurexType="unknown";
+            for (var n=0;n<tmp.length;n++) {
+                if (tmp[n]==="client" || tmp[n]==="client-lite") {
+                    theme.lliurexType="client";
+                }
+            }
+            
+            console.log("Lliurex type:",theme.lliurexType);
+            
+        }
     }
     
     N4D.Proxy {
@@ -150,19 +190,17 @@ Rectangle {
         }
     }
     
-    Noise.UniformSurface {
-        opacity: 0.025
-        
+    LLX.Background {
+
         anchors.fill: parent
         
     }
     
-    Lliurex.Window {
-    //QQC2.Pane {
+    LLX.Window {
         id: paneMain
         width:700
         height:500
-        title: "LliureX 21 Live"
+        title: "LliureX 22 Live"
         
         anchors.centerIn:parent
         
@@ -173,11 +211,22 @@ Rectangle {
             ColumnLayout {
                 spacing: 12
                 
-                Text {
+                RowLayout {
                     Layout.alignment: Qt.AlignCenter
-                    Layout.fillWidth: true
-                    text: strings[0]
+                    
+                    PlasmaCore.IconItem {
+                        source:"folder-language"
+                        Layout.preferredWidth: 24
+                        Layout.preferredHeight: 24
+                    }
+                    
+                    PC3.Label {
+                        //Layout.alignment: Qt.AlignCenter
+                        Layout.fillWidth: true
+                        text: strings[0]
+                    }
                 }
+                
                 QQC2.Frame {
                     Layout.preferredWidth: 300
                     Layout.preferredHeight: 300
@@ -219,12 +268,23 @@ Rectangle {
                         
                     }
                 }
-                Text {
+                
+                RowLayout {
                     Layout.alignment: Qt.AlignCenter
-                    Layout.fillWidth: true
-                    text: strings[1]
+                    
+                    PlasmaCore.IconItem {
+                        source: "input-keyboard"
+                        Layout.preferredWidth: 24
+                        Layout.preferredHeight: 24
+                    }
+                    
+                    PC3.Label {
+                        //Layout.alignment: Qt.AlignCenter
+                        Layout.fillWidth: true
+                        text: strings[1]
+                    }
                 }
-                QQC2.ComboBox {
+                PC3.ComboBox {
                     id: cmbLayout
                     Layout.preferredWidth: 300
                     model: llx.layoutsModel
@@ -239,6 +299,7 @@ Rectangle {
                 }
         
             }
+            
             ColumnLayout {
                 //anchors.fill:parent
                 Layout.fillWidth: true
@@ -251,9 +312,22 @@ Rectangle {
                     height:100
                 }
                 
-                Text {
+                PC3.Label {
                     Layout.alignment: Qt.AlignCenter
                     text: strings[2]
+                }
+                
+                PlasmaCore.IconItem {
+                    Layout.alignment: Qt.AlignCenter
+                    source: "drive-removable-media"
+                    implicitWidth   : 128
+                    implicitHeight: 128
+                    usesPlasmaTheme: false
+                }
+                
+                PC3.Label {
+                    Layout.alignment: Qt.AlignCenter
+                    text: theme.lliurexType+":"+theme.lliurexVersion
                 }
                 
                 Item {

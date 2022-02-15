@@ -21,5 +21,5 @@ target_link_libraries (lliurexlocaleplugin
     Qt5::Quick
 )
 
-install (TARGETS lliurexlocaleplugin DESTINATION ${KDE_INSTALL_QMLDIR}/Lliurex/Locale)
-install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/Lliurex/Locale)
+install (TARGETS lliurexlocaleplugin DESTINATION ${KDE_INSTALL_QMLDIR}/net/lliurex/locale)
+install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/net/lliurex/locale)

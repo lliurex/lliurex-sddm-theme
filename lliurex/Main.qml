@@ -18,19 +18,20 @@
 */
 
 import "ui" as Lliurex
+import net.lliurex.ui 1.0 as LLX
 
 import Edupals.N4D 1.0 as N4D
-import Lliurex.Noise 1.0 as Noise
 
 import SddmComponents 2.0 as Sddm
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 3.0 as PlasmaComponents
 import org.kde.kirigami 2.16 as Kirigami
 
 import QtQuick 2.6
 import QtQuick.Controls 2.6 as QQC2
 import QtQuick.Layouts 1.15
 
-Rectangle {
+Item {
     
     id: theme
     property int checkTime:0
@@ -142,20 +143,8 @@ Rectangle {
         }
     }
     
-    Rectangle {
+    LLX.Background {
         anchors.fill: parent
-        //color: "#3498db"
-        color: "#2980b9"
-        
-        Noise.UniformSurface
-        {
-            opacity: 0.025
-            
-            anchors.fill: parent
-            
-            //frequency:0.01
-            //depth:4
-        }
     }
     
     /* Clock refresh timer */
@@ -184,7 +173,7 @@ Rectangle {
     }
     
     /* user frame */
-    Lliurex.Window {
+    LLX.Window {
         id: userFrame
         visible: false
         title: "User selection"
@@ -218,7 +207,7 @@ Rectangle {
     }
     
     /* login frame */
-    Lliurex.Window {
+    LLX.Window {
         id: loginFrame
         width: 400
         height: 340
@@ -293,7 +282,7 @@ Rectangle {
                     }
                 }
                 
-                QQC2.TextField {
+                PlasmaComponents.TextField {
                     id: txtUser
                     width: 200
                     placeholderText: i18nd("lliurex-sddm-theme","User name")
@@ -325,7 +314,7 @@ Rectangle {
                     //anchors.verticalCenter: parent.verticalCenter
                 }
                 
-                QQC2.TextField {
+                PlasmaComponents.TextField {
                     id: txtPass
                     width: 200
                     echoMode: TextInput.Password
@@ -366,7 +355,7 @@ Rectangle {
             }
             
                 
-            QQC2.Button {
+            PlasmaComponents.Button {
                 id: btnLogin
                 text: i18nd("lliurex-sddm-theme","Login");
                 implicitWidth: 200
@@ -384,7 +373,7 @@ Rectangle {
     }
     
     /* guest frame */
-    Lliurex.Window {
+    LLX.Window {
         id: guestFrame
         width: 400
         height: 340
@@ -401,7 +390,7 @@ Rectangle {
                 source: "images/guest.svg"
             }
             
-            QQC2.Label {
+            PlasmaComponents.Label {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth:true
                 wrapMode: Text.WordWrap
@@ -411,7 +400,7 @@ Rectangle {
                 
             }
             
-            QQC2.Button {
+            PlasmaComponents.Button {
                 Layout.alignment: Qt.AlignCenter
                 text: i18nd("lliurex-sddm-theme","Enter")
                 implicitWidth: PlasmaCore.Units.gridUnit*6
@@ -426,7 +415,7 @@ Rectangle {
                 implicitHeight:PlasmaCore.Units.gridUnit*2
             }
             
-            QQC2.Button {
+            PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","Cancel")
                 implicitWidth: PlasmaCore.Units.gridUnit*6
                 icon.name: "dialog-cancel"
@@ -443,7 +432,7 @@ Rectangle {
     }
     
     /* Shutdown frame */
-    Lliurex.Window {
+    LLX.Window {
         id: shutdownFrame
         title: i18nd("lliurex-sddm-theme","Power off")
         visible: false
@@ -460,7 +449,7 @@ Rectangle {
             Row {
                 spacing: 10
                 
-                QQC2.Button {
+                PlasmaComponents.Button {
                     text: i18nd("lliurex-sddm-theme","Power off")
                     enabled:sddm.canPowerOff
                     implicitWidth: PlasmaCore.Units.gridUnit*6
@@ -472,7 +461,7 @@ Rectangle {
                     }
                 }
                 
-                QQC2.Button {
+                PlasmaComponents.Button {
                     text: i18nd("lliurex-sddm-theme","Reboot")
                     enabled: sddm.canReboot
                     implicitWidth: PlasmaCore.Units.gridUnit*6
@@ -484,7 +473,7 @@ Rectangle {
                     }
                 }
                 
-                QQC2.Button {
+                PlasmaComponents.Button {
                     text: i18nd("lliurex-sddm-theme","Suspend")
                     enabled: sddm.canSuspend
                     implicitWidth: PlasmaCore.Units.gridUnit*6
@@ -496,7 +485,7 @@ Rectangle {
                     }
                 }
                 
-                QQC2.Button {
+                PlasmaComponents.Button {
                     text: i18nd("lliurex-sddm-theme","Hibernate")
                     enabled: sddm.canHibernate
                     implicitWidth: PlasmaCore.Units.gridUnit*6
@@ -509,7 +498,7 @@ Rectangle {
                 }
             }
 
-            QQC2.Button {
+            PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","Cancel")
                 anchors.right: parent.right
                 implicitWidth: PlasmaCore.Units.gridUnit*6
@@ -539,7 +528,7 @@ Rectangle {
             anchors.fill: parent
             spacing: PlasmaCore.Units.largeSpacing
             
-            QQC2.ComboBox {
+            PlasmaComponents.ComboBox {
                 id: cmbSession
                 //flat: true
                 Layout.alignment: Qt.AlignLeft
@@ -576,7 +565,7 @@ Rectangle {
                 }
                     
             }
-            QQC2.Button {
+            PlasmaComponents.Button {
                 Layout.alignment: Qt.AlignLeft
                 icon.source:"images/guest_32.svg"
                 icon.width:24
@@ -606,18 +595,26 @@ Rectangle {
                 Layout.fillWidth:true
             }
             
-            
-            QQC2.Label {
+            PlasmaComponents.Label {
                 id: widgetHost
                 Layout.alignment: Qt.AlignRight
-                //Layout.fillWidth: true
                 
                 horizontalAlignment: Text.AlignHCenter
                 
-                text: sddm.hostName + " "+theme.lliurexVersion
+                text: sddm.hostName
                 
             }
-            
+
+            PlasmaComponents.Label {
+                id: widgetVersion
+                Layout.alignment: Qt.AlignRight
+                
+                horizontalAlignment: Text.AlignHCenter
+                
+                text: theme.lliurexVersion
+                
+            }
+
             ColumnLayout {
                 id: widgetClock
                 Layout.alignment: Qt.AlignRight
@@ -625,17 +622,17 @@ Rectangle {
                 property alias time: wTime.text
                 property alias date: wDate.text
                 
-                QQC2.Label {
+                PlasmaComponents.Label {
                     id: wTime
                     Layout.alignment: Qt.AlignCenter
                 }
-                QQC2.Label {
+                PlasmaComponents.Label {
                     id: wDate
                     Layout.alignment: Qt.AlignCenter
                 }
             }
             
-            QQC2.Button {
+            PlasmaComponents.Button {
                 Layout.alignment: Qt.AlignRight
                 
                 flat:true
