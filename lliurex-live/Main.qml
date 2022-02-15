@@ -19,7 +19,7 @@
 
 import "../lliurex/ui" as Lliurex
 
-import Lliurex.Locale 1.0 as Locale
+import net.lliurex.locale 1.0 as Locale
 import net.lliurex.ui 1.0 as LLX
 import Edupals.N4D 1.0 as N4D
 

@@ -595,18 +595,26 @@ Item {
                 Layout.fillWidth:true
             }
             
-            
             PlasmaComponents.Label {
                 id: widgetHost
                 Layout.alignment: Qt.AlignRight
-                //Layout.fillWidth: true
                 
                 horizontalAlignment: Text.AlignHCenter
                 
-                text: sddm.hostName + " "+theme.lliurexVersion
+                text: sddm.hostName
                 
             }
-            
+
+            PlasmaComponents.Label {
+                id: widgetVersion
+                Layout.alignment: Qt.AlignRight
+                
+                horizontalAlignment: Text.AlignHCenter
+                
+                text: theme.lliurexVersion
+                
+            }
+
             ColumnLayout {
                 id: widgetClock
                 Layout.alignment: Qt.AlignRight

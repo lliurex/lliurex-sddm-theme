@@ -1,2 +1,2 @@
-module Lliurex.Locale
+module net.lliurex.locale
 plugin lliurexlocaleplugin
