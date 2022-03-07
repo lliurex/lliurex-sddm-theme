@@ -1,3 +1,9 @@
+lliurex-sddm-theme (22.0.1.0) lliurex-22; urgency=medium
+
+  * Fixed a visual regression
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Mon, 07 Mar 2022 10:31:01 +0100
+
 lliurex-sddm-theme (22.0.0.0) focal; urgency=medium
 
   * First lliurex 22 release
