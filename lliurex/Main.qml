@@ -284,7 +284,7 @@ Item {
                 
                 PlasmaComponents.TextField {
                     id: txtUser
-                    width: 200
+                    implicitWidth: 200
                     placeholderText: i18nd("lliurex-sddm-theme","User name")
                     //anchors.verticalCenter: parent.verticalCenter
                     //anchors.horizontalCenter: parent.horizontalCenter
@@ -316,7 +316,7 @@ Item {
                 
                 PlasmaComponents.TextField {
                     id: txtPass
-                    width: 200
+                    implicitWidth: 200
                     echoMode: TextInput.Password
                     placeholderText: i18nd("lliurex-sddm-theme","Password")
                     //anchors.horizontalCenter: parent.horizontalCenter
