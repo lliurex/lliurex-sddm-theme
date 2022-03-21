@@ -30,8 +30,8 @@ Rectangle {
     
     signal selected (string name)
     
-    width: 128
-    height: 128
+    width: 64
+    height: 64
     color: highlight ? "#3daee9":"transparent"
     
     visible : filter.length==0 || (filter.length>0 && name.startsWith(filter))
@@ -44,8 +44,8 @@ Rectangle {
         
         Image {
             id: userImage
-            width: 64
-            height: 64
+            width: 32
+            height: 32
             anchors.horizontalCenter: parent.horizontalCenter
         }
         
