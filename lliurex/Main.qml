@@ -30,10 +30,14 @@ import org.kde.kirigami 2.16 as Kirigami
 import QtQuick 2.6
 import QtQuick.Controls 2.6 as QQC2
 import QtQuick.Layouts 1.15
+import QtQuick.VirtualKeyboard 2.1
 
 Item {
     
-    id: theme
+    id: root
+
+    property Item topWindow: loginFrame
+
     property int checkTime:0
     property int programmedCheck:0
     
@@ -76,23 +80,23 @@ Item {
         
         onError: {
             console.log("failed to request lliurex version");
-            theme.lliurexType="unknown";
+            root.lliurexType="unknown";
         }
         
         onResponse: {
             console.log("version:",value);
             
-            theme.lliurexVersion=value;
+            root.lliurexVersion=value;
             var tmp = value.split(",");
             
-            theme.lliurexType="unknown";
+            root.lliurexType="unknown";
             for (var n=0;n<tmp.length;n++) {
                 if (tmp[n]==="client" || tmp[n]==="client-lite") {
-                    theme.lliurexType="client";
+                    root.lliurexType="client";
                 }
             }
             
-            console.log("Lliurex type:",theme.lliurexType);
+            console.log("Lliurex type:",root.lliurexType);
             
         }
     }
@@ -108,7 +112,7 @@ Item {
             message.type=Kirigami.MessageType.Warning;
             message.text=i18nd("lliurex-sddm-theme","No connection to server");
             message.visible=true;
-            theme.programmedCheck=3000;
+            root.programmedCheck=3000;
         }
         
         onResponse: {
@@ -146,6 +150,20 @@ Item {
     LLX.Background {
         anchors.fill: parent
     }
+
+    InputPanel {
+        id: vkey
+        width: 3.0 * ((panel.y - (topWindow.y+topWindow.height)))
+
+        y: (topWindow.y+topWindow.height+4)
+
+        //anchors.bottom : panel.top
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        active: chkVkey.checked
+
+        visible: active && Qt.inputMethod.visible
+    }
     
     /* Clock refresh timer */
     Timer {
@@ -160,12 +178,12 @@ Item {
             widgetClock.date = date;
             widgetClock.time = time;
             
-            theme.checkTime+=timerClock.interval;
+            root.checkTime+=timerClock.interval;
             
-            if (theme.lliurexType=="client"  && theme.programmedCheck>=0 && theme.checkTime>=theme.programmedCheck) {
+            if (root.lliurexType=="client"  && root.programmedCheck>=0 && root.checkTime>=root.programmedCheck) {
                 
                 // avoid trigger another server check
-                theme.programmedCheck=-1;
+                root.programmedCheck=-1;
                 console.log("checking server...")
                 server_lliurex_version.call([])
             }
@@ -175,31 +193,39 @@ Item {
     /* user frame */
     LLX.Window {
         id: userFrame
-        visible: false
+        visible: root.topWindow == this
         title: "User selection"
-        width: theme.width*0.8
-        height: theme.height*0.8
+        //width: theme.width*0.8
+        //height: theme.height*0.8
+        width: 500
+        height:400
             
-        anchors.centerIn: parent
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: {
+            if (vkey.active) {
+                return (parent.height*0.3)-(height*0.5);
+            }
+            else {
+                return (parent.height*0.5)-(height*0.5);
+            }
+        }
         
         Lliurex.UserGrid {
-            //anchors.fill : parent
-            width:parent.width*0.95
-            height:parent.height*0.95
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
+            anchors.fill : parent
+            //width:parent.width*0.80
+            //height:parent.height*0.80
+            //anchors.horizontalCenter: parent.horizontalCenter
+            //anchors.bottom: parent.bottom
             
             model: userModel
             focus: true
             
             onCancel: {
-                userFrame.visible = false
-                loginFrame.visible = true
+                root.topWindow = loginFrame;
             }
             
             onSelected: {
-                userFrame.visible = false
-                loginFrame.visible = true
+                root.topWindow = loginFrame;
                 txtUser.text = name
                 txtPass.focus = true
             }
@@ -209,14 +235,22 @@ Item {
     /* login frame */
     LLX.Window {
         id: loginFrame
+        visible: root.topWindow == this
         width: 400
         height: 340
-        visible: true
         margin:24
         
         //x: theme.compact ? ((theme.width*0.5)-(width*0.5)) : ((dateFrame.x-width)<200 ? (dateFrame.x-width) : 200)
         
-        anchors.centerIn: parent
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: {
+            if (vkey.active) {
+                return (parent.height*0.3)-(height*0.5);
+            }
+            else {
+                return (parent.height*0.5)-(height*0.5);
+            }
+        }
         
         ColumnLayout {
             id: loginColumn
@@ -275,8 +309,7 @@ Item {
                         
                         onClicked: {
                             if (mouse.button == Qt.LeftButton) {
-                                loginFrame.visible=false
-                                userFrame.visible=true
+                                root.topWindow = userFrame;
                             }
                         }
                     }
@@ -353,7 +386,6 @@ Item {
                     
                 }
             }
-            
                 
             PlasmaComponents.Button {
                 id: btnLogin
@@ -377,7 +409,7 @@ Item {
         id: guestFrame
         width: 400
         height: 340
-        visible: false
+        visible: root.topWindow == this
         margin:24
         title: i18nd("lliurex-sddm-theme","Guest User")
         anchors.centerIn: parent
@@ -424,8 +456,7 @@ Item {
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 
                 onClicked: {
-                    loginFrame.visible=true;
-                    guestFrame.visible=false;
+                    root.topWindow = loginFrame;
                 }
             }
         }
@@ -435,7 +466,7 @@ Item {
     LLX.Window {
         id: shutdownFrame
         title: i18nd("lliurex-sddm-theme","Power off")
-        visible: false
+        visible: root.topWindow == this
         anchors.centerIn: parent
         
         width: 500
@@ -506,8 +537,7 @@ Item {
                 display: QQC2.AbstractButton.TextBesideIcon
                 
                 onClicked: {
-                    loginFrame.visible=true
-                    shutdownFrame.visible=false
+                    root.topWindow = loginFrame;
                 }
             }
             
@@ -516,7 +546,7 @@ Item {
     }
     
     QQC2.Pane {
-        
+        id: panel
         padding:2
         width:parent.width
         height:50
@@ -586,11 +616,20 @@ Item {
 
                 }
                 onClicked: {
-                    loginFrame.visible=false;
-                    guestFrame.visible=true;
+                    root.topWindow = guestFrame;
                 }
             }
             
+            PlasmaComponents.Button {
+                id: chkVkey
+                Layout.alignment: Qt.AlignLeft
+                icon.name:"input-keyboard-virtual"
+                checkable: true
+                display: AbstractButton.IconOnly
+                icon.width:24
+                icon.height:24
+            }
+
             Item {
                 Layout.fillWidth:true
             }
@@ -611,7 +650,7 @@ Item {
                 
                 horizontalAlignment: Text.AlignHCenter
                 
-                text: theme.lliurexVersion
+                text: root.lliurexVersion
                 
             }
 
@@ -642,9 +681,7 @@ Item {
                 icon.height:32
                 
                 onClicked: {
-                    loginFrame.visible=false
-                    userFrame.visible=false
-                    shutdownFrame.visible=true
+                    root.topWindow = shutdownFrame;
                 }
             }
         }
