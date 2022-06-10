@@ -320,14 +320,15 @@ Item {
                 PlasmaCore.IconItem {
                     Layout.alignment: Qt.AlignCenter
                     source: "drive-removable-media"
-                    implicitWidth   : 128
+                    implicitWidth : 128
                     implicitHeight: 128
                     usesPlasmaTheme: false
                 }
                 
                 PC3.Label {
                     Layout.alignment: Qt.AlignCenter
-                    text: theme.lliurexType+":"+theme.lliurexVersion
+                    //text: theme.lliurexType+":"+theme.lliurexVersion
+                    text: theme.lliurexFullVersion
                 }
                 
                 Item {
