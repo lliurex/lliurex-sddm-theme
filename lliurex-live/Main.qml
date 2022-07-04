@@ -51,10 +51,10 @@ Item {
     
     property var ts : [ 
     //      0           1                       2                   3       4       5           6   
-    ["C",["Language","Keyboard layout","Welcome to LliureX 22 live","Ok","Cancel","Shutdown","Reboot"]],
-    ["ca_ES.UTF-8@valencia",["Idioma","Teclat","Benvingut a LliureX 22 live","Accepta","Cancel·la","Atura","Reinicia"]] , 
-    ["es_ES.UTF-8",["Lenguaje","Teclado","Bienvenido a LliureX 22 live","Aceptar","Cancelar","Apagar","Reiniciar"]],
-    ["ca_ES.UTF-8",["Idioma","Teclat","Benvingut a LliureX 22 live","Accepta","Cancel·la","Atura","Reinicia"]] , 
+    ["C",["Language","Keyboard layout","Welcome to LliureX 21.2022 live","Ok","Cancel","Shutdown","Reboot"]],
+    ["ca_ES.UTF-8@valencia",["Idioma","Teclat","Benvingut a LliureX 21.2022 live","Accepta","Cancel·la","Atura","Reinicia"]] ,
+    ["es_ES.UTF-8",["Lenguaje","Teclado","Bienvenido a LliureX 21.2022 live","Aceptar","Cancelar","Apagar","Reiniciar"]],
+    ["ca_ES.UTF-8",["Idioma","Teclat","Benvingut a LliureX 21.2022 live","Accepta","Cancel·la","Atura","Reinicia"]] ,
         ];
     property var strings : ["","",""];
     
