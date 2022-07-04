@@ -1,3 +1,9 @@
+lliurex-sddm-theme (22.1.2.0) lliurex22; urgency=medium
+
+  * Modified live version label to 21.2022
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Mon, 04 Jul 2022 11:57:26 +0200
+
 lliurex-sddm-theme (22.1.1.0) lliurex22; urgency=medium
 
   * Showing whole lliurex version string on live wizard
