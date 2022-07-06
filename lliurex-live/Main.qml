@@ -200,7 +200,7 @@ Item {
         id: paneMain
         width:700
         height:500
-        title: "LliureX 22 Live"
+        title: "LliureX 21.2022 Live"
         
         anchors.centerIn:parent
         
