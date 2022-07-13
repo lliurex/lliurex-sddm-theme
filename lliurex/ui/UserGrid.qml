@@ -113,8 +113,8 @@ FocusScope {
             
             Grid {
                 id: grid
-                rows: 4
-                columns: width/128
+                rows: (model.count/columns) + 0.5
+                columns: width/64
                 spacing: 4
                 
                 anchors.fill: parent
@@ -122,7 +122,7 @@ FocusScope {
                 property var model
                 
                 Component.onCompleted: {
-                    rows = (model.count/columns)+0.5;
+                    //rows = (model.count/columns)+0.5;
                 }
                 
                 onModelChanged: {
@@ -145,7 +145,15 @@ FocusScope {
                         
                         o.selected.connect(selected);
                     }
-                    
+                    /*
+                    for (var n=0;n<32;n++) {
+                        var name="test-"+n
+                        var o = component.createObject(grid,{name:name,image:"user-account"});
+                        o.selected.connect(selected);
+                    }
+                    rows = (model.count+32/columns)+0.5;
+                    */
+
                 }
             }
         }
