@@ -197,7 +197,7 @@ Item {
         title: "User selection"
         //width: theme.width*0.8
         //height: theme.height*0.8
-        width: 500
+        width: 512
         height:400
             
         anchors.horizontalCenter: parent.horizontalCenter
