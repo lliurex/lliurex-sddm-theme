@@ -17,8 +17,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import "../lliurex/ui" as Lliurex
-
 import net.lliurex.locale 1.0 as Locale
 import net.lliurex.ui 1.0 as LLX
 import Edupals.N4D 1.0 as N4D
@@ -382,7 +380,7 @@ Item {
         }
     }
     
-    Lliurex.Window {
+    LLX.Window {
         id: paneShutdown
         visible:false
         width:300
