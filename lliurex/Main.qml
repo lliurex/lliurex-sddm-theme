@@ -43,6 +43,7 @@ Item {
     
     property string lliurexVersion: ""
     property string lliurexType: ""
+    property bool escolesLogin: false
     
     //property bool compact: (loginFrame.width+dateFrame.width+60) > theme.width
     
@@ -120,10 +121,26 @@ Item {
             message.visible=false;
         }
     }
+
+    N4D.Proxy
+    {
+        id: local_get_variable
+        client: n4dLocal
+        method: "get_variable"
+
+        onError: {
+        }
+
+        onResponse: {
+            console.log("Escoles conectades:",value);
+            escolesLogin = value;
+        }
+    }
     
     Component.onCompleted: {
         console.log("looking for lliurex version...");
         local_lliurex_version.call([]);
+        local_get_variable.call(["SDDM_ESCOLES_CONECTADES_ENABLED"]);
     }
     
     /* catch login events */
@@ -395,13 +412,46 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 
                 onClicked: {
-                    loginFrame.enabled=false
-                    sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
+                    if (escolesLogin) {
+                        root.topWindow = escolesFrame;
+                    }
+                    else {
+                        loginFrame.enabled=false;
+                        sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
+                    }
                 }
             }
             
         }
         
+    }
+
+    /* escoles login window */
+    LLX.Window {
+        id: escolesFrame
+        width: 400
+        height: 340
+        visible: root.topWindow == this
+        margin:24
+        title: i18nd("lliurex-sddm-theme","Escoles Conectades")
+        anchors.centerIn: parent
+        ColumnLayout {
+            anchors.fill:parent
+
+            PlasmaComponents.Button {
+                text: i18nd("lliurex-sddm-theme","Cancel")
+                implicitWidth: PlasmaCore.Units.gridUnit*6
+                icon.name: "dialog-cancel"
+                display: QQC2.AbstractButton.TextBesideIcon
+
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+
+                onClicked: {
+                    root.topWindow = loginFrame;
+                }
+            }
+        }
+
     }
     
     /* guest frame */
