@@ -44,6 +44,8 @@ Item {
     property string lliurexVersion: ""
     property string lliurexType: ""
     property bool escolesLogin: false
+    property var networks
+    property int escolesStage: -1
     
     //property bool compact: (loginFrame.width+dateFrame.width+60) > theme.width
     
@@ -134,6 +136,24 @@ Item {
         onResponse: {
             console.log("Escoles conectades:",value);
             escolesLogin = value;
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_scan_network
+        client: n4dLocal
+        plugin: "EscolesConectades"
+        method: "scan_network"
+
+        onError: {
+            console.log("failed to retrieve networks:",what,"\n",details);
+        }
+
+        onResponse: {
+            console.log("networks:",value);
+            networks = value;
+            escolesStage = 1;
         }
     }
     
@@ -413,7 +433,9 @@ Item {
                 
                 onClicked: {
                     if (escolesLogin) {
+                        root.escolesStage = 0;
                         root.topWindow = escolesFrame;
+                        local_scan_network.call([]);
                     }
                     else {
                         loginFrame.enabled=false;
@@ -435,8 +457,28 @@ Item {
         margin:24
         title: i18nd("lliurex-sddm-theme","Escoles Conectades")
         anchors.centerIn: parent
+
         ColumnLayout {
             anchors.fill:parent
+
+            Lliurex.StatusLine {
+                stage: 0
+                currentStage: root.escolesStage
+                text: i18nd("lliurex-sddm-theme","Scanning networks")
+            }
+
+            Lliurex.StatusLine {
+                stage: 1
+                currentStage: root.escolesStage
+                text: i18nd("lliurex-sddm-theme","Turning down connections")
+            }
+
+            Lliurex.StatusLine {
+                stage: 2
+                currentStage: root.escolesStage
+                text: i18nd("lliurex-sddm-theme","Creating connection")
+            }
+
 
             PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","Cancel")
