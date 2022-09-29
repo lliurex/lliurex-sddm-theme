@@ -44,6 +44,7 @@ Item {
     property string lliurexVersion: ""
     property string lliurexType: ""
     property bool escolesLogin: false
+    property string escolesTarget: "WIFI_ALU"
     property var networks
     property int escolesStage: -1
     
@@ -126,21 +127,6 @@ Item {
 
     N4D.Proxy
     {
-        id: local_get_variable
-        client: n4dLocal
-        method: "get_variable"
-
-        onError: {
-        }
-
-        onResponse: {
-            console.log("Escoles conectades:",value);
-            escolesLogin = value;
-        }
-    }
-
-    N4D.Proxy
-    {
         id: local_scan_network
         client: n4dLocal
         plugin: "EscolesConectades"
@@ -153,14 +139,37 @@ Item {
         onResponse: {
             console.log("networks:",value);
             networks = value;
-            escolesStage = 1;
+            var found = false;
+            for (var n in networks) {
+                console.log(networks[n]);
+                if (networks[n][0] == escolesTarget) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                escolesStage = 1;
+            }
+            else {
+                console.log("Escoles target not found!");
+                messageEscoles.visible = true;
+                messageEscoles.text="Wifi network not found:" + escolesTarget
+            }
         }
     }
     
     Component.onCompleted: {
         console.log("looking for lliurex version...");
         local_lliurex_version.call([]);
-        local_get_variable.call(["SDDM_ESCOLES_CONECTADES_ENABLED"]);
+        try {
+            escolesLogin = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES_ENABLED");
+            escolesTarget = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES_TARGET");
+        }
+        catch(e) {
+            console.log(e);
+        }
+        console.log("escolesLogin:",escolesLogin);
     }
     
     /* catch login events */
@@ -479,6 +488,10 @@ Item {
                 text: i18nd("lliurex-sddm-theme","Creating connection")
             }
 
+            Kirigami.InlineMessage {
+                id: messageEscoles
+                anchors.fill:parent
+            }
 
             PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","Cancel")
