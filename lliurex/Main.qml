@@ -44,7 +44,7 @@ Item {
     property string lliurexVersion: ""
     property string lliurexType: ""
     property bool escolesLogin: false
-    property string escolesTarget: "WIFI_ALU"
+    property string escolesTarget: "AULA_PROF"
     property var networks
     property int escolesStage: -1
     
@@ -150,12 +150,53 @@ Item {
 
             if (found) {
                 escolesStage = 1;
+                local_disconnect_all.call([]);
             }
             else {
                 console.log("Escoles target not found!");
                 messageEscoles.visible = true;
-                messageEscoles.text="Wifi network not found:" + escolesTarget
+                messageEscoles.text=i18nd("Wifi network not found:") + escolesTarget;
             }
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_disconnect_all
+        client: n4dLocal
+        plugin: "EscolesConectades"
+        method: "disconnect_all"
+
+        onError: {
+            console.log("failed to turn down all connections:",what,"\n",details);
+            messageEscoles.visible = true;
+            messageEscoles.text=i18nd("Failed to turn down connections");
+        }
+
+        onResponse: {
+            escolesStage = 2;
+            local_create_connection.call(["EscolesConectades",escolesTarget,txtUser.text,txtPass.text]);
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_create_connection
+        client: n4dLocal
+        plugin: "EscolesConectades"
+        method: "create_connection"
+        /* name,ssid,user,password */
+
+        onError: {
+            console.log("failed to create connection:",what,"\n",details);
+            messageEscoles.visible = true;
+            messageEscoles.text=i18nd("lliurex-sddm-theme","Failed to create connection");
+        }
+
+        onResponse: {
+            escolesStage = 3;
+
+            /* TODO: login here?*/
         }
     }
     
@@ -163,7 +204,7 @@ Item {
         console.log("looking for lliurex version...");
         local_lliurex_version.call([]);
         try {
-            escolesLogin = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES_ENABLED");
+            //escolesLogin = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES_ENABLED");
             escolesTarget = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES_TARGET");
         }
         catch(e) {
