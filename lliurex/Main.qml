@@ -44,7 +44,7 @@ Item {
     property string lliurexVersion: ""
     property string lliurexType: ""
     property bool escolesLogin: false
-    property string escolesTarget: "AULA_PROF"
+    property string escolesTarget: "Galactica"
     property var networks
     property int escolesStage: -1
     
@@ -175,7 +175,7 @@ Item {
 
         onResponse: {
             escolesStage = 2;
-            local_create_connection.call(["EscolesConectades",escolesTarget,txtUser.text,txtPass.text]);
+            local_create_connection.call(["EscolesConectades",escolesTarget,txtUser.text,txtPass.text,{mode="personal"}]);
         }
     }
 
@@ -196,7 +196,7 @@ Item {
         onResponse: {
             escolesStage = 3;
 
-            /* TODO: login here?*/
+            sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
         }
     }
     
@@ -276,14 +276,56 @@ Item {
             }
         }
     }
-    
+
+    /* setup frame */
+    LLX.Window {
+        id: settingsFrame
+        visible: root.topWindow == this
+        title: i18nd("lliurex-sddm-theme","Settings")
+        width: 512
+        height:512
+
+        anchors.centerIn: parent
+
+        ColumnLayout {
+            anchors.fill: parent
+
+            QQC2.GroupBox {
+                Layout.fillHeight:true
+                Layout.fillWidth:true
+
+                title: i18nd("lliurex-sddm-theme","Escoles Conectades")
+                ColumnLayout {
+                    anchors.fill: parent
+                    QQC2.CheckBox {
+                        text: i18nd("lliurex-sddm-theme","Alpha")
+                    }
+                    QQC2.CheckBox {
+                        text: i18nd("lliurex-sddm-theme","Bravo")
+                    }
+                    QQC2.CheckBox {
+                        text: i18nd("lliurex-sddm-theme","Charlie")
+                    }
+                }
+            }
+
+            PlasmaComponents.Button {
+                text: i18nd("lliurex-sddm-theme","Cancel")
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+
+                onClicked: {
+                    root.topWindow = loginFrame;
+                }
+            }
+        }
+
+    }
+
     /* user frame */
     LLX.Window {
         id: userFrame
         visible: root.topWindow == this
-        title: "User selection"
-        //width: theme.width*0.8
-        //height: theme.height*0.8
+        title: i18nd("lliurex-sddm-theme","User selection")
         width: 512
         height:400
             
@@ -774,6 +816,19 @@ Item {
                 display: AbstractButton.IconOnly
                 icon.width:24
                 icon.height:24
+            }
+
+            PlasmaComponents.Button {
+                id: btnSettings
+                Layout.alignment: Qt.AlignLeft
+                icon.name:"system-users"
+                display: AbstractButton.IconOnly
+                icon.width:24
+                icon.height:24
+
+                onClicked: {
+                    root.topWindow = settingsFrame;
+                }
             }
 
             Item {
