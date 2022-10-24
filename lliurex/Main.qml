@@ -127,6 +127,27 @@ Item {
 
     N4D.Proxy
     {
+        id: local_check_wired_connection
+        client: n4dLocal
+        plugin: "EscolesConectades"
+        method: "check_wired_connection"
+
+        onError: {
+            local_scan_network.call([]);
+        }
+
+        onResponse: {
+            if (value) {
+                sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
+            }
+            else {
+                local_scan_network.call([]);
+            }
+        }
+    }
+
+    N4D.Proxy
+    {
         id: local_scan_network
         client: n4dLocal
         plugin: "EscolesConectades"
@@ -527,7 +548,8 @@ Item {
                     if (escolesLogin) {
                         root.escolesStage = 0;
                         root.topWindow = escolesFrame;
-                        local_scan_network.call([]);
+                        local_get_active_connections.call([]);
+                        //local_scan_network.call([]);
                     }
                     else {
                         loginFrame.enabled=false;
