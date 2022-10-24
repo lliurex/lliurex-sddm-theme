@@ -43,8 +43,8 @@ Item {
     
     property string lliurexVersion: ""
     property string lliurexType: ""
-    property int escolesLogin: 2
-    property string escolesTarget: "Galactica"
+    property int escolesLogin: 3
+    property string escolesTarget: ""
     property var networks
     property int escolesStage: -1
     
@@ -226,7 +226,7 @@ Item {
         local_lliurex_version.call([]);
         try {
             //escolesLogin = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES_ENABLED");
-            escolesTarget = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES_TARGET");
+            //escolesTarget = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES_TARGET");
         }
         catch(e) {
             console.log(e);
@@ -320,7 +320,7 @@ Item {
                     anchors.fill: parent
                     PlasmaComponents.CheckBox {
                         id: chkEscoles
-                        checked: escolesLogin > 0
+                        checked: (escolesLogin & 1) == 1
                         text: i18nd("lliurex-sddm-theme","Activar")
 
                         onClicked: {
@@ -328,8 +328,9 @@ Item {
                         }
                     }
                     PlasmaComponents.RadioButton {
+                        id: rb1
                         enabled: chkEscoles.checked
-                        checked: (escolesLogin & 1) == 1
+                        checked: (escolesLogin & 2) == 2
                         text: i18nd("lliurex-sddm-theme","WiFi Alumnos")
 
                         onClicked: {
@@ -337,8 +338,9 @@ Item {
                         }
                     }
                     PlasmaComponents.RadioButton {
+                        id: rb2
                         enabled: chkEscoles.checked
-                        checked: (escolesLogin & 2) == 2
+                        checked: (escolesLogin & 4) == 4
                         text: i18nd("lliurex-sddm-theme","WiFi Profesores")
 
                         onClicked: {
@@ -363,6 +365,10 @@ Item {
                     Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
                     onClicked: {
+                        escolesLogin = chkEscoles.checked ? 1 : 0
+                        escolesLogin = escolesLogin | (rb1.checked ? : 2 : 0)
+                        escolesLogin = escolesLogin | (rb2.checked ? : 4 : 0)
+
                         enabled = false;
                         root.topWindow = loginFrame;
                     }
