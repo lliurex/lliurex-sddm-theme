@@ -43,7 +43,7 @@ Item {
     
     property string lliurexVersion: ""
     property string lliurexType: ""
-    property bool escolesLogin: false
+    property int escolesLogin: 2
     property string escolesTarget: "Galactica"
     property var networks
     property int escolesStage: -1
@@ -312,30 +312,70 @@ Item {
             anchors.fill: parent
 
             QQC2.GroupBox {
-                Layout.fillHeight:true
+                //Layout.fillHeight:true
                 Layout.fillWidth:true
 
                 title: i18nd("lliurex-sddm-theme","Escoles Conectades")
                 ColumnLayout {
                     anchors.fill: parent
-                    QQC2.CheckBox {
-                        text: i18nd("lliurex-sddm-theme","Alpha")
+                    PlasmaComponents.CheckBox {
+                        id: chkEscoles
+                        checked: escolesLogin > 0
+                        text: i18nd("lliurex-sddm-theme","Activar")
+
+                        onClicked: {
+                            btnSettingsAccept.enabled = true;
+                        }
                     }
-                    QQC2.CheckBox {
-                        text: i18nd("lliurex-sddm-theme","Bravo")
+                    PlasmaComponents.RadioButton {
+                        enabled: chkEscoles.checked
+                        checked: (escolesLogin & 1) == 1
+                        text: i18nd("lliurex-sddm-theme","WiFi Alumnos")
+
+                        onClicked: {
+                            btnSettingsAccept.enabled = true;
+                        }
                     }
-                    QQC2.CheckBox {
-                        text: i18nd("lliurex-sddm-theme","Charlie")
+                    PlasmaComponents.RadioButton {
+                        enabled: chkEscoles.checked
+                        checked: (escolesLogin & 2) == 2
+                        text: i18nd("lliurex-sddm-theme","WiFi Profesores")
+
+                        onClicked: {
+                            btnSettingsAccept.enabled = true;
+                        }
                     }
                 }
             }
 
-            PlasmaComponents.Button {
-                text: i18nd("lliurex-sddm-theme","Cancel")
+            Item {
+                Layout.fillHeight:true
+            }
+
+            RowLayout {
+                Layout.fillWidth:true
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-                onClicked: {
-                    root.topWindow = loginFrame;
+                PlasmaComponents.Button {
+                    id: btnSettingsAccept
+                    text: i18nd("lliurex-sddm-theme","Accept")
+                    enabled: false
+                    Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+
+                    onClicked: {
+                        enabled = false;
+                        root.topWindow = loginFrame;
+                    }
+                }
+
+                PlasmaComponents.Button {
+                    text: i18nd("lliurex-sddm-theme","Cancel")
+                    Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+
+                    onClicked: {
+                        btnSettingsAccept.enabled = false;
+                        root.topWindow = loginFrame;
+                    }
                 }
             }
         }
@@ -545,7 +585,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 
                 onClicked: {
-                    if (escolesLogin) {
+                    if (escolesLogin>0) {
                         root.escolesStage = 0;
                         root.topWindow = escolesFrame;
                         local_get_active_connections.call([]);
