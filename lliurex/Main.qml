@@ -366,8 +366,8 @@ Item {
 
                     onClicked: {
                         escolesLogin = chkEscoles.checked ? 1 : 0
-                        escolesLogin = escolesLogin | (rb1.checked ? : 2 : 0)
-                        escolesLogin = escolesLogin | (rb2.checked ? : 4 : 0)
+                        escolesLogin = escolesLogin | (rb1.checked ?  2 : 0)
+                        escolesLogin = escolesLogin | (rb2.checked ?  4 : 0)
 
                         enabled = false;
                         root.topWindow = loginFrame;
