@@ -43,7 +43,7 @@ Item {
     
     property string lliurexVersion: ""
     property string lliurexType: ""
-    property int escolesLogin: 3
+    property int escolesLogin: 0
     property string escolesTarget: ""
     property var networks
     property int escolesStage: -1
@@ -225,8 +225,7 @@ Item {
         console.log("looking for lliurex version...");
         local_lliurex_version.call([]);
         try {
-            //escolesLogin = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES_ENABLED");
-            //escolesTarget = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES_TARGET");
+            escolesLogin = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES");
         }
         catch(e) {
             console.log(e);
@@ -340,7 +339,7 @@ Item {
                     PlasmaComponents.RadioButton {
                         id: rb2
                         enabled: chkEscoles.checked
-                        checked: (escolesLogin & 4) == 4
+                        checked: !((escolesLogin & 2) == 2)
                         text: i18nd("lliurex-sddm-theme","WiFi Profesores")
 
                         onClicked: {
@@ -365,9 +364,10 @@ Item {
                     Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
                     onClicked: {
-                        escolesLogin = chkEscoles.checked ? 1 : 0
-                        escolesLogin = escolesLogin | (rb1.checked ?  2 : 0)
-                        escolesLogin = escolesLogin | (rb2.checked ?  4 : 0)
+                        escolesLogin = chkEscoles.checked ? 1 : 0;
+                        escolesLogin = escolesLogin | (rb1.checked ?  2 : 0);
+
+                        n4dLocal.setVariable("SDDM_ESCOLES_CONECTADES",escolesLogin);
 
                         enabled = false;
                         root.topWindow = loginFrame;
