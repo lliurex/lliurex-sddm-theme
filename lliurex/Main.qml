@@ -61,6 +61,22 @@ Item {
 
     Sddm.TextConstants { id: textConstants }
     
+    function showError(msg)
+    {
+        message.type=Kirigami.MessageType.Error;
+        message.text=msg;
+        message.visible=true;
+        root.topWindow = loginFrame;
+    }
+
+    function showWarning(msg)
+    {
+        message.type=Kirigami.MessageType.Warning;
+        message.text=msg;
+        message.visible=true;
+        root.topWindow = loginFrame;
+    }
+
     N4D.Client
     {
         id: n4dLocal
@@ -113,9 +129,7 @@ Item {
         method: "lliurex_version"
         
         onError: {
-            message.type=Kirigami.MessageType.Warning;
-            message.text=i18nd("lliurex-sddm-theme","No connection to server");
-            message.visible=true;
+            showWarning(i18nd("lliurex-sddm-theme","No connection to server"));
             root.programmedCheck=3000;
         }
         
@@ -175,8 +189,7 @@ Item {
             }
             else {
                 console.log("Escoles target not found!");
-                messageEscoles.visible = true;
-                messageEscoles.text=i18nd("Wifi network not found:") + escolesTarget;
+                showError(i18nd("Wifi network not found:") + escolesTarget);
             }
         }
     }
@@ -190,8 +203,7 @@ Item {
 
         onError: {
             console.log("failed to turn down all connections:",what,"\n",details);
-            messageEscoles.visible = true;
-            messageEscoles.text=i18nd("Failed to turn down connections");
+            showError(i18nd("Failed to turn down connections"));
         }
 
         onResponse: {
@@ -210,8 +222,7 @@ Item {
 
         onError: {
             console.log("failed to create connection:",what,"\n",details);
-            messageEscoles.visible = true;
-            messageEscoles.text=i18nd("lliurex-sddm-theme","Failed to create connection");
+            showError(i18nd("lliurex-sddm-theme","Failed to create connection"));
         }
 
         onResponse: {
@@ -244,9 +255,7 @@ Item {
         }
         
         function onLoginFailed() {
-            message.type=Kirigami.MessageType.Error;
-            message.text=i18nd("lliurex-sddm-theme","Login failed");
-            message.visible=true;
+            showError(i18nd("lliurex-sddm-theme","Login failed"));
             
             loginFrame.enabled=true;
             txtPass.text = "";
@@ -553,8 +562,15 @@ Item {
                     //palette.highlight: "#3daee9"
                     
                     Keys.onReturnPressed: {
-                        loginFrame.enabled=false
-                        sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
+                        if (escolesLogin>0) {
+                            root.escolesStage = 0;
+                            root.topWindow = escolesFrame;
+                            local_check_wired_connection.call([]);
+                        }
+                        else {
+                            loginFrame.enabled=false
+                            sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
+                        }
                     }
                     
                     Image {
@@ -594,8 +610,7 @@ Item {
                     if (escolesLogin>0) {
                         root.escolesStage = 0;
                         root.topWindow = escolesFrame;
-                        local_get_active_connections.call([]);
-                        //local_scan_network.call([]);
+                        local_check_wired_connection.call([]);
                     }
                     else {
                         loginFrame.enabled=false;
