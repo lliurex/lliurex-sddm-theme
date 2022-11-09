@@ -113,7 +113,7 @@ FocusScope {
             
             Grid {
                 id: grid
-                rows: (model.count/columns) + 0.5
+                rows: (model.count/columns) + 1
                 columns: width/64
                 spacing: 4
                 
@@ -145,14 +145,7 @@ FocusScope {
                         
                         o.selected.connect(selected);
                     }
-                    /*
-                    for (var n=0;n<32;n++) {
-                        var name="test-"+n
-                        var o = component.createObject(grid,{name:name,image:"user-account"});
-                        o.selected.connect(selected);
-                    }
-                    rows = (model.count+32/columns)+0.5;
-                    */
+                    
 
                 }
             }
