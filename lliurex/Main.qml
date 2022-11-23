@@ -329,7 +329,7 @@ Item {
                     PlasmaComponents.CheckBox {
                         id: chkEscoles
                         checked: (escolesLogin & 1) == 1
-                        text: i18nd("lliurex-sddm-theme","Activar")
+                        text: i18nd("lliurex-sddm-theme","Enable")
 
                         onClicked: {
                             btnSettingsAccept.enabled = true;
