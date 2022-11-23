@@ -8,7 +8,7 @@ Standards-Version: 4.1.2
 Package: lliurex-sddm-theme
 Architecture: any
 Section: x11
-Depends: sddm, ${shlibs:Depends}, ${misc:Depends}, qml-module-edupals-n4d, n4d-lliurex-base, qml-module-lliurex-ui
+Depends: sddm, ${shlibs:Depends}, ${misc:Depends}, qml-module-edupals-n4d, n4d-lliurex-base, qml-module-lliurex-ui, n4d-escoles-conectades
 Description: LliureX sddm theme
  LliureX 21 custom sddm theme
 
