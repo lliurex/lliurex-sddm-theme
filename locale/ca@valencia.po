@@ -3,21 +3,34 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
+"#-#-#-#-#  ca@valencia.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-30 13:55+0200\n"
 "PO-Revision-Date: 2021-01-19 11:40+0000\n"
 "Last-Translator: Angels <gimenez_angcam@gva.es>\n"
-"Language-Team: Valencian <http://weblate.lliurex.net/projects/"
-"lliurex-sddm-theme/lliurex-sddm-theme/ca@valencia/>\n"
+"Language-Team: Valencian <http://weblate.lliurex.net/projects/lliurex-sddm-"
+"theme/lliurex-sddm-theme/ca@valencia/>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.3.1\n"
+"#-#-#-#-#  messages.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-23 11:12+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: lliurex-desktop/Main.qml:358
 msgid "User name"
@@ -64,7 +77,9 @@ msgid "Go back"
 msgstr "Torna arrere"
 
 #: lliurex-desktop/Main.qml
-msgid "Access this computer using a guest account. Everything stored with this account will be deleted after you log out."
+msgid ""
+"Access this computer using a guest account. Everything stored with this "
+"account will be deleted after you log out."
 msgstr ""
 "Accedeix a aquest ordinador amb un compte de convidat. Tot el que es guarde "
 "amb aquest compte s'eliminarà després de tancar la sessió."
@@ -76,3 +91,52 @@ msgstr "Cancel·la"
 #: lliurex-desktop/ui/UserGrid.qml:99
 msgid "Search..."
 msgstr "Cerca..."
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:225
+msgid "Failed to create connection"
+msgstr ""
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:313
+msgid "Settings"
+msgstr ""
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:326
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:633
+msgid "Escoles Conectades"
+msgstr ""
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:332
+msgid "Enable"
+msgstr ""
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:342
+msgid "WiFi Alumnos"
+msgstr ""
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:352
+msgid "WiFi Profesores"
+msgstr ""
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:371
+msgid "Accept"
+msgstr ""
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:404
+msgid "User selection"
+msgstr ""
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:642
+msgid "Scanning networks"
+msgstr ""
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:648
+msgid "Turning down connections"
+msgstr ""
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:654
+msgid "Creating connection"
+msgstr ""
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:708
+msgid "Enter"
+msgstr ""

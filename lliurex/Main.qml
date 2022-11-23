@@ -43,6 +43,10 @@ Item {
     
     property string lliurexVersion: ""
     property string lliurexType: ""
+    property int escolesLogin: 0
+    property string escolesTarget: ""
+    property var networks
+    property int escolesStage: -1
     
     //property bool compact: (loginFrame.width+dateFrame.width+60) > theme.width
     
@@ -57,6 +61,22 @@ Item {
 
     Sddm.TextConstants { id: textConstants }
     
+    function showError(msg)
+    {
+        message.type=Kirigami.MessageType.Error;
+        message.text=msg;
+        message.visible=true;
+        root.topWindow = loginFrame;
+    }
+
+    function showWarning(msg)
+    {
+        message.type=Kirigami.MessageType.Warning;
+        message.text=msg;
+        message.visible=true;
+        root.topWindow = loginFrame;
+    }
+
     N4D.Client
     {
         id: n4dLocal
@@ -109,9 +129,7 @@ Item {
         method: "lliurex_version"
         
         onError: {
-            message.type=Kirigami.MessageType.Warning;
-            message.text=i18nd("lliurex-sddm-theme","No connection to server");
-            message.visible=true;
+            showWarning(i18nd("lliurex-sddm-theme","No connection to server"));
             root.programmedCheck=3000;
         }
         
@@ -120,10 +138,110 @@ Item {
             message.visible=false;
         }
     }
+
+    N4D.Proxy
+    {
+        id: local_check_wired_connection
+        client: n4dLocal
+        plugin: "EscolesConectades"
+        method: "check_wired_connection"
+
+        onError: {
+            local_scan_network.call([]);
+        }
+
+        onResponse: {
+            if (value) {
+                sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
+            }
+            else {
+                local_scan_network.call([]);
+            }
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_scan_network
+        client: n4dLocal
+        plugin: "EscolesConectades"
+        method: "scan_network"
+
+        onError: {
+            console.log("failed to retrieve networks:",what,"\n",details);
+        }
+
+        onResponse: {
+            console.log("networks:",value);
+            networks = value;
+            var found = false;
+            for (var n in networks) {
+                console.log(networks[n]);
+                if (networks[n][0] == escolesTarget) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                escolesStage = 1;
+                local_disconnect_all.call([]);
+            }
+            else {
+                console.log("Escoles target not found!");
+                showError(i18nd("Wifi network not found:") + escolesTarget);
+            }
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_disconnect_all
+        client: n4dLocal
+        plugin: "EscolesConectades"
+        method: "disconnect_all"
+
+        onError: {
+            console.log("failed to turn down all connections:",what,"\n",details);
+            showError(i18nd("Failed to turn down connections"));
+        }
+
+        onResponse: {
+            escolesStage = 2;
+            local_create_connection.call(["EscolesConectades",escolesTarget,txtUser.text,txtPass.text,{mode="personal"}]);
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_create_connection
+        client: n4dLocal
+        plugin: "EscolesConectades"
+        method: "create_connection"
+        /* name,ssid,user,password */
+
+        onError: {
+            console.log("failed to create connection:",what,"\n",details);
+            showError(i18nd("lliurex-sddm-theme","Failed to create connection"));
+        }
+
+        onResponse: {
+            escolesStage = 3;
+
+            sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
+        }
+    }
     
     Component.onCompleted: {
         console.log("looking for lliurex version...");
         local_lliurex_version.call([]);
+        try {
+            escolesLogin = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES");
+        }
+        catch(e) {
+            console.log(e);
+        }
+        console.log("escolesLogin:",escolesLogin);
     }
     
     /* catch login events */
@@ -137,9 +255,7 @@ Item {
         }
         
         function onLoginFailed() {
-            message.type=Kirigami.MessageType.Error;
-            message.text=i18nd("lliurex-sddm-theme","Login failed");
-            message.visible=true;
+            showError(i18nd("lliurex-sddm-theme","Login failed"));
             
             loginFrame.enabled=true;
             txtPass.text = "";
@@ -189,14 +305,103 @@ Item {
             }
         }
     }
-    
+
+    /* setup frame */
+    LLX.Window {
+        id: settingsFrame
+        visible: root.topWindow == this
+        title: i18nd("lliurex-sddm-theme","Settings")
+        width: 512
+        height:512
+
+        anchors.centerIn: parent
+
+        ColumnLayout {
+            anchors.fill: parent
+
+            QQC2.GroupBox {
+                //Layout.fillHeight:true
+                Layout.fillWidth:true
+
+                title: i18nd("lliurex-sddm-theme","Escoles Conectades")
+                ColumnLayout {
+                    anchors.fill: parent
+                    PlasmaComponents.CheckBox {
+                        id: chkEscoles
+                        checked: (escolesLogin & 1) == 1
+                        text: i18nd("lliurex-sddm-theme","Enable")
+
+                        onClicked: {
+                            btnSettingsAccept.enabled = true;
+                        }
+                    }
+                    PlasmaComponents.RadioButton {
+                        id: rb1
+                        enabled: chkEscoles.checked
+                        checked: (escolesLogin & 2) == 2
+                        text: i18nd("lliurex-sddm-theme","WiFi Alumnos")
+
+                        onClicked: {
+                            btnSettingsAccept.enabled = true;
+                        }
+                    }
+                    PlasmaComponents.RadioButton {
+                        id: rb2
+                        enabled: chkEscoles.checked
+                        checked: !((escolesLogin & 2) == 2)
+                        text: i18nd("lliurex-sddm-theme","WiFi Profesores")
+
+                        onClicked: {
+                            btnSettingsAccept.enabled = true;
+                        }
+                    }
+                }
+            }
+
+            Item {
+                Layout.fillHeight:true
+            }
+
+            RowLayout {
+                Layout.fillWidth:true
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+
+                PlasmaComponents.Button {
+                    id: btnSettingsAccept
+                    text: i18nd("lliurex-sddm-theme","Accept")
+                    enabled: false
+                    Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+
+                    onClicked: {
+                        escolesLogin = chkEscoles.checked ? 1 : 0;
+                        escolesLogin = escolesLogin | (rb1.checked ?  2 : 0);
+
+                        n4dLocal.setVariable("SDDM_ESCOLES_CONECTADES",escolesLogin);
+
+                        enabled = false;
+                        root.topWindow = loginFrame;
+                    }
+                }
+
+                PlasmaComponents.Button {
+                    text: i18nd("lliurex-sddm-theme","Cancel")
+                    Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+
+                    onClicked: {
+                        btnSettingsAccept.enabled = false;
+                        root.topWindow = loginFrame;
+                    }
+                }
+            }
+        }
+
+    }
+
     /* user frame */
     LLX.Window {
         id: userFrame
         visible: root.topWindow == this
-        title: "User selection"
-        //width: theme.width*0.8
-        //height: theme.height*0.8
+        title: i18nd("lliurex-sddm-theme","User selection")
         width: 512
         height:400
             
@@ -357,8 +562,15 @@ Item {
                     //palette.highlight: "#3daee9"
                     
                     Keys.onReturnPressed: {
-                        loginFrame.enabled=false
-                        sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
+                        if (escolesLogin>0) {
+                            root.escolesStage = 0;
+                            root.topWindow = escolesFrame;
+                            local_check_wired_connection.call([]);
+                        }
+                        else {
+                            loginFrame.enabled=false
+                            sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
+                        }
                     }
                     
                     Image {
@@ -395,13 +607,72 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 
                 onClicked: {
-                    loginFrame.enabled=false
-                    sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
+                    if (escolesLogin>0) {
+                        root.escolesStage = 0;
+                        root.topWindow = escolesFrame;
+                        local_check_wired_connection.call([]);
+                    }
+                    else {
+                        loginFrame.enabled=false;
+                        sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
+                    }
                 }
             }
             
         }
         
+    }
+
+    /* escoles login window */
+    LLX.Window {
+        id: escolesFrame
+        width: 400
+        height: 340
+        visible: root.topWindow == this
+        margin:24
+        title: i18nd("lliurex-sddm-theme","Escoles Conectades")
+        anchors.centerIn: parent
+
+        ColumnLayout {
+            anchors.fill:parent
+
+            Lliurex.StatusLine {
+                stage: 0
+                currentStage: root.escolesStage
+                text: i18nd("lliurex-sddm-theme","Scanning networks")
+            }
+
+            Lliurex.StatusLine {
+                stage: 1
+                currentStage: root.escolesStage
+                text: i18nd("lliurex-sddm-theme","Turning down connections")
+            }
+
+            Lliurex.StatusLine {
+                stage: 2
+                currentStage: root.escolesStage
+                text: i18nd("lliurex-sddm-theme","Creating connection")
+            }
+
+            Kirigami.InlineMessage {
+                id: messageEscoles
+                anchors.fill:parent
+            }
+
+            PlasmaComponents.Button {
+                text: i18nd("lliurex-sddm-theme","Cancel")
+                implicitWidth: PlasmaCore.Units.gridUnit*6
+                icon.name: "dialog-cancel"
+                display: QQC2.AbstractButton.TextBesideIcon
+
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+
+                onClicked: {
+                    root.topWindow = loginFrame;
+                }
+            }
+        }
+
     }
     
     /* guest frame */
@@ -628,6 +899,19 @@ Item {
                 display: AbstractButton.IconOnly
                 icon.width:24
                 icon.height:24
+            }
+
+            PlasmaComponents.Button {
+                id: btnSettings
+                Layout.alignment: Qt.AlignLeft
+                icon.name:"system-users"
+                display: AbstractButton.IconOnly
+                icon.width:24
+                icon.height:24
+
+                onClicked: {
+                    root.topWindow = settingsFrame;
+                }
             }
 
             Item {
