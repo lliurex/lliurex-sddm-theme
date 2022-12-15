@@ -1,3 +1,9 @@
+lliurex-sddm-theme (22.2.1.0) lliurex22; urgency=medium
+
+  * Disabled Escoles Conectades button (for now)
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Thu, 15 Dec 2022 14:01:13 +0100
+
 lliurex-sddm-theme (22.2.0.0) lliurex22; urgency=medium
 
   * Added support for Escoles Conectades WiFi
