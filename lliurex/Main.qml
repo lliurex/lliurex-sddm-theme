@@ -44,7 +44,7 @@ Item {
     property string lliurexVersion: ""
     property string lliurexType: ""
     property int escolesLogin: 0
-    property string escolesTarget: ""
+    property string escolesTarget: "WIFI_ALU"
     property var networks
     property int escolesStage: -1
     
@@ -148,6 +148,7 @@ Item {
 
         onError: {
             local_scan_network.call([]);
+            // TODO: show error here?
         }
 
         onResponse: {
@@ -169,9 +170,17 @@ Item {
 
         onError: {
             console.log("failed to retrieve networks:",what,"\n",details);
+            showError(i18nd("lliurex-sddm-theme","Failed to retrieve networks"));
         }
 
         onResponse: {
+            if ((escolesLogin & 2)==2) {
+                escolesTarget = "WIFI_ALU"
+            }
+            else {
+                escolesTarget = "WIFI_PROF"
+            }
+            console.log("Using target:",escolesTarget);
             console.log("networks:",value);
             networks = value;
             var found = false;
@@ -189,7 +198,7 @@ Item {
             }
             else {
                 console.log("Escoles target not found!");
-                showError(i18nd("Wifi network not found:") + escolesTarget);
+                showError(i18nd("lliurex-sddm-theme","Wifi network not found:") + escolesTarget);
             }
         }
     }
@@ -203,12 +212,12 @@ Item {
 
         onError: {
             console.log("failed to turn down all connections:",what,"\n",details);
-            showError(i18nd("Failed to turn down connections"));
+            showError(i18nd("lliurex-sddm-theme","Failed to turn down connections"));
         }
 
         onResponse: {
             escolesStage = 2;
-            local_create_connection.call(["EscolesConectades",escolesTarget,txtUser.text,txtPass.text,{mode="personal"}]);
+            local_create_connection.call(["EscolesConectades",escolesTarget,txtUser.text,txtPass.text,""]);
         }
     }
 
@@ -231,17 +240,44 @@ Item {
             sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
         }
     }
+
+    N4D.Proxy
+    {
+        id: local_get_settings
+        client: n4dLocal
+        plugin: "EscolesConectades"
+        method: "get_settings"
+
+        onError: {
+            console.log("Failed to get EscolesConectades settings");
+        }
+
+        onResponse: {
+            escolesLogin = value;
+            console.log("escolesLogin:",escolesLogin);
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_set_settings
+        client: n4dLocal
+        plugin: "EscolesConectades"
+        method: "set_settings"
+
+        onError: {
+            console.log("Failed to set EscolesConectades settings");
+        }
+
+        onResponse: {
+        }
+    }
     
     Component.onCompleted: {
         console.log("looking for lliurex version...");
         local_lliurex_version.call([]);
-        try {
-            escolesLogin = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES");
-        }
-        catch(e) {
-            console.log(e);
-        }
-        console.log("escolesLogin:",escolesLogin);
+        //escolesLogin = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES");
+        local_get_settings.call([]);
     }
     
     /* catch login events */
@@ -376,8 +412,9 @@ Item {
                         escolesLogin = chkEscoles.checked ? 1 : 0;
                         escolesLogin = escolesLogin | (rb1.checked ?  2 : 0);
 
-                        n4dLocal.setVariable("SDDM_ESCOLES_CONECTADES",escolesLogin);
-
+                        console.log("Setting:",escolesLogin);
+                        //n4dLocal.setVariable("SDDM_ESCOLES_CONECTADES",escolesLogin);
+                        local_set_settings.call([escolesLogin]);
                         enabled = false;
                         root.topWindow = loginFrame;
                     }
@@ -908,8 +945,10 @@ Item {
                 display: AbstractButton.IconOnly
                 icon.width:24
                 icon.height:24
+                visible:false
 
                 onClicked: {
+                    local_get_settings.call([]);
                     root.topWindow = settingsFrame;
                 }
             }
