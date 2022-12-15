@@ -908,6 +908,7 @@ Item {
                 display: AbstractButton.IconOnly
                 icon.width:24
                 icon.height:24
+                visible:false
 
                 onClicked: {
                     root.topWindow = settingsFrame;
