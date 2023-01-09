@@ -236,8 +236,7 @@ Item {
 
         onResponse: {
             escolesStage = 3;
-
-            sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
+            local_wait_for_domain.call([]);
         }
     }
 
@@ -270,6 +269,23 @@ Item {
         }
 
         onResponse: {
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_wait_for_domain
+        client: n4dLocal
+        plugin: "EscolesConectades"
+        method: "wait_for_domain"
+
+        onError: {
+            console.log("Failed waiting to GVA domain");
+        }
+
+        onResponse: {
+            escolesStage = 4;
+            sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
         }
     }
     
@@ -689,6 +705,12 @@ Item {
                 stage: 2
                 currentStage: root.escolesStage
                 text: i18nd("lliurex-sddm-theme","Creating connection")
+            }
+
+            Lliurex.StatusLine {
+                stage: 3
+                currentStage: root.escolesStage
+                text: i18nd("lliurex-sddm-theme","Waiting for GVA server")
             }
 
             Kirigami.InlineMessage {
