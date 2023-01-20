@@ -687,6 +687,13 @@ Item {
         title: i18nd("lliurex-sddm-theme","Escoles Conectades")
         anchors.centerIn: parent
 
+        onVisibleChanged: {
+            if (visible) {
+                timerAutoLogin.start();
+                progressAutoLogin.value = 1.0;
+            }
+        }
+
         Timer {
             id: timerAutoLogin
             running:true
@@ -707,6 +714,7 @@ Item {
             }
 
             PlasmaComponents.ProgressBar {
+                id: progressAutoLogin
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter
                 value: 1.0
@@ -720,6 +728,9 @@ Item {
                     text: i18nd("lliurex-sddm-theme","Login");
 
                     onClicked: {
+                        timerAutoLogin.stop();
+
+                        // Login goes here
                     }
                 }
 
@@ -727,6 +738,7 @@ Item {
                     text: i18nd("lliurex-sddm-theme","Cancel");
 
                     onClicked: {
+                        timerAutoLogin.stop();
                         root.topWindow = loginFrame;
                     }
 
