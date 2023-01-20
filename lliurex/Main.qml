@@ -676,6 +676,66 @@ Item {
         
     }
 
+    LLX.Window {
+        id: escolesAutoLoginFrame
+        width: 400
+        height: 340
+
+        visible: root.topWindow == this
+        margin: 24
+
+        title: i18nd("lliurex-sddm-theme","Escoles Conectades")
+        anchors.centerIn: parent
+
+        Timer {
+            id: timerAutoLogin
+            running:true
+            interval: 1000
+            repeat:true
+
+            onTriggered: {
+            }
+        }
+
+        ColumnLayout {
+            anchors.fill: parent
+
+            PlasmaComponents.Label {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter
+                text: i18nd("lliurex-sddm-theme","Login as Student in:")
+            }
+
+            PlasmaComponents.ProgressBar {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter
+                value: 1.0
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignCenter | Qt.AlignBottom
+
+                PlasmaComponents.Button {
+                    text: i18nd("lliurex-sddm-theme","Login");
+
+                    onClicked: {
+                    }
+                }
+
+                PlasmaComponents.Button {
+                    text: i18nd("lliurex-sddm-theme","Cancel");
+
+                    onClicked: {
+                        root.topWindow = loginFrame;
+                    }
+
+                }
+            }
+
+        }
+    }
+
     /* escoles login window */
     LLX.Window {
         id: escolesFrame
