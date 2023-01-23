@@ -36,6 +36,8 @@ Item {
     
     id: root
 
+    readonly property int autoLoginTimeout: 10000 //10 seconds
+
     property Item topWindow: loginFrame
 
     property int checkTime:0
@@ -676,6 +678,22 @@ Item {
         
     }
 
+    Timer {
+        id: timerAutoLogin
+        running:true
+        interval: 50
+        repeat:true
+
+        onTriggered: {
+            progressAutoLogin.value = progressAutoLogin.value - (interval/autoLoginTimeout);
+
+            if (progressAutoLogin.value <= 0.0) {
+                stop();
+                console.log("Autologin!");
+            }
+        }
+    }
+
     LLX.Window {
         id: escolesAutoLoginFrame
         width: 400
@@ -690,17 +708,7 @@ Item {
         onVisibleChanged: {
             if (visible) {
                 timerAutoLogin.start();
-                progressAutoLogin.value = 1.0;
-            }
-        }
-
-        Timer {
-            id: timerAutoLogin
-            running:true
-            interval: 1000
-            repeat:true
-
-            onTriggered: {
+                progressAutoLogin.value =  1.0;
             }
         }
 
@@ -1044,6 +1052,21 @@ Item {
                 onClicked: {
                     local_get_settings.call([]);
                     root.topWindow = settingsFrame;
+                }
+            }
+
+            PlasmaComponents.Button {
+                id: btnEscolesAutoLogin
+                Layout.alignment: Qt.AlignLeft
+                icon.name:"smiley"
+                display: AbstractButton.IconOnly
+                icon.width:24
+                icon.height:24
+                //visible:false
+
+                onClicked: {
+
+                    root.topWindow = escolesAutoLoginFrame;
                 }
             }
 
