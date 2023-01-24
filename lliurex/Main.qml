@@ -36,6 +36,14 @@ Item {
     
     id: root
 
+    enum EscolesConectades {
+        VendorEnabled = 1,
+        Enabled = 2,
+        Mode = 4,   // 1 Manual, 0 Auto
+        Wifi = 8    // 1 Prof, 0 Alu
+    }
+
+
     readonly property int autoLoginTimeout: 10000 //10 seconds
 
     property Item topWindow: loginFrame
@@ -176,11 +184,11 @@ Item {
         }
 
         onResponse: {
-            if ((escolesLogin & 2)==2) {
-                escolesTarget = "WIFI_ALU"
+            if ((escolesLogin & Main.EscolesConectades.Wifi) > 0) {
+                escolesTarget = "WIFI_PROF"
             }
             else {
-                escolesTarget = "WIFI_PROF"
+                escolesTarget = "WIFI_ALU"
             }
             console.log("Using target:",escolesTarget);
             console.log("networks:",value);
@@ -256,6 +264,10 @@ Item {
         onResponse: {
             escolesLogin = value;
             console.log("escolesLogin:",escolesLogin);
+            console.log("VendorEnabled:", (escolesLogin & Main.EscolesConectades.VendorEnabled > 0) ? "yes" : "no" );
+            console.log("Enabled:", (escolesLogin & Main.EscolesConectades.Enabled > 0) ? "yes" : "no");
+            console.log("Mode:", (escolesLogin & Main.EscolesConectades.Mode > 0) ? "Manual" : "Autologin");
+            console.log("Wifi:", (escolesLogin & Main.EscolesConectades.WiFi > 0) ? "WIFI_PROF" : "WIFI_ALU");
         }
     }
 
@@ -382,7 +394,7 @@ Item {
                     anchors.fill: parent
                     PlasmaComponents.CheckBox {
                         id: chkEscoles
-                        checked: (escolesLogin & 1) == 1
+                        checked: (escolesLogin & Main.EscolesConectades.Enabled) > 0
                         text: i18nd("lliurex-sddm-theme","Enable")
 
                         onClicked: {
@@ -392,7 +404,7 @@ Item {
                     PlasmaComponents.RadioButton {
                         id: rb1
                         enabled: chkEscoles.checked
-                        checked: (escolesLogin & 2) == 2
+                        checked: !((escolesLogin & Main.EscolesConectades.Wifi) > 0)
                         text: i18nd("lliurex-sddm-theme","WiFi Alumnos")
 
                         onClicked: {
@@ -402,7 +414,7 @@ Item {
                     PlasmaComponents.RadioButton {
                         id: rb2
                         enabled: chkEscoles.checked
-                        checked: !((escolesLogin & 2) == 2)
+                        checked: (escolesLogin & Main.EscolesConectades.Wifi) > 0
                         text: i18nd("lliurex-sddm-theme","WiFi Profesores")
 
                         onClicked: {
@@ -427,8 +439,10 @@ Item {
                     Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
                     onClicked: {
-                        escolesLogin = chkEscoles.checked ? 1 : 0;
-                        escolesLogin = escolesLogin | (rb1.checked ?  2 : 0);
+                        escolesLogin = Main.EscolesConectades.VendorEnabled;
+                        escolesLogin = escolesLogin | chkEscoles.checked ? Main.EscolesConectades.Enabled : 0;
+                        escolesLogin = escolesLogin | Main.EscolesConectades.Mode;
+                        escolesLogin = escolesLogin | (rb1.checked ? Main.EscolesConectades.Wifi : 0);
 
                         console.log("Setting:",escolesLogin);
                         //n4dLocal.setVariable("SDDM_ESCOLES_CONECTADES",escolesLogin);
@@ -617,7 +631,7 @@ Item {
                     //palette.highlight: "#3daee9"
                     
                     Keys.onReturnPressed: {
-                        if (escolesLogin>0) {
+                        if ( (escolesLogin & EscolesConectades.Enabled) > 0) {
                             root.escolesStage = 0;
                             root.topWindow = escolesFrame;
                             local_check_wired_connection.call([]);
@@ -662,7 +676,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 
                 onClicked: {
-                    if (escolesLogin>0) {
+                    if (escolesLogin & EscolesConectades.Enabled > 0) {
                         root.escolesStage = 0;
                         root.topWindow = escolesFrame;
                         local_check_wired_connection.call([]);
@@ -680,7 +694,7 @@ Item {
 
     Timer {
         id: timerAutoLogin
-        running:true
+        running:false
         interval: 50
         repeat:true
 
@@ -791,11 +805,6 @@ Item {
                 stage: 3
                 currentStage: root.escolesStage
                 text: i18nd("lliurex-sddm-theme","Waiting for GVA server")
-            }
-
-            Kirigami.InlineMessage {
-                id: messageEscoles
-                anchors.fill:parent
             }
 
             PlasmaComponents.Button {
@@ -1047,7 +1056,7 @@ Item {
                 display: AbstractButton.IconOnly
                 icon.width:24
                 icon.height:24
-                visible:false
+                visible: (escolesLogin & Main.EscolesConectades.VendorEnabled) > 0
 
                 onClicked: {
                     local_get_settings.call([]);
@@ -1062,7 +1071,7 @@ Item {
                 display: AbstractButton.IconOnly
                 icon.width:24
                 icon.height:24
-                //visible:false
+                visible:false //TODO
 
                 onClicked: {
 
