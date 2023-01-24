@@ -631,7 +631,7 @@ Item {
                     //palette.highlight: "#3daee9"
                     
                     Keys.onReturnPressed: {
-                        if ( (escolesLogin & EscolesConectades.Enabled) > 0) {
+                        if ( (escolesLogin & Main.EscolesConectades.Enabled) > 0) {
                             root.escolesStage = 0;
                             root.topWindow = escolesFrame;
                             local_check_wired_connection.call([]);
@@ -676,7 +676,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 
                 onClicked: {
-                    if (escolesLogin & EscolesConectades.Enabled > 0) {
+                    if ( (escolesLogin & Main.EscolesConectades.Enabled) > 0) {
                         root.escolesStage = 0;
                         root.topWindow = escolesFrame;
                         local_check_wired_connection.call([]);
