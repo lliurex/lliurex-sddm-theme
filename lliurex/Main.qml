@@ -439,14 +439,16 @@ Item {
                     Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
                     onClicked: {
-                        escolesLogin = Main.EscolesConectades.VendorEnabled;
-                        escolesLogin = escolesLogin | chkEscoles.checked ? Main.EscolesConectades.Enabled : 0;
-                        escolesLogin = escolesLogin | Main.EscolesConectades.Mode;
-                        escolesLogin = escolesLogin | (rb1.checked ? Main.EscolesConectades.Wifi : 0);
 
-                        console.log("Setting:",escolesLogin);
+                        var tmp = Main.EscolesConectades.VendorEnabled;
+                        tmp = tmp | (chkEscoles.checked ? Main.EscolesConectades.Enabled : 0);
+                        tmp = tmp | Main.EscolesConectades.Mode;
+                        tmp = tmp | (rb1.checked ? 0 : Main.EscolesConectades.Wifi);
+
+                        console.log("Setting:",tmp);
                         //n4dLocal.setVariable("SDDM_ESCOLES_CONECTADES",escolesLogin);
-                        local_set_settings.call([escolesLogin]);
+                        local_set_settings.call([tmp]);
+                        escolesLogin = tmp;
                         enabled = false;
                         root.topWindow = loginFrame;
                     }
