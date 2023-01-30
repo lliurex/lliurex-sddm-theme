@@ -39,7 +39,7 @@ Item {
     enum EscolesConectades {
         VendorEnabled = 1,
         Enabled = 2,
-        Mode = 4,   // 1 Manual, 0 Auto
+        Manual = 4,   // 1 Manual, 0 Auto
         Wifi = 8    // 1 Prof, 0 Alu
     }
 
@@ -47,6 +47,7 @@ Item {
     readonly property int autoLoginTimeout: 10000 //10 seconds
 
     property Item topWindow: loginFrame
+    property bool firstBoot: true
 
     property int checkTime:0
     property int programmedCheck:0
@@ -264,10 +265,19 @@ Item {
         onResponse: {
             escolesLogin = value;
             console.log("escolesLogin:",escolesLogin);
-            console.log("VendorEnabled:", (escolesLogin & Main.EscolesConectades.VendorEnabled > 0) ? "yes" : "no" );
-            console.log("Enabled:", (escolesLogin & Main.EscolesConectades.Enabled > 0) ? "yes" : "no");
-            console.log("Mode:", (escolesLogin & Main.EscolesConectades.Mode > 0) ? "Manual" : "Autologin");
-            console.log("Wifi:", (escolesLogin & Main.EscolesConectades.WiFi > 0) ? "WIFI_PROF" : "WIFI_ALU");
+            console.log("VendorEnabled:", ((escolesLogin & Main.EscolesConectades.VendorEnabled) > 0) ? "yes" : "no" );
+            console.log("Enabled:", ((escolesLogin & Main.EscolesConectades.Enabled) > 0) ? "yes" : "no");
+            console.log("Mode:", ((escolesLogin & Main.EscolesConectades.Manual) > 0) ? "Manual" : "Autologin");
+            console.log("Wifi:", ((escolesLogin & Main.EscolesConectades.WiFi) > 0) ? "WIFI_PROF" : "WIFI_ALU");
+
+            if (firstBoot) {
+                firstBoot = false;
+                console.log("First boot!");
+                if ( ((escolesLogin & Main.EscolesConectades.Enabled) > 0) &&
+                            ((escolesLogin & Main.EscolesConectades.Manual) == 0)) {
+                    root.topWindow = escolesAutoLoginFrame;
+                }
+            }
         }
     }
 
@@ -308,6 +318,7 @@ Item {
         local_lliurex_version.call([]);
         //escolesLogin = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES");
         local_get_settings.call([]);
+
     }
     
     /* catch login events */
@@ -442,7 +453,7 @@ Item {
 
                         var tmp = Main.EscolesConectades.VendorEnabled;
                         tmp = tmp | (chkEscoles.checked ? Main.EscolesConectades.Enabled : 0);
-                        tmp = tmp | Main.EscolesConectades.Mode;
+                        tmp = tmp | Main.EscolesConectades.Manual;
                         tmp = tmp | (rb1.checked ? 0 : Main.EscolesConectades.Wifi);
 
                         console.log("Setting:",tmp);
@@ -713,7 +724,7 @@ Item {
     LLX.Window {
         id: escolesAutoLoginFrame
         width: 400
-        height: 340
+        height: 200
 
         visible: root.topWindow == this
         margin: 24
@@ -744,12 +755,33 @@ Item {
                 value: 1.0
             }
 
+            Item {
+                Layout.fillHeight: true
+            }
+
             RowLayout {
                 Layout.fillWidth: true
-                Layout.alignment: Qt.AlignCenter | Qt.AlignBottom
+                //Layout.alignment: Qt.AlignCenter | Qt.AlignBottom
+
+                PlasmaComponents.Button {
+
+                    //text: i18nd("lliurex-sddm-theme","Cancel");
+                    icon.name: "arrow-left"
+
+                    onClicked: {
+                        timerAutoLogin.stop();
+                        root.topWindow = loginFrame;
+                    }
+
+                }
+
+                Item {
+                    width:32
+                }
 
                 PlasmaComponents.Button {
                     text: i18nd("lliurex-sddm-theme","Login");
+                    implicitWidth: 200
 
                     onClicked: {
                         timerAutoLogin.stop();
@@ -758,15 +790,6 @@ Item {
                     }
                 }
 
-                PlasmaComponents.Button {
-                    text: i18nd("lliurex-sddm-theme","Cancel");
-
-                    onClicked: {
-                        timerAutoLogin.stop();
-                        root.topWindow = loginFrame;
-                    }
-
-                }
             }
 
         }
@@ -1058,7 +1081,8 @@ Item {
                 display: AbstractButton.IconOnly
                 icon.width:24
                 icon.height:24
-                visible: (escolesLogin & Main.EscolesConectades.VendorEnabled) > 0
+                visible: ((escolesLogin & Main.EscolesConectades.VendorEnabled) > 0)
+
 
                 onClicked: {
                     local_get_settings.call([]);
@@ -1073,7 +1097,8 @@ Item {
                 display: AbstractButton.IconOnly
                 icon.width:24
                 icon.height:24
-                visible:false //TODO
+                visible: ((escolesLogin & Main.EscolesConectades.VendorEnabled) > 0) &&
+                            ((escolesLogin & Main.EscolesConectades.Manual) == 0)
 
                 onClicked: {
 
