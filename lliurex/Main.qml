@@ -104,6 +104,34 @@ Item {
         root.topWindow = loginFrame;
     }
 
+    function login()
+    {
+        if (root.loginMode == Main.LoginMode.Local) {
+            console.log("performing a local login...");
+            sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
+        }
+
+        if (root.loginMode == Main.LoginMode.EscolesTeacher ||
+                    root.loginMode == Main.LoginMode.EscolesStudent) {
+            console.log("performing a EscolesConectades login...");
+            root.escolesStage = 0;
+            root.topWindow = escolesFrame;
+            local_check_wired_connection.call([]);
+        }
+
+        if (root.loginMode == Main.LoginMode.Guest) {
+            console.log("performing a guest login...");
+            sddm.login("guest-user","",cmbSession.currentIndex)
+        }
+
+        if (root.loginMode == Main.LoginMode.AutoStudent) {
+            console.log("performing an autologin...");
+            root.escolesStage = 0;
+            root.topWindow = escolesFrame;
+            local_check_wired_connection.call([]);
+        }
+    }
+
     N4D.Client
     {
         id: n4dLocal
@@ -180,8 +208,14 @@ Item {
 
         onResponse: {
             if (value) {
-                //TODO: check type of login Auto/Manual
-                sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
+                if (root.loginMode == Main.LoginMode.EscolesStudent ||
+                        root.loginMode == Main.LoginMode.EscolesTeacher) {
+                    sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
+                }
+
+                if (root.loginMode == Main.LoginMode.AutoStudent) {
+                    sddm.login("guest-user","",cmbSession.currentIndex);
+                }
             }
             else {
                 local_scan_network.call([]);
@@ -202,12 +236,13 @@ Item {
         }
 
         onResponse: {
-            if ((escolesLogin & Main.EscolesConectades.Wifi) > 0) {
-                escolesTarget = "WIFI_PROF"
+
+            if (root.loginMode == Main.LoginMode.EscolesStudent ||
+                    root.loginMode == Main.LoginMode.AutoStudent) {
+                root.escolestarget = "WIFI_ALU";
             }
-            else {
-                escolesTarget = "WIFI_ALU"
-            }
+
+
             console.log("Using target:",escolesTarget);
             console.log("networks:",value);
             networks = value;
@@ -245,12 +280,16 @@ Item {
 
         onResponse: {
             escolesStage = 2;
-            if (escolesLoginManual == 1) {
+
+            if (root.loginMode == Main.LoginMode.EscolesStudent ||
+                    root.loginMode == Main.LoginMode.EscolesTeacher) {
                 local_create_connection.call(["EscolesConectades",escolesTarget,txtUser.text,txtPass.text,""]);
             }
-            else {
+
+            if (root.loginMode == Main.LoginMode.AutoStudent) {
                 local_create_connection.call(["EscolesConectades","alumnat",escolesAutoLoginSettings,""]);
             }
+
         }
     }
 
@@ -269,12 +308,13 @@ Item {
 
         onResponse: {
             escolesStage = 3;
-
-            if (escolesLoginManual == 1) {
+            if (root.loginMode == Main.LoginMode.EscolesStudent ||
+                    root.loginMode == Main.LoginMode.EscolesTeacher) {
                 local_wait_for_domain.call([]);
             }
-            else {
-                //TODO
+
+            if (root.loginMode == Main.LoginMode.AutoStudent) {
+                sddm.login("guest-user","",cmbSession.currentIndex);
             }
         }
     }
@@ -297,13 +337,22 @@ Item {
                 escolesEnabled = true;
             }
 
-            if (value > 2) {
-                escolesAutoEnabled = true;
+            switch (value) {
+                case 1:
+                    loginMode = Main.LoginMode.EscolesTeacher;
+                break;
+                case 2:
+                    loginMode = Main.LoginMode.EscolesStudent;
+                break;
+                case 3:
+                    loginMode = Main.LoginMode.AutoStudent;
+                    escolesAutoEnabled = true;
+                break;
+
             }
 
             if (firstBoot) {
                 firstBoot = false;
-                console.log("First boot!");
                 if (escolesAutoEnabled) {
                     root.topWindow = escolesAutoLoginFrame;
                 }
@@ -372,10 +421,9 @@ Item {
             }
         }
 
-        local_lliurex_version.call([]);
-        //escolesLogin = n4dLocal.getVariable("SDDM_ESCOLES_CONECTADES");
         local_get_settings.call([]);
         local_get_autologin.call([]);
+        local_lliurex_version.call([]);
 
     }
     
@@ -461,6 +509,7 @@ Item {
                 display: QQC2.AbstractButton.TextUnderIcon
 
                 onClicked: {
+                    root.loginMode = Main.LoginMode.Local;
                     root.topWindow=loginFrame;
                 }
             }
@@ -473,6 +522,7 @@ Item {
                 display: QQC2.AbstractButton.TextUnderIcon
 
                 onClicked: {
+                    root.loginMode = Main.LoginMode.Guest;
                     root.topWindow=guestFrame;
                 }
             }
@@ -497,7 +547,8 @@ Item {
                 display: QQC2.AbstractButton.TextUnderIcon
 
                 onClicked: {
-                    root.topWindow=escolesAutoLoginFrame;
+                    root.loginMode = Main.LoginMode.AutoStudent;
+                    root.topWindow = escolesAutoLoginFrame;
                 }
             }
 
@@ -507,16 +558,29 @@ Item {
         }
     }
 
-
     /* setup frame */
     LLX.Window {
         id: settingsFrame
         visible: root.topWindow == this
         title: i18nd("lliurex-sddm-theme","Settings")
-        width: 512
-        height:512
+        width: 256
+        height:256
+
+        property int mode : 1
 
         anchors.centerIn: parent
+
+        onVisibleChanged: {
+            if (visible) {
+                if (loginMode == Main.LoginMode.EscolesTeacher) {
+                    settingsFrame.mode = 1;
+                }
+
+                if (loginMode == Main.LoginMode.EscolesStudent || loginMode == Main.LoginMode.AutoStudent) {
+                    settingsFrame.mode = 2;
+                }
+            }
+        }
 
         ColumnLayout {
             anchors.fill: parent
@@ -525,22 +589,13 @@ Item {
                 //Layout.fillHeight:true
                 Layout.fillWidth:true
 
-                title: i18nd("lliurex-sddm-theme","Escoles Conectades")
+                //title: i18nd("lliurex-sddm-theme","Escoles Conectades")
                 ColumnLayout {
                     anchors.fill: parent
-                    PlasmaComponents.CheckBox {
-                        id: chkEscoles
-                        checked: (escolesLogin & Main.EscolesConectades.Enabled) > 0
-                        text: i18nd("lliurex-sddm-theme","Enable")
-
-                        onClicked: {
-                            btnSettingsAccept.enabled = true;
-                        }
-                    }
                     PlasmaComponents.RadioButton {
                         id: rb1
-                        enabled: chkEscoles.checked
-                        checked: !((escolesLogin & Main.EscolesConectades.Wifi) > 0)
+                        //enabled: chkEscoles.checked
+                        checked: settingsFrame.mode == 2
                         text: i18nd("lliurex-sddm-theme","WiFi Alumnos")
 
                         onClicked: {
@@ -549,8 +604,8 @@ Item {
                     }
                     PlasmaComponents.RadioButton {
                         id: rb2
-                        enabled: chkEscoles.checked
-                        checked: (escolesLogin & Main.EscolesConectades.Wifi) > 0
+                        //enabled: chkEscoles.checked
+                        checked: settingsFrame.mode == 1
                         text: i18nd("lliurex-sddm-theme","WiFi Profesores")
 
                         onClicked: {
@@ -576,16 +631,7 @@ Item {
 
                     onClicked: {
 
-                        var tmp = Main.EscolesConectades.VendorEnabled;
-                        tmp = tmp | (chkEscoles.checked ? Main.EscolesConectades.Enabled : 0);
-                        tmp = tmp | Main.EscolesConectades.Manual;
-                        tmp = tmp | (rb1.checked ? 0 : Main.EscolesConectades.Wifi);
-
-                        console.log("Setting:",tmp);
-                        //n4dLocal.setVariable("SDDM_ESCOLES_CONECTADES",escolesLogin);
-                        local_set_settings.call([tmp]);
-                        escolesLogin = tmp;
-                        enabled = false;
+                        root.loginMode = (rb2.checked) ? Main.LoginMode.EscolesTeacher : Main.LoginMode.EscolesTeacher;
                         root.topWindow = loginFrame;
                     }
                 }
@@ -694,6 +740,7 @@ Item {
                 PlasmaComponents.Button {
                     id: btnUserSelector
                     //implicitWidth: PlasmaCore.Units.gridUnit*1
+                    enabled: root.loginMode == Main.LoginMode.Local
                     icon.name:"user"
                     icon.width: 22
                     icon.height:22
@@ -746,16 +793,8 @@ Item {
                     //palette.highlight: "#3daee9"
                     
                     Keys.onReturnPressed: {
-
-                        if ( (escolesLogin & Main.EscolesConectades.Enabled) > 0) {
-                            root.escolesStage = 0;
-                            root.topWindow = escolesFrame;
-                            local_check_wired_connection.call([]);
-                        }
-                        else {
-                            loginFrame.enabled=false
-                            sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
-                        }
+                        loginFrame.enabled = false;
+                        login();
                     }
                     
                     PlasmaCore.IconItem {
@@ -792,15 +831,8 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 
                 onClicked: {
-                    if ( (escolesLogin & Main.EscolesConectades.Enabled) > 0) {
-                        root.escolesStage = 0;
-                        root.topWindow = escolesFrame;
-                        local_check_wired_connection.call([]);
-                    }
-                    else {
-                        loginFrame.enabled=false;
-                        sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
-                    }
+                    loginFrame.enabled = false;
+                    login();
                 }
             }
             
@@ -819,7 +851,7 @@ Item {
 
             if (progressAutoLogin.value <= 0.0) {
                 stop();
-                console.log("Autologin!");
+                login();
             }
         }
     }
@@ -838,9 +870,10 @@ Item {
 
         onVisibleChanged: {
             if (visible) {
+
                 timerAutoLogin.start();
                 progressAutoLogin.value =  1.0;
-                btnForceEscolesAutoLogin.forceActiveFocus();
+                //btnForceEscolesAutoLogin.forceActiveFocus();
             }
         }
 
@@ -878,7 +911,7 @@ Item {
                     icon.name: "arrow-left"
 
                     onClicked: {
-                        escolesLoginManual = Main.EscolesConectades.Manual;
+                        root.loginMode = Main.LoginMode.EscolesStudent;
                         timerAutoLogin.stop();
                         root.topWindow = loginFrame;
                     }
@@ -896,9 +929,7 @@ Item {
 
                     onClicked: {
                         timerAutoLogin.stop();
-
-                        root.topWindow = escolesFrame;
-                        local_check_wired_connection.call([]);
+                        login();
                     }
                 }
 
@@ -994,8 +1025,8 @@ Item {
                 implicitWidth: PlasmaCore.Units.gridUnit*6
                 
                 onClicked: {
-                    guestFrame.enabled=false;
-                    sddm.login("guest-user","",cmbSession.currentIndex)
+                    guestFrame.enabled = false;
+                    login();
                 }
             }
             
@@ -1229,6 +1260,40 @@ Item {
                 Layout.fillWidth:true
             }
             
+            RowLayout {
+                id: widgetLoginMode
+                Layout.alignment: Qt.AlignRight
+
+                PlasmaCore.IconItem {
+                    source: "user"
+                    width: 16
+                    height: 16
+                }
+
+                PlasmaComponents.Label {
+
+                    Layout.alignment: Qt.AlignRight
+
+                    horizontalAlignment: Text.AlignHCenter
+
+                    text: {
+                        switch (root.loginMode) {
+                            case Main.LoginMode.Local:
+                                return i18nd("lliurex-sddm-theme","Local");
+                            case Main.LoginMode.Guest:
+                                return i18nd("lliurex-sddm-theme","Guest");
+                            case Main.LoginMode.EscolesTeacher:
+                                return i18nd("lliurex-sddm-theme","Escoles Conectades: Teacher");
+                            case Main.LoginMode.EscolesStudent:
+                                return i18nd("lliurex-sddm-theme","Escoles Conectades: Student");
+                            case Main.LoginMode.AutoStudent:
+                                return i18nd("lliurex-sddm-theme","Escoles Conectades: Alumnat");
+                        }
+                    }
+
+                }
+            }
+
             PlasmaComponents.Label {
                 id: widgetHost
                 Layout.alignment: Qt.AlignRight
