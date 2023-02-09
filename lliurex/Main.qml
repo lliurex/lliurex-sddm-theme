@@ -53,7 +53,7 @@ Item {
 
     readonly property int autoLoginTimeout: 10000 //10 seconds
 
-    property Item topWindow: loginSelectorFrame
+    property Item topWindow: loginFrame
     property bool firstBoot: true
     property int loginMode : Main.LoginMode.Local
 
@@ -218,6 +218,7 @@ Item {
                 }
             }
             else {
+                console.log("no cable found");
                 local_scan_network.call([]);
             }
         }
@@ -239,9 +240,12 @@ Item {
 
             if (root.loginMode == Main.LoginMode.EscolesStudent ||
                     root.loginMode == Main.LoginMode.AutoStudent) {
-                root.escolestarget = "WIFI_ALU";
+                root.escolesTarget = "WIFI_ALU";
             }
 
+            if (root.loginMode == Main.LoginMode.EscolesTeacher) {
+                root.escolesTarget = "WIFI_PROF";
+            }
 
             console.log("Using target:",escolesTarget);
             console.log("networks:",value);
@@ -287,7 +291,7 @@ Item {
             }
 
             if (root.loginMode == Main.LoginMode.AutoStudent) {
-                local_create_connection.call(["EscolesConectades","alumnat",escolesAutoLoginSettings,""]);
+                local_create_connection.call(["EscolesConectades",escolesTarget,"alumnat","$4nD1sik%",""]);
             }
 
         }
@@ -535,7 +539,22 @@ Item {
                 display: QQC2.AbstractButton.TextUnderIcon
 
                 onClicked: {
-                    root.topWindow=loginFrame;
+
+                    switch (root.escolesLogin) {
+                        case 1:
+                            root.loginMode = Main.LoginMode.EscolesTeacher;
+                        break;
+                        case 2:
+                        case 3:
+                            root.loginMode = Main.LoginMode.EscolesStudent;
+                        break;
+                        default:
+                            root.loginMode = Main.LoginMode.EscolesStudent;
+                        break;
+                    }
+
+                    root.topWindow = loginFrame;
+
                 }
             }
 
@@ -631,7 +650,7 @@ Item {
 
                     onClicked: {
 
-                        root.loginMode = (rb2.checked) ? Main.LoginMode.EscolesTeacher : Main.LoginMode.EscolesTeacher;
+                        root.loginMode = (rb2.checked) ? Main.LoginMode.EscolesTeacher : Main.LoginMode.EscolesStudent;
                         root.topWindow = loginFrame;
                     }
                 }
@@ -809,6 +828,50 @@ Item {
                 
                 Item {
                     width: imgPassword.width
+                }
+            }
+
+            RowLayout {
+                visible: root.loginMode == Main.LoginMode.EscolesStudent || root.loginMode == Main.LoginMode.EscolesTeacher
+                //anchors.horizontalCenter: parent.horizontalCenter
+                //anchors.right: btnLogin.right
+                Layout.alignment: Qt.AlignHCenter
+                spacing: 6
+
+                PlasmaCore.IconItem {
+                    id:imgCloud
+                    width:16
+                    height:16
+                    source: "folder-cloud"
+                    //anchors.verticalCenter: parent.verticalCenter
+                }
+
+                PlasmaComponents.ComboBox {
+                    implicitWidth: 200
+                    textRole: "text"
+                    valueRole: "value"
+                    model: [
+                        {value: Main.LoginMode.EscolesStudent, text: i18nd("lliurex-sddm-theme","Student")},
+                        {value: Main.LoginMode.EscolesTeacher, text: i18nd("lliurex-sddm-theme","Teacher")}]
+
+                    onActivated: {
+                        root.loginMode = currentValue;
+                    }
+
+                    onVisibleChanged: {
+                        if (visible) {
+                            if (root.loginMode == Main.LoginMode.EscolesStudent) {
+                                currentIndex = 0;
+                            }
+                            else {
+                                currentIndex = 1;
+                            }
+                        }
+                    }
+                }
+            
+                Item {
+                    width:imgCloud.width
                 }
             }
             
@@ -1207,7 +1270,7 @@ Item {
                     root.topWindow = loginSelectorFrame;
                 }
             }
-
+            /*
             PlasmaComponents.Button {
                 id: btnSettings
                 Layout.alignment: Qt.AlignLeft
@@ -1223,6 +1286,7 @@ Item {
                     root.topWindow = settingsFrame;
                 }
             }
+            */
 /*
             PlasmaComponents.Button {
                 Layout.alignment: Qt.AlignLeft
