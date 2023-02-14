@@ -94,6 +94,7 @@ Item {
         message.text=msg;
         message.visible=true;
         root.topWindow = loginFrame;
+        root.topWindow.enabled = true;
     }
 
     function showWarning(msg)
@@ -102,6 +103,7 @@ Item {
         message.text=msg;
         message.visible=true;
         root.topWindow = loginFrame;
+        root.topWindow.enabled = true;
     }
 
     function login()
@@ -832,7 +834,7 @@ Item {
             }
 
             RowLayout {
-                visible: root.loginMode == Main.LoginMode.EscolesStudent || root.loginMode == Main.LoginMode.EscolesTeacher
+                visible: root.loginMode == Main.LoginMode.EscolesStudent || root.loginMode == Main.LoginMode.EscolesTeacher || root.loginMode == Main.LoginMode.AutoStudent
                 //anchors.horizontalCenter: parent.horizontalCenter
                 //anchors.right: btnLogin.right
                 Layout.alignment: Qt.AlignHCenter
@@ -860,7 +862,7 @@ Item {
 
                     onVisibleChanged: {
                         if (visible) {
-                            if (root.loginMode == Main.LoginMode.EscolesStudent) {
+                            if (root.loginMode == Main.LoginMode.EscolesStudent || Main.LoginMode.AutoStudent) {
                                 currentIndex = 0;
                             }
                             else {
@@ -882,6 +884,7 @@ Item {
                 Kirigami.InlineMessage {
                     id: message
                     anchors.fill:parent
+                    showCloseButton: true
                     
                 }
             }
@@ -1048,6 +1051,7 @@ Item {
 
                 onClicked: {
                     root.topWindow = loginFrame;
+                    root.topWindow.enabled = true;
                 }
             }
         }
@@ -1084,9 +1088,9 @@ Item {
             
             PlasmaComponents.Button {
                 Layout.alignment: Qt.AlignCenter
-                text: i18nd("lliurex-sddm-theme","Enter")
-                implicitWidth: PlasmaCore.Units.gridUnit*6
-                
+                implicitWidth: 200
+                text: i18nd("lliurex-sddm-theme","Login")
+
                 onClicked: {
                     guestFrame.enabled = false;
                     login();
