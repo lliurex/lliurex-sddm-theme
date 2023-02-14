@@ -1,3 +1,9 @@
+lliurex-sddm-theme (22.4.0.0) focal; urgency=medium
+
+  * Working EscolesConectades and alumnat autologin. Partially tested version.
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Tue, 14 Feb 2023 14:53:22 +0100
+
 lliurex-sddm-theme (22.3.1.0) focal; urgency=medium
 
   * Fixed typo
