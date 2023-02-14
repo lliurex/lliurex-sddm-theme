@@ -45,10 +45,10 @@ Item {
     }
 
     enum EscolesConectades {
-        VendorEnabled = 1,
-        Enabled = 2,
-        Manual = 4,   // 1 Manual, 0 Auto
-        Wifi = 8    // 1 Prof, 0 Alu
+        Disabled = 0,
+        Teacher = 1,
+        Student = 2,
+        Auto = 3
     }
 
     readonly property int autoLoginTimeout: 10000 //10 seconds
@@ -214,7 +214,7 @@ Item {
                 }
 
                 if (root.loginMode == Main.LoginMode.AutoStudent) {
-                    sddm.login("guest-user","",cmbSession.currentIndex);
+                    sddm.login("alumnat",root.escolesAutoLoginSettings,cmbSession.currentIndex);
                 }
             }
             else {
@@ -291,7 +291,7 @@ Item {
             }
 
             if (root.loginMode == Main.LoginMode.AutoStudent) {
-                local_create_connection.call(["EscolesConectades",escolesTarget,"alumnat","$4nD1sik%",""]);
+                local_create_connection.call(["EscolesConectades",escolesTarget,"alumnat",root.escolesAutoLoginSettings,""]);
             }
 
         }
@@ -318,7 +318,7 @@ Item {
             }
 
             if (root.loginMode == Main.LoginMode.AutoStudent) {
-                sddm.login("guest-user","",cmbSession.currentIndex);
+                sddm.login("alumnat",root.escolesAutoLoginSettings,cmbSession.currentIndex);
             }
         }
     }
@@ -342,13 +342,13 @@ Item {
             }
 
             switch (value) {
-                case 1:
+                case Main.EscolesConectades.Teacher:
                     loginMode = Main.LoginMode.EscolesTeacher;
                 break;
-                case 2:
+                case Main.EscolesConectades.Student:
                     loginMode = Main.LoginMode.EscolesStudent;
                 break;
-                case 3:
+                case Main.EscolesConectades.Auto:
                     loginMode = Main.LoginMode.AutoStudent;
                     escolesAutoEnabled = true;
                 break;
@@ -408,7 +408,7 @@ Item {
         }
 
         onResponse: {
-            escolesAutoLoginSettings = value;
+            root.escolesAutoLoginSettings = value;
         }
     }
 
@@ -541,11 +541,11 @@ Item {
                 onClicked: {
 
                     switch (root.escolesLogin) {
-                        case 1:
+                        case Main.EscolesConectades.Teacher:
                             root.loginMode = Main.LoginMode.EscolesTeacher;
                         break;
-                        case 2:
-                        case 3:
+                        case Main.EscolesConectades.Student:
+                        case Main.EscolesConectades.Auto:
                             root.loginMode = Main.LoginMode.EscolesStudent;
                         break;
                         default:
@@ -585,18 +585,18 @@ Item {
         width: 256
         height:256
 
-        property int mode : 1
+        property int mode : Main.EscolesConectades.Teacher
 
         anchors.centerIn: parent
 
         onVisibleChanged: {
             if (visible) {
                 if (loginMode == Main.LoginMode.EscolesTeacher) {
-                    settingsFrame.mode = 1;
+                    settingsFrame.mode = Main.EscolesConectades.Teacher;
                 }
 
                 if (loginMode == Main.LoginMode.EscolesStudent || loginMode == Main.LoginMode.AutoStudent) {
-                    settingsFrame.mode = 2;
+                    settingsFrame.mode = Main.EscolesConectades.Student;
                 }
             }
         }
@@ -614,7 +614,7 @@ Item {
                     PlasmaComponents.RadioButton {
                         id: rb1
                         //enabled: chkEscoles.checked
-                        checked: settingsFrame.mode == 2
+                        checked: settingsFrame.mode == Main.EscolesConectades.Student
                         text: i18nd("lliurex-sddm-theme","WiFi Alumnos")
 
                         onClicked: {
@@ -624,7 +624,7 @@ Item {
                     PlasmaComponents.RadioButton {
                         id: rb2
                         //enabled: chkEscoles.checked
-                        checked: settingsFrame.mode == 1
+                        checked: settingsFrame.mode == Main.EscolesConectades.Teacher
                         text: i18nd("lliurex-sddm-theme","WiFi Profesores")
 
                         onClicked: {
@@ -839,10 +839,10 @@ Item {
                 spacing: 6
 
                 PlasmaCore.IconItem {
-                    id:imgCloud
-                    width:16
-                    height:16
-                    source: "folder-cloud"
+                    id:imgEC
+                    //width:16
+                    //height:16
+                    source: "network-wireless"
                     //anchors.verticalCenter: parent.verticalCenter
                 }
 
@@ -871,7 +871,7 @@ Item {
                 }
             
                 Item {
-                    width:imgCloud.width
+                    width:imgEC.width
                 }
             }
             
@@ -1251,7 +1251,7 @@ Item {
                 Layout.alignment: Qt.AlignLeft
                 icon.name:"input-keyboard-virtual"
                 checkable: true
-                display: AbstractButton.IconOnly
+                display: QQC2.AbstractButton.IconOnly
                 icon.width:24
                 icon.height:24
             }
@@ -1260,104 +1260,21 @@ Item {
                 id: btnModeSelector
                 Layout.alignment: Qt.AlignLeft
                 icon.name:"system-users"
-                display: AbstractButton.IconOnly
+                display: QQC2.AbstractButton.IconOnly
                 icon.width:24
                 icon.height:24
-                visible: true
+                visible: root.guestEnabled | root.escolesEnabled
 
 
                 onClicked: {
                     root.topWindow = loginSelectorFrame;
                 }
             }
-            /*
-            PlasmaComponents.Button {
-                id: btnSettings
-                Layout.alignment: Qt.AlignLeft
-                icon.name:"folder-cloud"
-                display: AbstractButton.IconOnly
-                icon.width:24
-                icon.height:24
-                visible: root.escolesEnabled
 
-
-                onClicked: {
-                    local_get_settings.call([]);
-                    root.topWindow = settingsFrame;
-                }
-            }
-            */
-/*
-            PlasmaComponents.Button {
-                Layout.alignment: Qt.AlignLeft
-                icon.source:"images/guest.svg"
-                icon.width:24
-                icon.height:24
-                display: QQC2.AbstractButton.TextBesideIcon
-                text: i18nd("lliurex-sddm-theme","Guest User")
-                
-                visible: root.guestEnabled
-                onClicked: {
-                    root.topWindow = guestFrame;
-                }
-            }
-            
-
-
-
-            PlasmaComponents.Button {
-                id: btnEscolesAutoLogin
-                Layout.alignment: Qt.AlignLeft
-                icon.name:"smiley"
-                display: AbstractButton.IconOnly
-                icon.width:24
-                icon.height:24
-                visible: root.escolesAutoEnabled
-
-                onClicked: {
-                    escolesLoginManual = 0;
-                    root.topWindow = escolesAutoLoginFrame;
-                }
-            }
-*/
             Item {
                 Layout.fillWidth:true
             }
             
-            RowLayout {
-                id: widgetLoginMode
-                Layout.alignment: Qt.AlignRight
-
-                PlasmaCore.IconItem {
-                    source: "user"
-                    width: 16
-                    height: 16
-                }
-
-                PlasmaComponents.Label {
-
-                    Layout.alignment: Qt.AlignRight
-
-                    horizontalAlignment: Text.AlignHCenter
-
-                    text: {
-                        switch (root.loginMode) {
-                            case Main.LoginMode.Local:
-                                return i18nd("lliurex-sddm-theme","Local");
-                            case Main.LoginMode.Guest:
-                                return i18nd("lliurex-sddm-theme","Guest");
-                            case Main.LoginMode.EscolesTeacher:
-                                return i18nd("lliurex-sddm-theme","Escoles Conectades: Teacher");
-                            case Main.LoginMode.EscolesStudent:
-                                return i18nd("lliurex-sddm-theme","Escoles Conectades: Student");
-                            case Main.LoginMode.AutoStudent:
-                                return i18nd("lliurex-sddm-theme","Escoles Conectades: Alumnat");
-                        }
-                    }
-
-                }
-            }
-
             PlasmaComponents.Label {
                 id: widgetHost
                 Layout.alignment: Qt.AlignRight
