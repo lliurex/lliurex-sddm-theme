@@ -1,3 +1,10 @@
+lliurex-sddm-theme (22.5.0.0) focal; urgency=medium
+
+  * Fixed a bug on teacher mode
+  * Updated translations (ES)
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Thu, 16 Feb 2023 23:19:37 +0100
+
 lliurex-sddm-theme (22.4.0.0) focal; urgency=medium
 
   * Working EscolesConectades and alumnat autologin. Partially tested version.
