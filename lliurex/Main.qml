@@ -508,7 +508,7 @@ Item {
             anchors.fill: parent
 
             PlasmaComponents.Button {
-                text: i18nd("lliurex-sddm-theme","Local")
+                text: i18nd("lliurex-sddm-theme","Standard")
                 visible: root.localEnabled
                 implicitWidth: PlasmaCore.Units.gridUnit*8
                 icon.name: "computer"
@@ -862,7 +862,7 @@ Item {
 
                     onVisibleChanged: {
                         if (visible) {
-                            if (root.loginMode == Main.LoginMode.EscolesStudent || Main.LoginMode.AutoStudent) {
+                            if (root.loginMode == Main.LoginMode.EscolesStudent || root.loginMode == Main.LoginMode.AutoStudent) {
                                 currentIndex = 0;
                             }
                             else {
