@@ -4,22 +4,9 @@
 # quique <quiqueiii@gmail.com>, 2022.
 msgid ""
 msgstr ""
-"#-#-#-#-#  es.po  #-#-#-#-#\n"
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-30 13:55+0200\n"
-"PO-Revision-Date: 2022-11-23 11:46+0100\n"
-"Last-Translator: quique <quiqueiii@gmail.com>\n"
-"Language: es\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
-"X-Generator: Lokalize 22.04.2\n"
-"#-#-#-#-#  messages.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-23 11:12+0100\n"
+"POT-Creation-Date: 2023-02-16 22:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,53 +14,130 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  es.po  #-#-#-#-#\n"
+"X-Generator: Lokalize 22.04.2\n"
+"#-#-#-#-#  messages.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lliurex-desktop/Main.qml:358
-msgid "User name"
-msgstr "Usuario"
-
-#: lliurex-desktop/Main.qml:386
-msgid "Password"
-msgstr "Contraseña"
-
-#: lliurex-desktop/Main.qml:412
-msgid "Login failed"
-msgstr "Fallo en el acceso"
-
-#: lliurex-desktop/Main.qml:412
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:189
 msgid "No connection to server"
 msgstr "Sin conexión al servidor"
 
-#: lliurex-desktop/Main.qml:419
-msgid "Login"
-msgstr "Acceder"
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:238
+#, fuzzy
+msgid "Failed to retrieve networks"
+msgstr "No se pudo crear la conexión"
 
-#: lliurex-desktop/Main.qml:507
-msgid "Power off"
-msgstr "Apagar"
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:270
+msgid "Wifi network not found:"
+msgstr "No se ha encontrado la red WiFi:"
 
-#: lliurex-desktop/Main.qml:515
-msgid "Reboot"
-msgstr "Reiniciar"
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:284
+msgid "Failed to turn down connections"
+msgstr "No se pudo cerrar las conexiones activas"
 
-#: lliurex-desktop/Main.qml:523
-msgid "Suspend"
-msgstr "Suspender"
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:312
+msgid "Failed to create connection"
+msgstr "No se pudo crear la conexión"
 
-#: lliurex-desktop/Main.qml:531
-msgid "Hibernate"
-msgstr "Hibernar"
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:447
+msgid "Login failed"
+msgstr "Fallo en el acceso"
 
-#: lliurex-desktop/Main.qml
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:501
+msgid "Log in mode"
+msgstr "Modo de acceso"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:511
+msgid "Standard"
+msgstr "Estándar"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:524
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1068
 msgid "Guest User"
 msgstr "Usuario Invitado"
 
-#: lliurex-desktop/Main.qml
-msgid "Go back"
-msgstr "Volver"
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:537
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:934
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1014
+msgid "Escoles Conectades"
+msgstr "Escoles Conectades"
 
-#: lliurex-desktop/Main.qml
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:564
+msgid "Alumnat"
+msgstr "Alumnat"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:586
+msgid "Settings"
+msgstr "Preferencias"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:620
+msgid "WiFi Alumnos"
+msgstr "WiFi Alumnos"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:630
+msgid "WiFi Profesores"
+msgstr "WiFi Profesores"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:649
+msgid "Accept"
+msgstr "Aceptar"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:661
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1045
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1105
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1187
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/ui/UserGrid.qml:156
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:678
+msgid "User selection"
+msgstr "Selección de usuario"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:778
+msgid "User name"
+msgstr "Usuario"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:811
+msgid "Password"
+msgstr "Contraseña"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:856
+msgid "Student"
+msgstr "Alumno"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:857
+msgid "Teacher"
+msgstr "Profesor"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:894
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:993
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1092
+msgid "Login"
+msgstr "Acceder"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:956
+msgid "Login as Student in:"
+msgstr "Accediendo como estudiante en:"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1023
+msgid "Scanning networks"
+msgstr "Escaneando redes"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1029
+msgid "Turning down connections"
+msgstr "Desactivando las conexiones"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1035
+msgid "Creating connection"
+msgstr "Creando conexión"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1041
+msgid "Waiting for GVA server"
+msgstr "Esperando al servidor GVA"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1085
 msgid ""
 "Access this computer using a guest account. Everything stored with this "
 "account will be deleted after you log out."
@@ -81,59 +145,24 @@ msgstr ""
 "Acceso a este PC usando una cuenta de invitado. Todo lo guardado con esta "
 "cuenta será borrado cuando desconectes."
 
-#: lliurex-desktop/Main.qml:540 lliurex-desktop/ui/UserGrid.qml:153
-msgid "Cancel"
-msgstr "Cancelar"
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1122
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1138
+msgid "Power off"
+msgstr "Apagar"
 
-#: lliurex-desktop/ui/UserGrid.qml:99
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1150
+msgid "Reboot"
+msgstr "Reiniciar"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1162
+msgid "Suspend"
+msgstr "Suspender"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1174
+msgid "Hibernate"
+msgstr "Hibernar"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/ui/UserGrid.qml:101
 msgid "Search..."
 msgstr "Buscar..."
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:225
-msgid "Failed to create connection"
-msgstr "No se pudo crear la conexión"
-
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:313
-msgid "Settings"
-msgstr "Preferencias"
-
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:326
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:633
-msgid "Escoles Conectades"
-msgstr ""
-
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:332
-msgid "Enable"
-msgstr "Activar"
-
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:342
-msgid "WiFi Alumnos"
-msgstr ""
-
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:352
-msgid "WiFi Profesores"
-msgstr ""
-
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:371
-msgid "Accept"
-msgstr "Aceptar"
-
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:404
-msgid "User selection"
-msgstr "Selección de usuario"
-
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:642
-msgid "Scanning networks"
-msgstr "Escaneando redes"
-
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:648
-msgid "Turning down connections"
-msgstr "Desactivando las conexiones"
-
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:654
-msgid "Creating connection"
-msgstr "Creando conexión"
-
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:708
-msgid "Enter"
-msgstr "Entrar"
