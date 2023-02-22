@@ -39,19 +39,19 @@ Item {
     enum LoginMode {
         Local = 0,
         Guest,
-        EscolesTeacher,
-        EscolesStudent,
+        WifiEduGvaTeacher,
+        WifiEduGvaStudent,
         AutoStudent
     }
 
-    enum EscolesConectades {
+    enum WifiEduGva {
         Disabled = 0,
         Teacher = 1,
         Student = 2,
         Auto = 3
     }
 
-    readonly property int autoLoginTimeout: 10000 //10 seconds
+    readonly property int autoLoginTimeout: 30000 //30 seconds
 
     property Item topWindow: loginFrame
     property bool firstBoot: true
@@ -65,15 +65,15 @@ Item {
 
     property bool localEnabled : true
     property bool guestEnabled : false
-    property bool escolesEnabled : false
-    property bool escolesAutoEnabled: false
+    property bool wifiEduGvaEnabled : false
+    property bool wifiEduGvaAutoEnabled: false
 
-    property int escolesLogin: 0
-    property int escolesLoginManual: 0
-    property string escolesAutoLoginSettings: ""
-    property string escolesTarget: "WIFI_ALU"
+    property int wifiEduGvaLogin: 0
+    property int wifiEduGvaLoginManual: 0
+    property string wifiEduGvaAutoLoginSettings: ""
+    property string wifiEduGvaTarget: "WIFI_ALU"
     property var networks
-    property int escolesStage: -1
+    property int wifiEduGvaStage: -1
     
     //property bool compact: (loginFrame.width+dateFrame.width+60) > theme.width
     
@@ -113,11 +113,11 @@ Item {
             sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
         }
 
-        if (root.loginMode == Main.LoginMode.EscolesTeacher ||
-                    root.loginMode == Main.LoginMode.EscolesStudent) {
-            console.log("performing a EscolesConectades login...");
-            root.escolesStage = 0;
-            root.topWindow = escolesFrame;
+        if (root.loginMode == Main.LoginMode.WifiEduGvaTeacher ||
+                    root.loginMode == Main.LoginMode.WifiEduGvaStudent) {
+            console.log("performing a WifiEduGva login...");
+            root.wifiEduGvaStage = 0;
+            root.topWindow = wifiEduGvaFrame;
             local_check_wired_connection.call([]);
         }
 
@@ -128,8 +128,8 @@ Item {
 
         if (root.loginMode == Main.LoginMode.AutoStudent) {
             console.log("performing an autologin...");
-            root.escolesStage = 0;
-            root.topWindow = escolesFrame;
+            root.wifiEduGvaStage = 0;
+            root.topWindow = wifiEduGvaFrame;
             local_check_wired_connection.call([]);
         }
     }
@@ -200,7 +200,7 @@ Item {
     {
         id: local_check_wired_connection
         client: n4dLocal
-        plugin: "EscolesConectades"
+        plugin: "WifiEduGva"
         method: "check_wired_connection"
 
         onError: {
@@ -210,13 +210,13 @@ Item {
 
         onResponse: {
             if (value) {
-                if (root.loginMode == Main.LoginMode.EscolesStudent ||
-                        root.loginMode == Main.LoginMode.EscolesTeacher) {
+                if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
+                        root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
                     sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
                 }
 
                 if (root.loginMode == Main.LoginMode.AutoStudent) {
-                    sddm.login("alumnat",root.escolesAutoLoginSettings,cmbSession.currentIndex);
+                    sddm.login("alumnat","",cmbSession.currentIndex);
                 }
             }
             else {
@@ -230,7 +230,7 @@ Item {
     {
         id: local_scan_network
         client: n4dLocal
-        plugin: "EscolesConectades"
+        plugin: "WifiEduGva"
         method: "scan_network"
 
         onError: {
@@ -240,34 +240,34 @@ Item {
 
         onResponse: {
 
-            if (root.loginMode == Main.LoginMode.EscolesStudent ||
+            if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
                     root.loginMode == Main.LoginMode.AutoStudent) {
-                root.escolesTarget = "WIFI_ALU";
+                root.wifiEduGvaTarget = "WIFI_ALU";
             }
 
-            if (root.loginMode == Main.LoginMode.EscolesTeacher) {
-                root.escolesTarget = "WIFI_PROF";
+            if (root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
+                root.wifiEduGvaTarget = "WIFI_PROF";
             }
 
-            console.log("Using target:",escolesTarget);
+            console.log("Using target:",wifiEduGvaTarget);
             console.log("networks:",value);
             networks = value;
             var found = false;
             for (var n in networks) {
                 console.log(networks[n]);
-                if (networks[n][0] == escolesTarget) {
+                if (networks[n][0] == wifiEduGvaTarget) {
                     found = true;
                     break;
                 }
             }
 
             if (found) {
-                escolesStage = 1;
+                wifiEduGvaStage = 1;
                 local_disconnect_all.call([]);
             }
             else {
-                console.log("Escoles target not found!");
-                showError(i18nd("lliurex-sddm-theme","Wifi network not found:") + escolesTarget);
+                console.log("WifiEduGVA target not found!");
+                showError(i18nd("lliurex-sddm-theme","Wifi network not found:") + wifiEduGvaTarget);
             }
         }
     }
@@ -276,7 +276,7 @@ Item {
     {
         id: local_disconnect_all
         client: n4dLocal
-        plugin: "EscolesConectades"
+        plugin: "WifiEduGva"
         method: "disconnect_all"
 
         onError: {
@@ -285,15 +285,15 @@ Item {
         }
 
         onResponse: {
-            escolesStage = 2;
+            wifiEduGvaStage = 2;
 
-            if (root.loginMode == Main.LoginMode.EscolesStudent ||
-                    root.loginMode == Main.LoginMode.EscolesTeacher) {
-                local_create_connection.call(["EscolesConectades",escolesTarget,txtUser.text,txtPass.text,""]);
+            if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
+                    root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
+                local_create_connection.call(["WifiEduGva",wifiEduGvaTarget,txtUser.text,txtPass.text,""]);
             }
 
             if (root.loginMode == Main.LoginMode.AutoStudent) {
-                local_create_connection.call(["EscolesConectades",escolesTarget,"alumnat",root.escolesAutoLoginSettings,""]);
+                local_create_connection.call(["WifiEduGva",wifiEduGvaTarget,"alumnat",root.wifiEduGvaAutoLoginSettings,""]);
             }
 
         }
@@ -303,7 +303,7 @@ Item {
     {
         id: local_create_connection
         client: n4dLocal
-        plugin: "EscolesConectades"
+        plugin: "WifiEduGva"
         method: "create_connection"
         /* name,ssid,user,password */
 
@@ -313,14 +313,14 @@ Item {
         }
 
         onResponse: {
-            escolesStage = 3;
-            if (root.loginMode == Main.LoginMode.EscolesStudent ||
-                    root.loginMode == Main.LoginMode.EscolesTeacher) {
+            wifiEduGvaStage = 3;
+            if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
+                    root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
                 local_wait_for_domain.call([]);
             }
 
             if (root.loginMode == Main.LoginMode.AutoStudent) {
-                sddm.login("alumnat",root.escolesAutoLoginSettings,cmbSession.currentIndex);
+                sddm.login("alumnat","",cmbSession.currentIndex);
             }
         }
     }
@@ -329,38 +329,38 @@ Item {
     {
         id: local_get_settings
         client: n4dLocal
-        plugin: "EscolesConectades"
+        plugin: "WifiEduGva"
         method: "get_settings"
 
         onError: {
-            console.log("Failed to get EscolesConectades settings");
+            console.log("Failed to get WifiEduGva settings");
         }
 
         onResponse: {
-            escolesLogin = value;
+            wifiEduGvaLogin = value;
 
             if (value > 0 ) {
-                escolesEnabled = true;
+                wifiEduGvaEnabled = true;
             }
 
             switch (value) {
-                case Main.EscolesConectades.Teacher:
-                    loginMode = Main.LoginMode.EscolesTeacher;
+                case Main.WifiEduGva.Teacher:
+                    loginMode = Main.LoginMode.WifiEduGvaTeacher;
                 break;
-                case Main.EscolesConectades.Student:
-                    loginMode = Main.LoginMode.EscolesStudent;
+                case Main.WifiEduGva.Student:
+                    loginMode = Main.LoginMode.WifiEduGvaStudent;
                 break;
-                case Main.EscolesConectades.Auto:
+                case Main.WifiEduGva.Auto:
                     loginMode = Main.LoginMode.AutoStudent;
-                    escolesAutoEnabled = true;
+                    wifiEduGvaAutoEnabled = true;
                 break;
 
             }
 
             if (firstBoot) {
                 firstBoot = false;
-                if (escolesAutoEnabled) {
-                    root.topWindow = escolesAutoLoginFrame;
+                if (wifiEduGvaAutoEnabled) {
+                    root.topWindow = wifiEduGvaAutoLoginFrame;
                 }
             }
         }
@@ -370,11 +370,11 @@ Item {
     {
         id: local_set_settings
         client: n4dLocal
-        plugin: "EscolesConectades"
+        plugin: "WifiEduGva"
         method: "set_settings"
 
         onError: {
-            console.log("Failed to set EscolesConectades settings");
+            console.log("Failed to set WifiEduGva settings");
         }
 
         onResponse: {
@@ -385,7 +385,7 @@ Item {
     {
         id: local_wait_for_domain
         client: n4dLocal
-        plugin: "EscolesConectades"
+        plugin: "WifiEduGva"
         method: "wait_for_domain"
 
         onError: {
@@ -393,7 +393,7 @@ Item {
         }
 
         onResponse: {
-            escolesStage = 4;
+            wifiEduGvaStage = 4;
             sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
         }
     }
@@ -402,15 +402,15 @@ Item {
     {
         id: local_get_autologin
         client: n4dLocal
-        plugin: "EscolesConectades"
+        plugin: "WifiEduGva"
         method: "get_autologin"
 
         onError: {
-            console.log("Failed to get EscolesConectades Autologin settings");
+            console.log("Failed to get WifiEduGva Autologin settings");
         }
 
         onResponse: {
-            root.escolesAutoLoginSettings = value;
+            root.wifiEduGvaAutoLoginSettings = value;
         }
     }
 
@@ -534,24 +534,24 @@ Item {
             }
 
             PlasmaComponents.Button {
-                text: i18nd("lliurex-sddm-theme","Escoles Conectades")
-                visible: root.escolesEnabled
+                text: i18nd("lliurex-sddm-theme","GVA Wifi")
+                visible: root.wifiEduGvaEnabled
                 implicitWidth: PlasmaCore.Units.gridUnit*8
                 icon.name:"folder-cloud"
                 display: QQC2.AbstractButton.TextUnderIcon
 
                 onClicked: {
 
-                    switch (root.escolesLogin) {
-                        case Main.EscolesConectades.Teacher:
-                            root.loginMode = Main.LoginMode.EscolesTeacher;
+                    switch (root.wifiEduGvaLogin) {
+                        case Main.WifiEduGva.Teacher:
+                            root.loginMode = Main.LoginMode.WifiEduGvaTeacher;
                         break;
-                        case Main.EscolesConectades.Student:
-                        case Main.EscolesConectades.Auto:
-                            root.loginMode = Main.LoginMode.EscolesStudent;
+                        case Main.WifiEduGva.Student:
+                        case Main.WifiEduGva.Auto:
+                            root.loginMode = Main.LoginMode.WifiEduGvaStudent;
                         break;
                         default:
-                            root.loginMode = Main.LoginMode.EscolesStudent;
+                            root.loginMode = Main.LoginMode.WifiEduGvaStudent;
                         break;
                     }
 
@@ -562,14 +562,14 @@ Item {
 
             PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","Alumnat")
-                visible: root.escolesAutoEnabled
+                visible: root.wifiEduGvaAutoEnabled
                 implicitWidth: PlasmaCore.Units.gridUnit*8
                 icon.name:"smiley"
                 display: QQC2.AbstractButton.TextUnderIcon
 
                 onClicked: {
                     root.loginMode = Main.LoginMode.AutoStudent;
-                    root.topWindow = escolesAutoLoginFrame;
+                    root.topWindow = wifiEduGvaAutoLoginFrame;
                 }
             }
 
@@ -577,98 +577,6 @@ Item {
                 Layout.fillWidth: true
             }
         }
-    }
-
-    /* setup frame */
-    LLX.Window {
-        id: settingsFrame
-        visible: root.topWindow == this
-        title: i18nd("lliurex-sddm-theme","Settings")
-        width: 256
-        height:256
-
-        property int mode : Main.EscolesConectades.Teacher
-
-        anchors.centerIn: parent
-
-        onVisibleChanged: {
-            if (visible) {
-                if (loginMode == Main.LoginMode.EscolesTeacher) {
-                    settingsFrame.mode = Main.EscolesConectades.Teacher;
-                }
-
-                if (loginMode == Main.LoginMode.EscolesStudent || loginMode == Main.LoginMode.AutoStudent) {
-                    settingsFrame.mode = Main.EscolesConectades.Student;
-                }
-            }
-        }
-
-        ColumnLayout {
-            anchors.fill: parent
-
-            QQC2.GroupBox {
-                //Layout.fillHeight:true
-                Layout.fillWidth:true
-
-                //title: i18nd("lliurex-sddm-theme","Escoles Conectades")
-                ColumnLayout {
-                    anchors.fill: parent
-                    PlasmaComponents.RadioButton {
-                        id: rb1
-                        //enabled: chkEscoles.checked
-                        checked: settingsFrame.mode == Main.EscolesConectades.Student
-                        text: i18nd("lliurex-sddm-theme","WiFi Alumnos")
-
-                        onClicked: {
-                            btnSettingsAccept.enabled = true;
-                        }
-                    }
-                    PlasmaComponents.RadioButton {
-                        id: rb2
-                        //enabled: chkEscoles.checked
-                        checked: settingsFrame.mode == Main.EscolesConectades.Teacher
-                        text: i18nd("lliurex-sddm-theme","WiFi Profesores")
-
-                        onClicked: {
-                            btnSettingsAccept.enabled = true;
-                        }
-                    }
-                }
-            }
-
-            Item {
-                Layout.fillHeight:true
-            }
-
-            RowLayout {
-                Layout.fillWidth:true
-                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-
-                PlasmaComponents.Button {
-                    id: btnSettingsAccept
-                    text: i18nd("lliurex-sddm-theme","Accept")
-                    enabled: false
-                    Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-
-                    onClicked: {
-
-                        root.loginMode = (rb2.checked) ? Main.LoginMode.EscolesTeacher : Main.LoginMode.EscolesStudent;
-                        root.topWindow = loginFrame;
-                    }
-                }
-
-                PlasmaComponents.Button {
-                    text: i18nd("lliurex-sddm-theme","Cancel")
-                    Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-
-                    onClicked: {
-                        btnSettingsAccept.enabled = false;
-                        root.topWindow = loginFrame;
-                    }
-                }
-            }
-        }
-
     }
 
     /* user frame */
@@ -691,10 +599,6 @@ Item {
         
         Lliurex.UserGrid {
             anchors.fill : parent
-            //width:parent.width*0.80
-            //height:parent.height*0.80
-            //anchors.horizontalCenter: parent.horizontalCenter
-            //anchors.bottom: parent.bottom
             
             model: userModel
             focus: true
@@ -718,8 +622,6 @@ Item {
         width: 400
         height: 340
         margin:24
-        
-        //x: theme.compact ? ((theme.width*0.5)-(width*0.5)) : ((dateFrame.x-width)<200 ? (dateFrame.x-width) : 200)
         
         anchors.horizontalCenter: parent.horizontalCenter
         y: {
@@ -753,14 +655,11 @@ Item {
             }
             
             RowLayout {
-                //anchors.horizontalCenter: parent.horizontalCenter
-                //anchors.right: btnLogin.right
                 Layout.alignment: Qt.AlignHCenter
                 spacing: 6
                 
                 PlasmaComponents.Button {
                     id: btnUserSelector
-                    //implicitWidth: PlasmaCore.Units.gridUnit*1
                     enabled: root.loginMode == Main.LoginMode.Local
                     icon.name:"user"
                     icon.width: 22
@@ -776,12 +675,9 @@ Item {
                     id: txtUser
                     implicitWidth: 200
                     placeholderText: i18nd("lliurex-sddm-theme","User name")
-                    //anchors.verticalCenter: parent.verticalCenter
-                    //anchors.horizontalCenter: parent.horizontalCenter
                     onEditingFinished: {
                         txtPass.focus=true
                     }
-                    //palette.highlight: "#3daee9"
                     
                     Component.onCompleted: focus=true;
                     
@@ -793,15 +689,12 @@ Item {
             }
             
             RowLayout {
-                //anchors.horizontalCenter: parent.horizontalCenter
-                //anchors.right: btnLogin.right
                 Layout.alignment: Qt.AlignHCenter
                 spacing: 6
                 
                 PlasmaCore.IconItem {
                     id: imgPassword
                     source: "lock"
-                    //anchors.verticalCenter: parent.verticalCenter
                 }
                 
                 PlasmaComponents.TextField {
@@ -809,9 +702,6 @@ Item {
                     implicitWidth: 200
                     echoMode: TextInput.Password
                     placeholderText: i18nd("lliurex-sddm-theme","Password")
-                    //anchors.horizontalCenter: parent.horizontalCenter
-                    //anchors.verticalCenter: parent.verticalCenter
-                    //palette.highlight: "#3daee9"
                     
                     Keys.onReturnPressed: {
                         loginFrame.enabled = false;
@@ -834,18 +724,13 @@ Item {
             }
 
             RowLayout {
-                visible: root.loginMode == Main.LoginMode.EscolesStudent || root.loginMode == Main.LoginMode.EscolesTeacher || root.loginMode == Main.LoginMode.AutoStudent
-                //anchors.horizontalCenter: parent.horizontalCenter
-                //anchors.right: btnLogin.right
+                visible: root.loginMode == Main.LoginMode.WifiEduGvaStudent || root.loginMode == Main.LoginMode.WifiEduGvaTeacher || root.loginMode == Main.LoginMode.AutoStudent
                 Layout.alignment: Qt.AlignHCenter
                 spacing: 6
 
                 PlasmaCore.IconItem {
                     id:imgEC
-                    //width:16
-                    //height:16
                     source: "network-wireless"
-                    //anchors.verticalCenter: parent.verticalCenter
                 }
 
                 PlasmaComponents.ComboBox {
@@ -853,8 +738,8 @@ Item {
                     textRole: "text"
                     valueRole: "value"
                     model: [
-                        {value: Main.LoginMode.EscolesStudent, text: i18nd("lliurex-sddm-theme","Student")},
-                        {value: Main.LoginMode.EscolesTeacher, text: i18nd("lliurex-sddm-theme","Teacher")}]
+                        {value: Main.LoginMode.WifiEduGvaStudent, text: i18nd("lliurex-sddm-theme","Student")},
+                        {value: Main.LoginMode.WifiEduGvaTeacher, text: i18nd("lliurex-sddm-theme","Teacher")}]
 
                     onActivated: {
                         root.loginMode = currentValue;
@@ -862,7 +747,7 @@ Item {
 
                     onVisibleChanged: {
                         if (visible) {
-                            if (root.loginMode == Main.LoginMode.EscolesStudent || root.loginMode == Main.LoginMode.AutoStudent) {
+                            if (root.loginMode == Main.LoginMode.WifiEduGvaStudent || root.loginMode == Main.LoginMode.AutoStudent) {
                                 currentIndex = 0;
                             }
                             else {
@@ -923,7 +808,7 @@ Item {
     }
 
     LLX.Window {
-        id: escolesAutoLoginFrame
+        id: wifiEduGvaAutoLoginFrame
         width: 400
         height: 200
 
@@ -931,7 +816,7 @@ Item {
 
         margin: 24
 
-        title: i18nd("lliurex-sddm-theme","Escoles Conectades")
+        title: i18nd("lliurex-sddm-theme","GVA Wifi")
         anchors.centerIn: parent
 
         onVisibleChanged: {
@@ -939,7 +824,6 @@ Item {
 
                 timerAutoLogin.start();
                 progressAutoLogin.value =  1.0;
-                //btnForceEscolesAutoLogin.forceActiveFocus();
             }
         }
 
@@ -969,15 +853,12 @@ Item {
 
             RowLayout {
                 Layout.fillWidth: true
-                //Layout.alignment: Qt.AlignCenter | Qt.AlignBottom
 
                 PlasmaComponents.Button {
-
-                    //text: i18nd("lliurex-sddm-theme","Cancel");
                     icon.name: "arrow-left"
 
                     onClicked: {
-                        root.loginMode = Main.LoginMode.EscolesStudent;
+                        root.loginMode = Main.LoginMode.WifiEduGvaStudent;
                         timerAutoLogin.stop();
                         root.topWindow = loginFrame;
                     }
@@ -1004,14 +885,14 @@ Item {
         }
     }
 
-    /* escoles login window */
+    /* wifiEduGva login window */
     LLX.Window {
-        id: escolesFrame
+        id: wifiEduGvaFrame
         width: 400
         height: 340
         visible: root.topWindow == this
         margin:24
-        title: i18nd("lliurex-sddm-theme","Escoles Conectades")
+        title: i18nd("lliurex-sddm-theme","GVA Wifi")
         anchors.centerIn: parent
 
         ColumnLayout {
@@ -1019,25 +900,25 @@ Item {
 
             Lliurex.StatusLine {
                 stage: 0
-                currentStage: root.escolesStage
+                currentStage: root.wifiEduGvaStage
                 text: i18nd("lliurex-sddm-theme","Scanning networks")
             }
 
             Lliurex.StatusLine {
                 stage: 1
-                currentStage: root.escolesStage
+                currentStage: root.wifiEduGvaStage
                 text: i18nd("lliurex-sddm-theme","Turning down connections")
             }
 
             Lliurex.StatusLine {
                 stage: 2
-                currentStage: root.escolesStage
+                currentStage: root.wifiEduGvaStage
                 text: i18nd("lliurex-sddm-theme","Creating connection")
             }
 
             Lliurex.StatusLine {
                 stage: 3
-                currentStage: root.escolesStage
+                currentStage: root.wifiEduGvaStage
                 text: i18nd("lliurex-sddm-theme","Waiting for GVA server")
             }
 
@@ -1110,6 +991,7 @@ Item {
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 
                 onClicked: {
+                    root.loginMode = LoginMode.Local;
                     root.topWindow = loginFrame;
                 }
             }
@@ -1267,7 +1149,7 @@ Item {
                 display: QQC2.AbstractButton.IconOnly
                 icon.width:24
                 icon.height:24
-                visible: root.guestEnabled | root.escolesEnabled
+                visible: root.guestEnabled | root.wifiEduGvaEnabled
 
 
                 onClicked: {
