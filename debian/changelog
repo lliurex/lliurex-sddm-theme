@@ -1,3 +1,10 @@
+lliurex-sddm-theme (22.6.0.0) focal; urgency=medium
+
+  * Using a text instead of an arrow on alumnat autologin window
+  * Better focus management
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Tue, 21 Mar 2023 12:43:44 +0100
+
 lliurex-sddm-theme (22.5.1.0) focal; urgency=medium
 
   * Refactored Escoles Conectades words to WifiEduGva
