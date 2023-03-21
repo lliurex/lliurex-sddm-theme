@@ -623,8 +623,18 @@ Item {
         width: 400
         height: 340
         margin:24
+        focus: true
         
         anchors.horizontalCenter: parent.horizontalCenter
+
+        onVisibleChanged: {
+            if (visible) {
+                txtUser.focus = true;
+                txtPass.focus = false;
+                forceActiveFocus();
+            }
+        }
+
         y: {
             if (vkey.active) {
                 return (parent.height*0.3)-(height*0.5);
@@ -679,8 +689,6 @@ Item {
                     onEditingFinished: {
                         txtPass.focus=true
                     }
-                    
-                    Component.onCompleted: focus=true;
                     
                 }
                 
@@ -822,7 +830,7 @@ Item {
 
         onVisibleChanged: {
             if (visible) {
-
+                forceActiveFocus();
                 timerAutoLogin.start();
                 progressAutoLogin.value =  1.0;
             }
@@ -888,6 +896,7 @@ Item {
                     id: btnForceEscolesAutoLogin
                     Layout.alignment: Qt.AlignRight
                     text: i18nd("lliurex-sddm-theme","Login")
+                    focus: true
                     //implicitWidth: 200
 
                     onClicked: {
