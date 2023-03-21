@@ -523,6 +523,7 @@ Item {
             PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","Guest User")
                 visible: root.guestEnabled
+                enabled: !root.wifiEduGvaAutoEnabled
                 implicitWidth: PlasmaCore.Units.gridUnit*8
                 icon.name:"im-invisible-user"
                 display: QQC2.AbstractButton.TextUnderIcon
@@ -622,8 +623,18 @@ Item {
         width: 400
         height: 340
         margin:24
+        focus: true
         
         anchors.horizontalCenter: parent.horizontalCenter
+
+        onVisibleChanged: {
+            if (visible) {
+                txtUser.focus = true;
+                txtPass.focus = false;
+                forceActiveFocus();
+            }
+        }
+
         y: {
             if (vkey.active) {
                 return (parent.height*0.3)-(height*0.5);
@@ -678,8 +689,6 @@ Item {
                     onEditingFinished: {
                         txtPass.focus=true
                     }
-                    
-                    Component.onCompleted: focus=true;
                     
                 }
                 
@@ -813,7 +822,7 @@ Item {
         height: 200
 
         visible: root.topWindow == this
-
+        focus:true
         margin: 24
 
         title: i18nd("lliurex-sddm-theme","GVA Wifi")
@@ -821,9 +830,18 @@ Item {
 
         onVisibleChanged: {
             if (visible) {
-
+                forceActiveFocus();
                 timerAutoLogin.start();
                 progressAutoLogin.value =  1.0;
+            }
+        }
+        Keys.enabled: true
+
+        Keys.onEscapePressed: {
+            if (visible) {
+                root.loginMode = Main.LoginMode.WifiEduGvaStudent;
+                timerAutoLogin.stop();
+                root.topWindow = loginFrame;
             }
         }
 
@@ -855,7 +873,11 @@ Item {
                 Layout.fillWidth: true
 
                 PlasmaComponents.Button {
-                    icon.name: "arrow-left"
+                    Layout.alignment: Qt.AlignLeft
+                    //icon.name: "arrow-left"
+                    text: i18nd("lliurex-sddm-theme","Change user")
+                    //implicitWidth: 64
+                    //implicitHeight: 64
 
                     onClicked: {
                         root.loginMode = Main.LoginMode.WifiEduGvaStudent;
@@ -866,13 +888,16 @@ Item {
                 }
 
                 Item {
-                    width:32
+                    //width:32
+                    Layout.fillWidth: true
                 }
 
                 PlasmaComponents.Button {
                     id: btnForceEscolesAutoLogin
-                    text: i18nd("lliurex-sddm-theme","Login");
-                    implicitWidth: 200
+                    Layout.alignment: Qt.AlignRight
+                    text: i18nd("lliurex-sddm-theme","Login")
+                    focus: true
+                    //implicitWidth: 200
 
                     onClicked: {
                         timerAutoLogin.stop();
@@ -991,7 +1016,7 @@ Item {
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 
                 onClicked: {
-                    root.loginMode = LoginMode.Local;
+                    root.loginMode = Main.LoginMode.Local;
                     root.topWindow = loginFrame;
                 }
             }
