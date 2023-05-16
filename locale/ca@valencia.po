@@ -1,9 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
+# quique <quiqueiii@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -16,9 +14,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  ca@valencia.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.1\n"
+"#-#-#-#-#  es.po  #-#-#-#-#\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 22.04.2\n"
 "#-#-#-#-#  messages.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:189
@@ -26,20 +24,20 @@ msgid "No connection to server"
 msgstr "No hi ha connexió amb el servidor"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:238
-msgid "Failed to retrieve networks"
-msgstr ""
+msgid "Failed to create connection"
+msgstr "No s’ha pogut crear la connexió"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:270
 msgid "Wifi network not found:"
-msgstr ""
+msgstr "No s’ha trobat la xarxa wifi:"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:284
 msgid "Failed to turn down connections"
-msgstr ""
+msgstr "No s’han pogut tancar les connexions actives"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:312
 msgid "Failed to create connection"
-msgstr ""
+msgstr "No s’ha pogut crear la connexió"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:447
 msgid "Login failed"
@@ -47,11 +45,11 @@ msgstr "L'inici de sessió ha fallat"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:501
 msgid "Log in mode"
-msgstr ""
+msgstr "Mode d'accés"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:511
 msgid "Standard"
-msgstr ""
+msgstr "Estàndard"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:524
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:974
@@ -62,15 +60,15 @@ msgstr "Usuari convidat"
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:828
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:920
 msgid "GVA Wifi"
-msgstr ""
+msgstr "GVA Wifi"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:565
 msgid "Alumnat"
-msgstr ""
+msgstr "Alumnat"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:587
 msgid "User selection"
-msgstr ""
+msgstr "Selecció d'usuari"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:688
 msgid "User name"
@@ -82,11 +80,11 @@ msgstr "Contrasenya"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:750
 msgid "Student"
-msgstr ""
+msgstr "Alumne/a"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:751
 msgid "Teacher"
-msgstr ""
+msgstr "Professor/a"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:788
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:898
@@ -96,27 +94,27 @@ msgstr "Inici de sessió"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:858
 msgid "Login as Student in:"
-msgstr ""
+msgstr "Accedint com a estudiant en:"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:878
 msgid "Change user"
-msgstr ""
+msgstr "Canviar usuari"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:929
 msgid "Scanning networks"
-msgstr ""
+msgstr "Escanejant xarxes"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:935
 msgid "Turning down connections"
-msgstr ""
+msgstr "Desactivant les connexions"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:941
 msgid "Creating connection"
-msgstr ""
+msgstr "S’està creant la connexió"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:947
 msgid "Waiting for GVA server"
-msgstr ""
+msgstr "Esperant el servidor GVA"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:951
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1011
@@ -130,8 +128,8 @@ msgid ""
 "Access this computer using a guest account. Everything stored with this "
 "account will be deleted after you log out."
 msgstr ""
-"Accedeix a aquest ordinador amb un compte de convidat. Tot el que es guarde "
-"amb aquest compte s'eliminarà després de tancar la sessió."
+"Accés a aquest ordinador amb un compte de convidat. Tot el que es guarde amb"
+" aquest compte s'eliminarà després de tancar la sessió."
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1029
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1045
