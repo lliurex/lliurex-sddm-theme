@@ -685,6 +685,7 @@ Item {
                 PlasmaComponents.TextField {
                     id: txtUser
                     implicitWidth: 200
+                    focus: true
                     placeholderText: i18nd("lliurex-sddm-theme","User name")
                     onEditingFinished: {
                         txtPass.focus=true
