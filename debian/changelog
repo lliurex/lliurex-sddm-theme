@@ -1,3 +1,9 @@
+lliurex-sddm-theme (23.0.1.0) focal; urgency=medium
+
+  * Locale fixes
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Mon, 19 Jun 2023 10:27:34 +0200
+
 lliurex-sddm-theme (23.0.0.0) focal; urgency=medium
 
   * Dummy upgrade
