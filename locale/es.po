@@ -24,9 +24,8 @@ msgid "No connection to server"
 msgstr "Sin conexión al servidor"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:238
-#, fuzzy
 msgid "Failed to retrieve networks"
-msgstr "No se pudo crear la conexión"
+msgstr "No se ha podido obtener la lista de redes"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:270
 msgid "Wifi network not found:"
