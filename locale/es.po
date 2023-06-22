@@ -80,11 +80,11 @@ msgstr "Contraseña"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:750
 msgid "Student"
-msgstr "Alumno"
+msgstr "Alumnado"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:751
 msgid "Teacher"
-msgstr "Profesor"
+msgstr "Profesorado"
 
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:788
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:898
