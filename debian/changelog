@@ -1,3 +1,13 @@
+lliurex-sddm-theme (23.0.2.0) focal; urgency=medium
+
+  * Change wifis name: 
+    - Profesor/a to Professorat
+    - Alumne/a to Alumnado
+    - Profesor to Profesorado
+    - Alumno to Alumnado
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 22 Jun 2023 15:29:43 +0200
+
 lliurex-sddm-theme (23.0.1.0) focal; urgency=medium
 
   * Locale fixes
