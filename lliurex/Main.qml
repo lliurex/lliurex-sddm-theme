@@ -99,10 +99,10 @@ Item {
 
     function showWarning(msg)
     {
-        message.type=Kirigami.MessageType.Warning;
-        message.text=msg;
-        message.visible=true;
-        root.topWindow = loginFrame;
+        message.type = Kirigami.MessageType.Warning;
+        message.text = msg;
+        message.visible = true;
+        //root.topWindow = loginFrame;
         root.topWindow.enabled = true;
     }
 
@@ -488,7 +488,8 @@ Item {
             if (root.lliurexType=="client"  && root.programmedCheck>=0 && root.checkTime>=root.programmedCheck) {
                 
                 // avoid trigger another server check
-                root.programmedCheck=-1;
+                root.programmedCheck = -1;
+                root.checkTime = 0;
                 console.log("checking server...")
                 server_lliurex_version.call([])
             }
