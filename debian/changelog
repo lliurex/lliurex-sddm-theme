@@ -1,3 +1,9 @@
+lliurex-sddm-theme (23.0.3.0) focal; urgency=medium
+
+  * Fixed server check always claiming focus
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Wed, 19 Jul 2023 14:29:58 +0200
+
 lliurex-sddm-theme (23.0.2.0) focal; urgency=medium
 
   * Change wifis name: 
