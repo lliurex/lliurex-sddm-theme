@@ -1,3 +1,9 @@
+lliurex-sddm-theme (23.0.3.1) jammy; urgency=medium
+
+  * Jammy release
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Thu, 31 Aug 2023 22:48:41 +0200
+
 lliurex-sddm-theme (23.0.3.0) focal; urgency=medium
 
   * Fixed server check always claiming focus
