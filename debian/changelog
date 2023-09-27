@@ -1,3 +1,9 @@
+lliurex-sddm-theme (23.0.4.0) jammy; urgency=medium
+
+  * Updated labels to 23.2023
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Wed, 27 Sep 2023 09:40:40 +0200
+
 lliurex-sddm-theme (23.0.3.1) jammy; urgency=medium
 
   * Jammy release
