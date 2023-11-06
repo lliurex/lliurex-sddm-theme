@@ -1,3 +1,9 @@
+lliurex-sddm-theme (23.1.0.0) jammy; urgency=medium
+
+  * Using WIFI_EDU where available
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Mon, 06 Nov 2023 11:24:31 +0100
+
 lliurex-sddm-theme (23.0.4.0) jammy; urgency=medium
 
   * Updated labels to 23.2023
