@@ -253,15 +253,24 @@ Item {
             console.log("networks:",value);
             networks = value;
             var found = false;
+            var wifiEdu = false;
             for (var n in networks) {
                 console.log(networks[n]);
                 if (networks[n][0] == wifiEduGvaTarget) {
                     found = true;
-                    break;
+                }
+
+                if (networks[n][0] == "WIFI_EDU") {
+                    wifiEdu = true;
+                    found = true;
                 }
             }
 
             if (found) {
+                if (wifiEdu) {
+                    root.wifiEduGvaTarget = "WIFI_EDU";
+                }
+
                 wifiEduGvaStage = 1;
                 local_disconnect_all.call([]);
             }
@@ -390,11 +399,17 @@ Item {
 
         onError: {
             console.log("Failed waiting to GVA domain");
+            showError(i18nd("lliurex-sddm-theme","No connection to server"));
         }
 
         onResponse: {
-            wifiEduGvaStage = 4;
-            sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex)
+            if (value) {
+                wifiEduGvaStage = 4;
+                sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
+            }
+            else {
+                showError(i18nd("lliurex-sddm-theme","No connection to server"));
+            }
         }
     }
     
