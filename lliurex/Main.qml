@@ -398,8 +398,9 @@ Item {
         method: "wait_for_domain"
 
         onError: {
-            console.log("Failed waiting to GVA domain");
-            showError(i18nd("lliurex-sddm-theme","No connection to server"));
+            //console.log("Failed waiting to GVA domain");
+            //showError(i18nd("lliurex-sddm-theme","No connection to server"));
+            local_get_active_connections.call([]);
         }
 
         onResponse: {
@@ -408,7 +409,8 @@ Item {
                 sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
             }
             else {
-                showError(i18nd("lliurex-sddm-theme","No connection to server"));
+                //showError(i18nd("lliurex-sddm-theme","No connection to server"));
+                local_get_active_connections.call([]);
             }
         }
     }
@@ -426,6 +428,52 @@ Item {
 
         onResponse: {
             root.wifiEduGvaAutoLoginSettings = value;
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_get_active_connections
+        client: n4dLocal
+        plugin: "WifiEduGva"
+        method: "get_active_connections"
+
+        onError: {
+            console.log("Failed to check internet connection");
+        }
+
+        onResponse: {
+            var found = false;
+
+            for (var c in value) {
+                if (c[0] == "WifiEduGva" ) {
+                    found = true;
+                }
+            }
+
+            if (found) {
+                local_check_connectivity.call([]);
+            }
+            else {
+            }
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_check_connectivity
+        client: n4dLocal
+        plugin: "WifiEduGva"
+        method: "check_connectivity"
+
+        onError: {
+            console.log("Failed to check internet connection");
+        }
+
+        onResponse: {
+            if (value) {
+                showError(i18nd("lliurex-sddm-theme","No connection to server"));
+            }
         }
     }
 
