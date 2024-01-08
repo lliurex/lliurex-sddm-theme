@@ -455,6 +455,7 @@ Item {
                 local_check_connectivity.call([]);
             }
             else {
+                showError(i18nd("lliurex-sddm-theme","WiFi connection was rejected"));
             }
         }
     }
