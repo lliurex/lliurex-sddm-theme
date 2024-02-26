@@ -1,3 +1,10 @@
+lliurex-sddm-theme (23.3.0.0) jammy; urgency=medium
+
+  * Language list is now keyboard navigable and accept focus 
+  * Translation makes a better effort to match selection 
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Mon, 26 Feb 2024 19:47:55 +0100
+
 lliurex-sddm-theme (23.2.0.0) jammy; urgency=medium
 
   * Updated live release text
