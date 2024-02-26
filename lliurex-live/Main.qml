@@ -66,10 +66,22 @@ Item {
             }
         }
         
-        if (index==-1) {
-            index = 0;
+        if (index == -1) {
+            //try again
+            var index = -1;
+            for (var n=0;n<ts.length;n++) {
+                //console.log(ts[n][0]," versus ",lang);
+                if (ts[n][0].substring(0,2)===lang.substring(0,2)) {
+                    index=n;
+                    break;
+                }
+            }
         }
         
+        if (index == -1) {
+            index = 0;
+        }
+
         var tmp = []
         for (var n=0;n<ts[index][1].length;n++) {
             tmp.push(ts[index][1][n]);
@@ -199,7 +211,7 @@ Item {
         width:700
         height:500
         title: "LliureX 23 Live"
-        
+        focus: true
         anchors.centerIn:parent
         
         RowLayout {
@@ -229,27 +241,28 @@ Item {
                     Layout.preferredWidth: 300
                     Layout.preferredHeight: 300
                     padding: 24
-                    
+                    focus: true
+                    activeFocusOnTab: true
+
                     ListView {
                         id: languagesView
-                        //Layout.fillWidth: true
-                        //Layout.fillHeight: true
                         anchors.fill:parent
-                        
+                        focus: true
+
                         highlightFollowsCurrentItem: true
-                        
+
                         model: llx.languagesModel
-                        
+
                         delegate: Kirigami.BasicListItem {
                             label: modelData.longName
                         }
-                        
+
                         onCurrentIndexChanged: {
                             var tmp = model[currentIndex].name;
                             var lang = tmp.split("_")[0];
-                            
+
                             var x = llx.findBestLayout(tmp);
-                            
+
                             for (var n=0;n<llx.layoutsModel.length;n++) {
                                 //console.log(llx.layoutsModel[n].name);
                                 if (llx.layoutsModel[n].name==x) {
@@ -257,11 +270,9 @@ Item {
                                     break;
                                 }
                             }
-                            
+
                             retranslate(model[currentIndex].name);
-                            
                         }
-                        
                     }
                 }
                 
