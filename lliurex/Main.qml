@@ -198,12 +198,35 @@ Item {
 
     N4D.Proxy
     {
+        id: local_is_cdc_enabled
+        client: n4dLocal
+        plugin: "WifiEduGva"
+        method: "is_cdc_enabled"
+
+        onError: {
+            console.log("Failed to check CDC");
+        }
+
+        onResponse: {
+            if (value) {
+                local_check_wired_connection.call([]);
+            }
+            else {
+                console.log("CDC is not enabled");
+                showError(i18nd("lliurex-sddm-theme","CDC is not enabled"));
+            }
+        }
+    }
+
+    N4D.Proxy
+    {
         id: local_check_wired_connection
         client: n4dLocal
         plugin: "WifiEduGva"
         method: "check_wired_connection"
 
         onError: {
+            console.log("Warning! Failed to check wired connections");
             local_scan_network.call([]);
             // TODO: show error here?
         }
