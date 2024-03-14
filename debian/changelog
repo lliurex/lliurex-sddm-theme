@@ -1,3 +1,9 @@
+lliurex-sddm-theme (23.4.0.0) jammy; urgency=medium
+
+  * Checking if cdc is enabled before trying to connect to AD
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Thu, 14 Mar 2024 09:59:44 +0100
+
 lliurex-sddm-theme (23.3.0.0) jammy; urgency=medium
 
   * Language list is now keyboard navigable and accept focus 
