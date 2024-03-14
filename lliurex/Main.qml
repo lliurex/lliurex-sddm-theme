@@ -118,7 +118,8 @@ Item {
             console.log("performing a WifiEduGva login...");
             root.wifiEduGvaStage = 0;
             root.topWindow = wifiEduGvaFrame;
-            local_check_wired_connection.call([]);
+            //local_check_wired_connection.call([]);
+            local_is_cdc_enabled.call([]);
         }
 
         if (root.loginMode == Main.LoginMode.Guest) {
