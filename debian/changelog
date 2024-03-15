@@ -1,3 +1,9 @@
+lliurex-sddm-theme (23.4.1.0) jammy; urgency=medium
+
+  * Updated translations
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Fri, 15 Mar 2024 12:43:41 +0100
+
 lliurex-sddm-theme (23.4.0.0) jammy; urgency=medium
 
   * Checking if cdc is enabled before trying to connect to AD
