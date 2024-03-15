@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-21 12:00+0100\n"
+"POT-Creation-Date: 2024-03-15 11:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,132 +19,138 @@ msgstr ""
 "X-Generator: Lokalize 22.04.2\n"
 "#-#-#-#-#  messages.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:189
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:190
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:426
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:435
 msgid "No connection to server"
 msgstr "No hi ha connexió amb el servidor"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:238
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:217
+msgid "CDC is not enabled"
+msgstr "No està habilitat el CDC"
+
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:262
 msgid "Failed to retrieve networks"
 msgstr "No s’ha pogut obtindre la llista de xarxes"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:270
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:303
 msgid "Wifi network not found:"
 msgstr "No s’ha trobat la xarxa wifi:"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:284
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:317
 msgid "Failed to turn down connections"
 msgstr "No s’han pogut tancar les connexions actives"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:312
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:345
 msgid "Failed to create connection"
 msgstr "No s’ha pogut crear la connexió"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:447
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:486
 msgid "Login failed"
 msgstr "L'inici de sessió ha fallat"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:501
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:541
 msgid "Log in mode"
 msgstr "Mode d'accés"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:511
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:551
 msgid "Standard"
 msgstr "Estàndard"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:524
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:974
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:564
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1015
 msgid "Guest User"
 msgstr "Usuari convidat"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:538
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:828
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:920
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:578
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:869
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:961
 msgid "GVA Wifi"
 msgstr "GVA Wifi"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:565
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:605
 msgid "Alumnat"
 msgstr "Alumnat"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:587
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:627
 msgid "User selection"
 msgstr "Selecció d'usuari"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:688
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:729
 msgid "User name"
 msgstr "Usuari"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:713
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:754
 msgid "Password"
 msgstr "Contrasenya"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:750
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:791
 msgid "Student"
 msgstr "Alumnat"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:751
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:792
 msgid "Teacher"
 msgstr "Professorat"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:788
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:898
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:998
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:829
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:939
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1039
 msgid "Login"
 msgstr "Inici de sessió"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:858
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:899
 msgid "Login as Student in:"
 msgstr "Accedint com a estudiant en:"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:878
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:919
 msgid "Change user"
 msgstr "Canviar usuari"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:929
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:970
 msgid "Scanning networks"
 msgstr "Escanejant xarxes"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:935
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:976
 msgid "Turning down connections"
 msgstr "Desactivant les connexions"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:941
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:982
 msgid "Creating connection"
 msgstr "S’està creant la connexió"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:947
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:988
 msgid "Waiting for GVA server"
 msgstr "Esperant el servidor GVA"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:951
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1011
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1094
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:992
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1052
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1135
 #: /home/quique/workspace/lliurex-sddm-theme/lliurex/ui/UserGrid.qml:156
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:991
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1032
 msgid ""
 "Access this computer using a guest account. Everything stored with this "
 "account will be deleted after you log out."
 msgstr ""
-"Accés a aquest ordinador amb un compte de convidat. Tot el que es guarde amb"
-" aquest compte s'eliminarà després de tancar la sessió."
+"Accés a aquest ordinador amb un compte de convidat. Tot el que es guarde amb "
+"aquest compte s'eliminarà després de tancar la sessió."
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1029
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1045
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1070
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1086
 msgid "Power off"
 msgstr "Apaga"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1057
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1098
 msgid "Reboot"
 msgstr "Reinicia"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1069
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1110
 msgid "Suspend"
 msgstr "Para temporalment"
 
-#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1081
+#: /home/quique/workspace/lliurex-sddm-theme/lliurex/Main.qml:1122
 msgid "Hibernate"
 msgstr "Hiberna"
 
