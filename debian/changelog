@@ -1,3 +1,9 @@
+lliurex-sddm-theme (23.4.1.1) noble; urgency=medium
+
+  * Noble release
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Mon, 29 Jul 2024 15:18:18 +0200
+
 lliurex-sddm-theme (23.4.1.0) jammy; urgency=medium
 
   * Updated translations
