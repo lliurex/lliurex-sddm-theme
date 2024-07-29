@@ -6,7 +6,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5 REQUIRED COMPONENTS Qml Quick)
+find_package(Qt6 REQUIRED COMPONENTS Qml Quick)
 
 include(KDEInstallDirs)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
@@ -17,8 +17,8 @@ include(KDECMakeSettings)
 add_library(lliurexlocaleplugin SHARED plugin.cpp)
 
 target_link_libraries (lliurexlocaleplugin
-    Qt5::Qml
-    Qt5::Quick
+    Qt6::Qml
+    Qt6::Quick
 )
 
 install (TARGETS lliurexlocaleplugin DESTINATION ${KDE_INSTALL_QMLDIR}/net/lliurex/locale)
