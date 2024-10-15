@@ -1,3 +1,10 @@
+lliurex-sddm-theme (25.0.0.0) noble; urgency=medium
+
+  * Working on Plasma 6
+  * Some minor refactoring, but more is expected
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Tue, 15 Oct 2024 11:38:11 +0200
+
 lliurex-sddm-theme (23.4.1.1) noble; urgency=medium
 
   * Noble release

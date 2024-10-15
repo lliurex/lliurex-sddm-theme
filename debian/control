@@ -2,13 +2,13 @@ Source: lliurex-sddm-theme
 Section: x11
 Priority: optional
 Maintainer: LliureX Team <lliurex@gva.es>
-Build-Depends: debhelper (>= 10), cmake, extra-cmake-modules, qt6-base-dev, qt6-declarative-dev
-Standards-Version: 4.1.2
+Build-Depends: debhelper-compat (= 13), cmake, extra-cmake-modules, qt6-base-dev, qt6-declarative-dev
+Standards-Version: 4.6.0
 
 Package: lliurex-sddm-theme
 Architecture: any
 Section: x11
-Depends: sddm, ${shlibs:Depends}, ${misc:Depends}, qml-module-edupals-n4d, n4d-lliurex-base, qml-module-lliurex-ui, n4d-wifiedugva
+Depends: sddm, ${shlibs:Depends}, ${misc:Depends}, qml6-module-edupals-n4d, n4d-lliurex-base, qml6-module-lliurex-ui, n4d-wifiedugva
 Description: LliureX sddm theme
  LliureX 25 custom sddm theme
 
