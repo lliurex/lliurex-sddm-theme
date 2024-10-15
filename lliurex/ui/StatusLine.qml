@@ -19,6 +19,7 @@
 
 import org.kde.plasma.components 3.0 as PlasmaComponents
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.16 as Kirigami
 
 import QtQuick 2.0
 import QtQuick.Controls 2.0 as Controls
@@ -35,7 +36,7 @@ RowLayout {
     property int stage: 1
     property int currentStage: -1
 
-    PlasmaCore.IconItem {
+    Kirigami.Icon {
         Layout.alignment: Qt.AlignVCenter
 
         source: {

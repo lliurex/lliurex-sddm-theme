@@ -550,7 +550,7 @@ Item {
             PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","Standard")
                 visible: root.localEnabled
-                implicitWidth: PlasmaCore.Units.gridUnit*8
+                implicitWidth: Kirigami.Units.gridUnit*8
                 icon.name: "computer"
                 display: QQC2.AbstractButton.TextUnderIcon
 
@@ -564,7 +564,7 @@ Item {
                 text: i18nd("lliurex-sddm-theme","Guest User")
                 visible: root.guestEnabled
                 enabled: !root.wifiEduGvaAutoEnabled
-                implicitWidth: PlasmaCore.Units.gridUnit*8
+                implicitWidth: Kirigami.Units.gridUnit*8
                 icon.name:"im-invisible-user"
                 display: QQC2.AbstractButton.TextUnderIcon
 
@@ -577,7 +577,7 @@ Item {
             PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","GVA Wifi")
                 visible: root.wifiEduGvaEnabled
-                implicitWidth: PlasmaCore.Units.gridUnit*8
+                implicitWidth: Kirigami.Units.gridUnit*8
                 icon.name:"folder-cloud"
                 display: QQC2.AbstractButton.TextUnderIcon
 
@@ -604,7 +604,7 @@ Item {
             PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","Alumnat")
                 visible: root.wifiEduGvaAutoEnabled
-                implicitWidth: PlasmaCore.Units.gridUnit*8
+                implicitWidth: Kirigami.Units.gridUnit*8
                 icon.name:"smiley"
                 display: QQC2.AbstractButton.TextUnderIcon
 
@@ -742,7 +742,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 spacing: 6
                 
-                PlasmaCore.IconItem {
+                Kirigami.Icon {
                     id: imgPassword
                     source: "lock"
                 }
@@ -758,7 +758,7 @@ Item {
                         login();
                     }
                     
-                    PlasmaCore.IconItem {
+                    Kirigami.Icon {
                         source: "input-caps-on"
                         anchors.right: parent.right
                         anchors.rightMargin:5
@@ -778,7 +778,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 spacing: 6
 
-                PlasmaCore.IconItem {
+                Kirigami.Icon {
                     id:imgEC
                     source: "network-wireless"
                 }
@@ -990,7 +990,7 @@ Item {
 
             PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","Cancel")
-                implicitWidth: PlasmaCore.Units.gridUnit*6
+                implicitWidth: Kirigami.Units.gridUnit*6
                 icon.name: "dialog-cancel"
                 display: QQC2.AbstractButton.TextBesideIcon
 
@@ -1045,12 +1045,12 @@ Item {
             }
             
             Item {
-                implicitHeight:PlasmaCore.Units.gridUnit*2
+                implicitHeight:Kirigami.Units.gridUnit*2
             }
             
             PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","Cancel")
-                implicitWidth: PlasmaCore.Units.gridUnit*6
+                implicitWidth: Kirigami.Units.gridUnit*6
                 icon.name: "dialog-cancel"
                 display: QQC2.AbstractButton.TextBesideIcon
                 
@@ -1085,7 +1085,7 @@ Item {
                 PlasmaComponents.Button {
                     text: i18nd("lliurex-sddm-theme","Power off")
                     enabled:sddm.canPowerOff
-                    implicitWidth: PlasmaCore.Units.gridUnit*6
+                    implicitWidth: Kirigami.Units.gridUnit*6
                     icon.name: "system-shutdown"
                     display: QQC2.AbstractButton.TextUnderIcon
                     
@@ -1097,7 +1097,7 @@ Item {
                 PlasmaComponents.Button {
                     text: i18nd("lliurex-sddm-theme","Reboot")
                     enabled: sddm.canReboot
-                    implicitWidth: PlasmaCore.Units.gridUnit*6
+                    implicitWidth: Kirigami.Units.gridUnit*6
                     icon.name: "system-reboot"
                     display: QQC2.AbstractButton.TextUnderIcon
                     
@@ -1109,7 +1109,7 @@ Item {
                 PlasmaComponents.Button {
                     text: i18nd("lliurex-sddm-theme","Suspend")
                     enabled: sddm.canSuspend
-                    implicitWidth: PlasmaCore.Units.gridUnit*6
+                    implicitWidth: Kirigami.Units.gridUnit*6
                     icon.name: "system-suspend"
                     display: QQC2.AbstractButton.TextUnderIcon
                     
@@ -1121,7 +1121,7 @@ Item {
                 PlasmaComponents.Button {
                     text: i18nd("lliurex-sddm-theme","Hibernate")
                     enabled: sddm.canHibernate
-                    implicitWidth: PlasmaCore.Units.gridUnit*6
+                    implicitWidth: Kirigami.Units.gridUnit*6
                     icon.name: "system-suspend-hibernate"
                     display: QQC2.AbstractButton.TextUnderIcon
                     
@@ -1134,7 +1134,7 @@ Item {
             PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","Cancel")
                 anchors.right: parent.right
-                implicitWidth: PlasmaCore.Units.gridUnit*6
+                implicitWidth: Kirigami.Units.gridUnit*6
                 icon.name: "dialog-cancel"
                 display: QQC2.AbstractButton.TextBesideIcon
                 
