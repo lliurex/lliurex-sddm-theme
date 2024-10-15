@@ -12,5 +12,5 @@ ConfigFile=theme.conf
 TranslationsDirectory=translations
 Theme-Id=lliurex-desktop
 Theme-API=2.0
-
+QtVersion=6
 

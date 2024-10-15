@@ -155,7 +155,7 @@ FocusScope {
             Layouts.Layout.alignment: Qt.AlignRight
             text: i18nd("lliurex-sddm-theme","Cancel")
             icon.name: "dialog-cancel"
-            implicitWidth: PlasmaCore.Units.gridUnit*6
+            implicitWidth: Kirigami.Units.gridUnit*6
             display: Controls.AbstractButton.TextBesideIcon
                         
             onClicked: {
