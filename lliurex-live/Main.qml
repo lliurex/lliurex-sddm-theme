@@ -49,12 +49,12 @@ Item {
     
     property var ts : [ 
     //      0           1                       2                   3       4       5           6   
-    ["C",["Language","Keyboard layout","Welcome to LliureX 23 live","Ok","Cancel","Shutdown","Reboot"]],
-    ["ca_ES.UTF-8@valencia",["Idioma","Teclat","Benvingut a LliureX 23 live","Accepta","Cancel·la","Atura","Reinicia"]] ,
-    ["es_ES.UTF-8",["Lenguaje","Teclado","Bienvenido a LliureX 23 live","Aceptar","Cancelar","Apagar","Reiniciar"]],
-    ["ca_ES.UTF-8",["Idioma","Teclat","Benvingut a LliureX 23 live","Accepta","Cancel·la","Atura","Reinicia"]] ,
+    ["C",["Language","Keyboard layout","Welcome to LliureX 25 live","Ok","Cancel","Shutdown","Reboot"]],
+    ["ca_ES.UTF-8@valencia",["Idioma","Teclat","Benvingut a LliureX 25 live","Accepta","Cancel·la","Atura","Reinicia"]] ,
+    ["es_ES.UTF-8",["Lenguaje","Teclado","Bienvenido a LliureX 25 live","Aceptar","Cancelar","Apagar","Reiniciar"]],
+    ["ca_ES.UTF-8",["Idioma","Teclat","Benvingut a LliureX 25 live","Accepta","Cancel·la","Atura","Reinicia"]] ,
         ];
-    property var strings : ["","",""];
+    property var strings : ts[0][1];
     
     function retranslate(lang) {
         var index = -1;
@@ -210,7 +210,7 @@ Item {
         id: paneMain
         width:700
         height:500
-        title: "LliureX 23 Live"
+        title: "LliureX 25 Live"
         focus: true
         anchors.centerIn:parent
         
@@ -224,7 +224,7 @@ Item {
                 RowLayout {
                     Layout.alignment: Qt.AlignCenter
                     
-                    PlasmaCore.IconItem {
+                    Kirigami.Icon {
                         source:"folder-language"
                         Layout.preferredWidth: 24
                         Layout.preferredHeight: 24
@@ -253,8 +253,8 @@ Item {
 
                         model: llx.languagesModel
 
-                        delegate: Kirigami.BasicListItem {
-                            label: modelData.longName
+                        delegate: QQC2.ItemDelegate {
+                            text: modelData.longName
                         }
 
                         onCurrentIndexChanged: {
@@ -279,7 +279,7 @@ Item {
                 RowLayout {
                     Layout.alignment: Qt.AlignCenter
                     
-                    PlasmaCore.IconItem {
+                    Kirigami.Icon {
                         source: "input-keyboard"
                         Layout.preferredWidth: 24
                         Layout.preferredHeight: 24
@@ -298,8 +298,8 @@ Item {
                     
                     displayText: model[currentIndex].longName
                     
-                    delegate: Kirigami.BasicListItem {
-                        label: modelData.longName
+                    delegate: QQC2.ItemDelegate {
+                        text: modelData.longName
                     }
                     
                 }
@@ -323,12 +323,11 @@ Item {
                     text: strings[2]
                 }
                 
-                PlasmaCore.IconItem {
+                Kirigami.Icon {
                     Layout.alignment: Qt.AlignCenter
                     source: "drive-removable-media"
                     implicitWidth : 128
                     implicitHeight: 128
-                    usesPlasmaTheme: false
                 }
                 
                 PC3.Label {
@@ -349,7 +348,7 @@ Item {
                         text: strings[5]
                         icon.name: "system-shutdown"
                         display: QQC2.AbstractButton.TextBesideIcon
-                        implicitWidth: PlasmaCore.Units.gridUnit*6
+                        width: PlasmaCore.Units.gridUnit*6
                         
                         onClicked: {
                             paneMain.visible=false;
@@ -362,7 +361,7 @@ Item {
                         text: strings[3]
                         icon.name: "dialog-ok"
                         display: QQC2.AbstractButton.TextBesideIcon
-                        implicitWidth: PlasmaCore.Units.gridUnit*6
+                        width: PlasmaCore.Units.gridUnit*6
                         
                         onClicked: {
                             btnOk.enabled=false;
@@ -410,7 +409,7 @@ Item {
                     text: strings[5]
                     icon.name: "system-shutdown"
                     display: QQC2.AbstractButton.TextUnderIcon
-                    implicitWidth: PlasmaCore.Units.gridUnit*6
+                    width: PlasmaCore.Units.gridUnit*6
                     
                     enabled:sddm.canPowerOff
                         onClicked: {
@@ -423,7 +422,7 @@ Item {
                     
                     icon.name: "system-reboot"
                     display: QQC2.AbstractButton.TextUnderIcon
-                    implicitWidth: PlasmaCore.Units.gridUnit*6
+                    width: PlasmaCore.Units.gridUnit*6
                     
                     enabled: sddm.canReboot
                         onClicked: {
@@ -436,7 +435,7 @@ Item {
             PC3.Button {
                 Layout.alignment: Qt.AlignBottom | Qt.AlignRight
                 text: strings[4]
-                implicitWidth: PlasmaCore.Units.gridUnit*6
+                width: PlasmaCore.Units.gridUnit*6
                 icon.name: "dialog-cancel"
                 display: QQC2.AbstractButton.TextBesideIcon
                         
