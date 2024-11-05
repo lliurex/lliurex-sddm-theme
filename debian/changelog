@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.0.2.0) noble; urgency=medium
+
+  * Using Plasma with Wayland (where available)
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Tue, 05 Nov 2024 10:30:48 +0100
+
 lliurex-sddm-theme (25.0.1.0) noble; urgency=medium
 
   * Updated live theme to Plasma 6
