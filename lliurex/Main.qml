@@ -1189,7 +1189,7 @@ Item {
                         */
                         var name=model.data(index,Qt.UserRole+4)
                         
-                        if (name==="Plasma (X11)") {
+                        if (name==="Plasma (Wayland)") {
                             currentIndex=n
                         }
                     }

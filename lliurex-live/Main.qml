@@ -95,7 +95,7 @@ Item {
         
         for (var n=0;n<sessionModel.rowCount();n++) {
             var name = sessionModel.data(sessionModel.index(n,0),Qt.UserRole+4);
-            if (name==="Plasma (X11)") {
+            if (name==="Plasma (Wayland)") {
                 plasmaIndex=n;
             }
         }
