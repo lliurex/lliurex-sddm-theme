@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.0.3.0) noble; urgency=medium
+
+  * Fixed Live wizard selection list
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Mon, 17 Mar 2025 13:44:46 +0100
+
 lliurex-sddm-theme (25.0.2.0) noble; urgency=medium
 
   * Using Plasma with Wayland (where available)
