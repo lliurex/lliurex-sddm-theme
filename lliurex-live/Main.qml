@@ -255,6 +255,10 @@ Item {
 
                         delegate: QQC2.ItemDelegate {
                             text: modelData.longName
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: languagesView.currentIndex = index
+                            }
                         }
 
                         onCurrentIndexChanged: {
@@ -348,7 +352,7 @@ Item {
                         text: strings[5]
                         icon.name: "system-shutdown"
                         display: QQC2.AbstractButton.TextBesideIcon
-                        width: PlasmaCore.Units.gridUnit*6
+                        width: Kirigami.Units.gridUnit*6
                         
                         onClicked: {
                             paneMain.visible=false;
@@ -361,7 +365,7 @@ Item {
                         text: strings[3]
                         icon.name: "dialog-ok"
                         display: QQC2.AbstractButton.TextBesideIcon
-                        width: PlasmaCore.Units.gridUnit*6
+                        width: Kirigami.Units.gridUnit*6
                         
                         onClicked: {
                             btnOk.enabled=false;
@@ -409,7 +413,7 @@ Item {
                     text: strings[5]
                     icon.name: "system-shutdown"
                     display: QQC2.AbstractButton.TextUnderIcon
-                    width: PlasmaCore.Units.gridUnit*6
+                    width: Kirigami.Units.gridUnit*6
                     
                     enabled:sddm.canPowerOff
                         onClicked: {
@@ -422,7 +426,7 @@ Item {
                     
                     icon.name: "system-reboot"
                     display: QQC2.AbstractButton.TextUnderIcon
-                    width: PlasmaCore.Units.gridUnit*6
+                    width: Kirigami.Units.gridUnit*6
                     
                     enabled: sddm.canReboot
                         onClicked: {
@@ -435,7 +439,7 @@ Item {
             PC3.Button {
                 Layout.alignment: Qt.AlignBottom | Qt.AlignRight
                 text: strings[4]
-                width: PlasmaCore.Units.gridUnit*6
+                width: Kirigami.Units.gridUnit*6
                 icon.name: "dialog-cancel"
                 display: QQC2.AbstractButton.TextBesideIcon
                         
