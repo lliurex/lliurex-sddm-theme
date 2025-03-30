@@ -25,6 +25,7 @@ import QtQuick.Layouts 1.1 as Layouts
 import QtQuick.Controls 2.5 as Controls
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents
+import org.kde.kirigami 2.16 as Kirigami
 
 FocusScope {
     id: userGrid
@@ -109,7 +110,7 @@ FocusScope {
             clip:true
             Controls.ScrollBar.horizontal.policy: Controls.ScrollBar.AlwaysOff
             Controls.ScrollBar.vertical.policy: Controls.ScrollBar.AlwaysOn
-            contentWidth: width
+            //contentWidth: width
             
             Grid {
                 id: grid
