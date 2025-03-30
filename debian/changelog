@@ -1,3 +1,10 @@
+lliurex-sddm-theme (25.1.0.0) noble; urgency=medium
+
+  * Fixes for qt6/plasma6
+  * Using an auto-smart login method detection (not tested)
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Sun, 30 Mar 2025 23:45:30 +0200
+
 lliurex-sddm-theme (25.0.3.0) noble; urgency=medium
 
   * Fixed Live wizard selection list
