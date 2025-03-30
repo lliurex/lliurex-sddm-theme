@@ -20,6 +20,7 @@
 import "ui" as Lliurex
 import net.lliurex.ui 1.0 as LLX
 
+import Edupals.Base as Edupals
 import Edupals.N4D 1.0 as N4D
 
 import SddmComponents 2.0 as Sddm
@@ -108,19 +109,8 @@ Item {
 
     function login()
     {
-        if (root.loginMode == Main.LoginMode.Local) {
-            console.log("performing a local login...");
-            sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
-        }
-
-        if (root.loginMode == Main.LoginMode.WifiEduGvaTeacher ||
-                    root.loginMode == Main.LoginMode.WifiEduGvaStudent) {
-            console.log("performing a WifiEduGva login...");
-            root.wifiEduGvaStage = 0;
-            root.topWindow = wifiEduGvaFrame;
-            //local_check_wired_connection.call([]);
-            local_is_cdc_enabled.call([]);
-        }
+        var userName = txtUser.text;
+        var userPass = txtPass.text;
 
         if (root.loginMode == Main.LoginMode.Guest) {
             console.log("performing a guest login...");
@@ -133,6 +123,44 @@ Item {
             root.topWindow = wifiEduGvaFrame;
             local_check_wired_connection.call([]);
         }
+
+        var localUsers = userQuery.getLocalUsers();
+        var isLocal = false;
+        console.log("local users:");
+        for (var n=0;n<localUsers.length;n++) {
+            console.log(localUsers[n]);
+            if (userName == localUsers[n]) {
+                isLocal = true;
+                break;
+            }
+        }
+
+        if (isLocal) {
+            console.log("performing a local login...");
+            sddm.login(userName, userPass, cmbSession.currentIndex);
+        }
+
+        if (root.loginMode == Main.LoginMode.WifiEduGvaTeacher ||
+            root.loginMode == Main.LoginMode.WifiEduGvaStudent) {
+
+            console.log("performing a WifiEduGva login...");
+            if (userName.includes(".")) {
+                console.log("looks like a teacher name");
+                root.loginMode = Main.LoginMode.WifiEduGvaTeacher;
+            }
+
+            root.wifiEduGvaStage = 0;
+            root.topWindow = wifiEduGvaFrame;
+            local_is_cdc_enabled.call([]);
+        }
+
+        // trust on pam anyway
+        sddm.login(userName, userPass, cmbSession.currentIndex);
+    }
+
+    Edupals.UserQuery
+    {
+        id: userQuery
     }
 
     N4D.Client
@@ -161,7 +189,7 @@ Item {
             root.lliurexType="unknown";
         }
         
-        onResponse: {
+        onResponse: function(value) {
             console.log("version:",value);
             
             root.lliurexVersion=value;
@@ -369,7 +397,7 @@ Item {
             console.log("Failed to get WifiEduGva settings");
         }
 
-        onResponse: {
+        onResponse: function (value) {
             wifiEduGvaLogin = value;
 
             if (value > 0 ) {
@@ -426,7 +454,7 @@ Item {
             showError(i18nd("lliurex-sddm-theme","No connection to server"));
         }
 
-        onResponse: {
+        onResponse: function(value) {
             if (value) {
                 wifiEduGvaStage = 4;
                 sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
@@ -448,7 +476,7 @@ Item {
             console.log("Failed to get WifiEduGva Autologin settings");
         }
 
-        onResponse: {
+        onResponse: function(value) {
             root.wifiEduGvaAutoLoginSettings = value;
         }
     }
@@ -648,7 +676,7 @@ Item {
                 root.topWindow = loginFrame;
             }
             
-            onSelected: {
+            onSelected: function(name) {
                 root.topWindow = loginFrame;
                 txtUser.text = name
                 txtPass.focus = true
@@ -772,7 +800,7 @@ Item {
                     width: imgPassword.width
                 }
             }
-
+            /*
             RowLayout {
                 visible: root.loginMode == Main.LoginMode.WifiEduGvaStudent || root.loginMode == Main.LoginMode.WifiEduGvaTeacher || root.loginMode == Main.LoginMode.AutoStudent
                 Layout.alignment: Qt.AlignHCenter
@@ -811,7 +839,7 @@ Item {
                     width:imgEC.width
                 }
             }
-            
+            */
             Item {
                 Layout.fillWidth:true;
                 height:32
@@ -1158,7 +1186,7 @@ Item {
         
         RowLayout {
             anchors.fill: parent
-            spacing: PlasmaCore.Units.largeSpacing
+            spacing: Kirigami.Units.largeSpacing
             
             PlasmaComponents.ComboBox {
                 id: cmbSession
