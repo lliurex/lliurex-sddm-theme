@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.2.0.0) noble; urgency=medium
+
+  * Visual glitches fixed
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Wed, 23 Apr 2025 09:15:24 +0200
+
 lliurex-sddm-theme (25.1.0.0) noble; urgency=medium
 
   * Fixes for qt6/plasma6
