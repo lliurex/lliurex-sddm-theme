@@ -521,6 +521,8 @@ Item {
     
     LLX.Background {
         anchors.fill: parent
+        isWallpaper:false
+        rats:false
     }
 
     InputPanel {

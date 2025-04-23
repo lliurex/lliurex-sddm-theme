@@ -21,13 +21,14 @@ import net.lliurex.locale 1.0 as Locale
 import net.lliurex.ui 1.0 as LLX
 import Edupals.N4D 1.0 as N4D
 
-import QtQuick 2.0
-import QtQuick.Controls 2.0 as QQC2
+import QtQuick 2.15
+import QtQuick.Controls 2.15 as QQC2
 import QtQuick.Layouts 1.15
 import SddmComponents 2.0 as Sddm
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PC3
-import org.kde.kirigami 2.16 as Kirigami
+import org.kde.kirigami 2.20 as Kirigami
+
+import org.kde.breeze as Breeze
 
 Item {
     id: theme
@@ -203,6 +204,8 @@ Item {
     LLX.Background {
 
         anchors.fill: parent
+        isWallpaper:false
+        rats:false
         
     }
     
@@ -242,7 +245,7 @@ Item {
                     Layout.preferredHeight: 300
                     padding: 24
                     focus: true
-                    activeFocusOnTab: true
+                    //activeFocusOnTab: true
 
                     ListView {
                         id: languagesView
@@ -250,11 +253,13 @@ Item {
                         focus: true
 
                         highlightFollowsCurrentItem: true
+                        activeFocusOnTab: true
 
                         model: llx.languagesModel
 
                         delegate: QQC2.ItemDelegate {
                             text: modelData.longName
+                            highlighted: (languagesView.currentIndex == index)
                             MouseArea {
                                 anchors.fill: parent
                                 onClicked: languagesView.currentIndex = index
@@ -302,8 +307,10 @@ Item {
                     
                     displayText: model[currentIndex].longName
                     
-                    delegate: QQC2.ItemDelegate {
+                    delegate: QQC2.MenuItem {
                         text: modelData.longName
+                        highlighted: cmbLayout.highlightedIndex === index
+                        hoverEnabled: cmbLayout.hoverEnabled
                     }
                     
                 }
