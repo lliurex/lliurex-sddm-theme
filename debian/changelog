@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.3.0.0) noble; urgency=medium
+
+  * Guessing connection mode
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Mon, 28 Apr 2025 00:13:46 +0200
+
 lliurex-sddm-theme (25.2.0.0) noble; urgency=medium
 
   * Visual glitches fixed
