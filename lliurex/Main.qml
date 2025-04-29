@@ -653,29 +653,41 @@ Item {
             }
 
             PlasmaComponents.Button {
-                text: i18nd("lliurex-sddm-theme","GVA Wifi")
-                visible: root.wifiEduGvaEnabled
+                text: i18nd("lliurex-sddm-theme","GVA Wifi Alu")
+                //visible: root.wifiEduGvaEnabled
                 implicitWidth: Kirigami.Units.gridUnit*8
                 icon.name:"folder-cloud"
                 display: QQC2.AbstractButton.TextUnderIcon
 
                 onClicked: {
-
-                    switch (root.wifiEduGvaLogin) {
-                        case Main.WifiEduGva.Teacher:
-                            root.loginMode = Main.LoginMode.WifiEduGvaTeacher;
-                        break;
-                        case Main.WifiEduGva.Student:
-                        case Main.WifiEduGva.Auto:
-                            root.loginMode = Main.LoginMode.WifiEduGvaStudent;
-                        break;
-                        default:
-                            root.loginMode = Main.LoginMode.WifiEduGvaStudent;
-                        break;
-                    }
-
+                    root.loginMode = Main.LoginMode.WifiEduGvaStudent;
                     root.topWindow = loginFrame;
+                }
+            }
 
+            PlasmaComponents.Button {
+                text: i18nd("lliurex-sddm-theme","GVA Wifi Prof")
+                //visible: root.wifiEduGvaEnabled
+                implicitWidth: Kirigami.Units.gridUnit*8
+                icon.name:"folder-cloud"
+                display: QQC2.AbstractButton.TextUnderIcon
+
+                onClicked: {
+                    root.loginMode = Main.LoginMode.WifiEduGvaTeacher;
+                    root.topWindow = loginFrame;
+                }
+            }
+
+            PlasmaComponents.Button {
+                text: i18nd("lliurex-sddm-theme","GVA Wifi Edu")
+                //visible: root.wifiEduGvaEnabled
+                implicitWidth: Kirigami.Units.gridUnit*8
+                icon.name:"folder-cloud"
+                display: QQC2.AbstractButton.TextUnderIcon
+
+                onClicked: {
+                    root.loginMode = Main.LoginMode.WifiEduGvaIES;
+                    root.topWindow = loginFrame;
                 }
             }
 
