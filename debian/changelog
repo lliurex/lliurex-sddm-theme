@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.4.0.0) noble; urgency=medium
+
+  * Allow user to select a custom wifi mode login
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Tue, 29 Apr 2025 23:42:34 +0200
+
 lliurex-sddm-theme (25.3.0.0) noble; urgency=medium
 
   * Guessing connection mode
