@@ -349,11 +349,58 @@ Item {
             wifiEduGvaStage = 3;
             if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
                     root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
-                local_wait_for_domain.call([]);
+                //local_wait_for_domain.call([]);
+                local_check_connectivity.call([]);
             }
 
             if (root.loginMode == Main.LoginMode.AutoStudent) {
                 sddm.login("alumnat","",cmbSession.currentIndex);
+            }
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_check_connectivity
+        client: n4dLocal
+        plugin: "WifiEduGva"
+        method: "check_connectivity"
+
+        onError: {
+            console.log("failed to check connectivity:",what,"\n",details);
+            showError(i18nd("lliurex-sddm-theme","Failed to check conection"));
+        }
+
+        onResponse: {
+            console.log("connectivity:",value);
+            if (value) {
+                local_wait_for_domain.call([]);
+            }
+            else {
+                showError(i18nd("lliurex-sddm-theme","Failed to establish an internet connection"));
+            }
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_recheck_connectivity
+        client: n4dLocal
+        plugin: "WifiEduGva"
+        method: "check_connectivity"
+
+        onError: {
+            console.log("failed to check connectivity:",what,"\n",details);
+            showError(i18nd("lliurex-sddm-theme","Failed to check conection"));
+        }
+
+        onResponse: {
+            console.log("connectivity:",value);
+            if (value) {
+                showError(i18nd("lliurex-sddm-theme","No connection to server"));
+            }
+            else {
+                showError(i18nd("lliurex-sddm-theme","Failed to establish an internet connection"));
             }
         }
     }
@@ -427,12 +474,15 @@ Item {
         }
 
         onResponse: {
+            console.log("domain status:",value);
+
             if (value) {
                 wifiEduGvaStage = 4;
                 sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
             }
             else {
-                showError(i18nd("lliurex-sddm-theme","No connection to server"));
+                //showError(i18nd("lliurex-sddm-theme","No connection to server"));
+                local_recheck_connectivity.call([]);
             }
         }
     }
