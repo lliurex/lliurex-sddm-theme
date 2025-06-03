@@ -482,7 +482,8 @@ Item {
             }
             else {
                 //showError(i18nd("lliurex-sddm-theme","No connection to server"));
-                local_recheck_connectivity.call([]);
+                //local_recheck_connectivity.call([]);
+                local_get_active_connections.call([]);
             }
         }
     }
@@ -500,6 +501,29 @@ Item {
 
         onResponse: {
             root.wifiEduGvaAutoLoginSettings = value;
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_get_active_connections
+        client: n4dLocal
+        plugin: "WifiEduGva"
+        method: "get_active_connections"
+
+        onError: {
+            console.log("Failed to list active connections");
+            showError(i18nd("lliurex-sddm-theme","Failed to establish an internet connection"));
+        }
+
+        onResponse: {
+            console.log("connections: ", value.count);
+            if (value.count==0) {
+                showError(i18nd("lliurex-sddm-theme","Failed to establish an internet connection"));
+            }
+            else {
+                showError(i18nd("lliurex-sddm-theme","No connection to server"));
+            }
         }
     }
 
