@@ -346,7 +346,7 @@ Item {
         }
 
         onResponse: {
-            wifiEduGvaStage = 3;
+            //wifiEduGvaStage = 3;
             if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
                     root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
                 //local_wait_for_domain.call([]);
@@ -374,10 +374,11 @@ Item {
         onResponse: {
             console.log("connectivity:",value);
             if (value) {
+                wifiEduGvaStage = 3;
                 local_wait_for_domain.call([]);
             }
             else {
-                showError(i18nd("lliurex-sddm-theme","Failed to establish an internet connection"));
+                showError(i18nd("lliurex-sddm-theme","Failed to establish a WiFi connection"));
             }
         }
     }
