@@ -278,8 +278,14 @@ Item {
             networks = value;
             var found = false;
             var wifiEdu = false;
-            for (var n in networks) {
+            for (var n=0;n<networks.length;n++) {
+
                 console.log(networks[n]);
+                if (networks[n].length == 0 ) {
+                    console.log("malformed ssid");
+                    continue;
+                }
+
                 if (networks[n][0] == wifiEduGvaTarget) {
                     found = true;
                 }
