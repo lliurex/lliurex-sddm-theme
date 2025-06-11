@@ -1,3 +1,9 @@
+lliurex-sddm-theme (23.5.0.0) jammy; urgency=medium
+
+  * Matched with newest n4d-wifiedugva, it improves waiting for connection and gives a proper error message when wifi cannot be stablished
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Wed, 11 Jun 2025 23:44:26 +0200
+
 lliurex-sddm-theme (23.4.1.0) jammy; urgency=medium
 
   * Updated translations
