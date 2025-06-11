@@ -278,8 +278,14 @@ Item {
             networks = value;
             var found = false;
             var wifiEdu = false;
-            for (var n in networks) {
+            for (var n=0;n<networks.length;n++) {
+
                 console.log(networks[n]);
+                if (networks[n].length == 0 ) {
+                    console.log("malformed ssid");
+                    continue;
+                }
+
                 if (networks[n][0] == wifiEduGvaTarget) {
                     found = true;
                 }
@@ -346,14 +352,62 @@ Item {
         }
 
         onResponse: {
-            wifiEduGvaStage = 3;
+            //wifiEduGvaStage = 3;
             if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
                     root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
-                local_wait_for_domain.call([]);
+                //local_wait_for_domain.call([]);
+                local_check_connectivity.call([]);
             }
 
             if (root.loginMode == Main.LoginMode.AutoStudent) {
                 sddm.login("alumnat","",cmbSession.currentIndex);
+            }
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_check_connectivity
+        client: n4dLocal
+        plugin: "WifiEduGva"
+        method: "check_connectivity"
+
+        onError: {
+            console.log("failed to check connectivity:",what,"\n",details);
+            showError(i18nd("lliurex-sddm-theme","Failed to check conection"));
+        }
+
+        onResponse: {
+            console.log("connectivity:",value);
+            if (value) {
+                wifiEduGvaStage = 3;
+                local_wait_for_domain.call([]);
+            }
+            else {
+                showError(i18nd("lliurex-sddm-theme","Failed to establish a WiFi connection"));
+            }
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_recheck_connectivity
+        client: n4dLocal
+        plugin: "WifiEduGva"
+        method: "check_connectivity"
+
+        onError: {
+            console.log("failed to check connectivity:",what,"\n",details);
+            showError(i18nd("lliurex-sddm-theme","Failed to check conection"));
+        }
+
+        onResponse: {
+            console.log("connectivity:",value);
+            if (value) {
+                showError(i18nd("lliurex-sddm-theme","No connection to server"));
+            }
+            else {
+                showError(i18nd("lliurex-sddm-theme","Failed to establish an internet connection"));
             }
         }
     }
@@ -427,12 +481,16 @@ Item {
         }
 
         onResponse: {
+            console.log("domain status:",value);
+
             if (value) {
                 wifiEduGvaStage = 4;
                 sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
             }
             else {
-                showError(i18nd("lliurex-sddm-theme","No connection to server"));
+                //showError(i18nd("lliurex-sddm-theme","No connection to server"));
+                //local_recheck_connectivity.call([]);
+                local_get_active_connections.call([]);
             }
         }
     }
@@ -450,6 +508,29 @@ Item {
 
         onResponse: {
             root.wifiEduGvaAutoLoginSettings = value;
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_get_active_connections
+        client: n4dLocal
+        plugin: "WifiEduGva"
+        method: "get_active_connections"
+
+        onError: {
+            console.log("Failed to list active connections");
+            showError(i18nd("lliurex-sddm-theme","Failed to establish an internet connection"));
+        }
+
+        onResponse: {
+            console.log("connections: ", value.count);
+            if (value.count==0) {
+                showError(i18nd("lliurex-sddm-theme","Failed to establish an internet connection"));
+            }
+            else {
+                showError(i18nd("lliurex-sddm-theme","No connection to server"));
+            }
         }
     }
 
