@@ -110,6 +110,44 @@ Item {
         root.topWindow.enabled = true;
     }
 
+    function is_local(username)
+    {
+        var localUsers = userQuery.getLocalUsers();
+        var isLocal = false;
+
+        console.log("local users:");
+        for (var n=0;n<localUsers.length;n++) {
+            console.log(localUsers[n]);
+            if (username == localUsers[n]) {
+                isLocal = true;
+                break;
+            }
+        }
+
+        return isLocal;
+    }
+
+    function is_teacher(username)
+    {
+        var teacher = false;
+
+        for (var n=0;n<username.length;n++) {
+            if (username[n] == ".") {
+                teacher = true;
+                break;
+            }
+        }
+
+        return teacher;
+    }
+
+    function is_dni(username)
+    {
+        let pattern = "/[a-zA-Z][0-9]{8}[a-zA-Z]"
+        //TODO
+        return false;
+    }
+
     function login()
     {
         var userName = txtUser.text;
