@@ -46,6 +46,14 @@ Item {
         WifiEduGvaIES
     }
 
+    enum Meta {
+        Unknown = 0,
+        CeipStudent,
+        CeipTeacher,
+        IESStudent,
+        IESTeacher
+    }
+
     enum WifiEduGva {
         Disabled = 0,
         Teacher = 1, // Ceip
@@ -172,82 +180,28 @@ Item {
             root.loginMode == Main.LoginMode.WifiEduGvaIES
         );
 
-        if (isWifiGVA) {
-//             //TODO
+        if (isWifiGVA && isLocal(userName) == false) {
+                var looksTeacher = isTeacher(userName) || isDNI(userName);
+
+                console.log("performing a WifiEduGva login...");
+
+                if (root.loginMode == Main.LoginMode.WifiEduGvaStudent && looksTeacher ) {
+                    root.loginMode = Main.LoginMode.WifiEduGvaTeacher;
+                    console.log("switch to WIFI_PROF profile");
+                }
+
+                if (root.loginMode == Main.LoginMode.WifiEduGvaTeacher && !looksTeacher ) {
+                    root.loginMode = Main.LoginMode.WifiEduGvaStudent;
+                    console.log("switch to WIFI_ALU profile");
+                }
+
+                local_check_wired_connection.call([]);
+                return;
         }
 
         //go ahead with pam
         sddm.login(userName, userPass, cmbSession.currentIndex);
-        // -----
 
-        if (root.loginMode == Main.LoginMode.Local) {
-            switch (root.guessMode) {
-
-                /* Ceip Student */
-                case 1:
-                    root.loginMode = Main.LoginMode.WifiEduGvaStudent;
-                break;
-
-                /* IES Student */
-                case 2:
-                    root.loginMode = Main.LoginMode.WifiEduGvaIES;
-                break;
-
-                /* Ceip Teacher */
-                case 5:
-                    root.loginMode = Main.LoginMode.WifiEduGvaTeacher;
-                break;
-
-                /* IES Teacher */
-                case 6:
-                    root.loginMode = Main.LoginMode.WifiEduGvaIES;
-                break;
-
-            }
-        }
-
-        if (root.loginMode == Main.LoginMode.Guest) {
-            console.log("performing a guest login...");
-            sddm.login("guest-user","",cmbSession.currentIndex)
-        }
-
-        if (root.loginMode == Main.LoginMode.AutoStudent) {
-            console.log("performing an autologin...");
-            root.wifiEduGvaStage = 0;
-            root.topWindow = wifiEduGvaFrame;
-            local_check_wired_connection.call([]);
-        }
-
-        var localUsers = userQuery.getLocalUsers();
-        var isLocal = false;
-        console.log("local users:");
-        for (var n=0;n<localUsers.length;n++) {
-            console.log(localUsers[n]);
-            if (userName == localUsers[n]) {
-                isLocal = true;
-                break;
-            }
-        }
-
-        if (isLocal) {
-            console.log("performing a local login...");
-            sddm.login(userName, userPass, cmbSession.currentIndex);
-        }
-
-        if (root.loginMode == Main.LoginMode.WifiEduGvaTeacher ||
-            root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
-            root.loginMode == Main.LoginMode.WifiEduGvaIES) {
-
-            console.log("performing a WifiEduGva login...");
-
-            root.wifiEduGvaStage = 0;
-            root.topWindow = wifiEduGvaFrame;
-            //local_is_cdc_enabled.call([]);
-            local_check_wired_connection.call([]);
-        }
-
-        // trust on pam anyway
-        sddm.login(userName, userPass, cmbSession.currentIndex);
     }
 
     Edupals.UserQuery
