@@ -46,6 +46,14 @@ Item {
         WifiEduGvaIES
     }
 
+    enum Meta {
+        Unknown = 0,
+        CeipStudent,
+        CeipTeacher,
+        IESStudent,
+        IESTeacher
+    }
+
     enum WifiEduGva {
         Disabled = 0,
         Teacher = 1, // Ceip
@@ -110,40 +118,53 @@ Item {
         root.topWindow.enabled = true;
     }
 
+    function isLocal(username)
+    {
+        var localUsers = userQuery.getLocalUsers();
+        var local = false;
+
+        console.log("local users:");
+        for (var n=0;n<localUsers.length;n++) {
+            console.log(localUsers[n]);
+            if (username == localUsers[n]) {
+                local = true;
+                break;
+            }
+        }
+
+        return local;
+    }
+
+    function isTeacher(username)
+    {
+        var teacher = false;
+
+        for (var n=0;n<username.length;n++) {
+            if (username[n] == ".") {
+                teacher = true;
+                break;
+            }
+        }
+
+        return teacher;
+    }
+
+    function isDNI(username)
+    {
+        let pattern = "/[a-zA-Z][0-9]{8}[a-zA-Z]"
+
+        return pattern.test(username);
+    }
+
     function login()
     {
         var userName = txtUser.text;
         var userPass = txtPass.text;
 
-        if (root.loginMode == Main.LoginMode.Local) {
-            switch (root.guessMode) {
-
-                /* Ceip Student */
-                case 1:
-                    root.loginMode = Main.LoginMode.WifiEduGvaStudent;
-                break;
-
-                /* IES Student */
-                case 2:
-                    root.loginMode = Main.LoginMode.WifiEduGvaIES;
-                break;
-
-                /* Ceip Teacher */
-                case 5:
-                    root.loginMode = Main.LoginMode.WifiEduGvaTeacher;
-                break;
-
-                /* IES Teacher */
-                case 6:
-                    root.loginMode = Main.LoginMode.WifiEduGvaIES;
-                break;
-
-            }
-        }
-
         if (root.loginMode == Main.LoginMode.Guest) {
             console.log("performing a guest login...");
             sddm.login("guest-user","",cmbSession.currentIndex)
+            return;
         }
 
         if (root.loginMode == Main.LoginMode.AutoStudent) {
@@ -151,38 +172,36 @@ Item {
             root.wifiEduGvaStage = 0;
             root.topWindow = wifiEduGvaFrame;
             local_check_wired_connection.call([]);
+            return;
         }
 
-        var localUsers = userQuery.getLocalUsers();
-        var isLocal = false;
-        console.log("local users:");
-        for (var n=0;n<localUsers.length;n++) {
-            console.log(localUsers[n]);
-            if (userName == localUsers[n]) {
-                isLocal = true;
-                break;
-            }
+        var isWifiGVA = (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
+            root.loginMode == Main.LoginMode.WifiEduGvaTeacher ||
+            root.loginMode == Main.LoginMode.WifiEduGvaIES
+        );
+
+        if (isWifiGVA && isLocal(userName) == false) {
+                var looksTeacher = isTeacher(userName) || isDNI(userName);
+
+                console.log("performing a WifiEduGva login...");
+
+                if (root.loginMode == Main.LoginMode.WifiEduGvaStudent && looksTeacher ) {
+                    root.loginMode = Main.LoginMode.WifiEduGvaTeacher;
+                    console.log("switch to WIFI_PROF profile");
+                }
+
+                if (root.loginMode == Main.LoginMode.WifiEduGvaTeacher && !looksTeacher ) {
+                    root.loginMode = Main.LoginMode.WifiEduGvaStudent;
+                    console.log("switch to WIFI_ALU profile");
+                }
+
+                local_check_wired_connection.call([]);
+                return;
         }
 
-        if (isLocal) {
-            console.log("performing a local login...");
-            sddm.login(userName, userPass, cmbSession.currentIndex);
-        }
-
-        if (root.loginMode == Main.LoginMode.WifiEduGvaTeacher ||
-            root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
-            root.loginMode == Main.LoginMode.WifiEduGvaIES) {
-
-            console.log("performing a WifiEduGva login...");
-
-            root.wifiEduGvaStage = 0;
-            root.topWindow = wifiEduGvaFrame;
-            //local_is_cdc_enabled.call([]);
-            local_check_wired_connection.call([]);
-        }
-
-        // trust on pam anyway
+        //go ahead with pam
         sddm.login(userName, userPass, cmbSession.currentIndex);
+
     }
 
     Edupals.UserQuery
@@ -415,16 +434,41 @@ Item {
         }
 
         onResponse: {
-            wifiEduGvaStage = 3;
+            wifiEduGvaStage = 2;
             if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
                 root.loginMode == Main.LoginMode.WifiEduGvaTeacher ||
                     root.loginMode == Main.LoginMode.WifiEduGvaIES) {
                 //local_wait_for_domain.call([]);
-                sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
+                local_check_connectivity.call([]));
+                //sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
             }
 
             if (root.loginMode == Main.LoginMode.AutoStudent) {
                 sddm.login("alumnat","",cmbSession.currentIndex);
+            }
+        }
+    }
+
+    N4D.Proxy
+    {
+        id: local_check_connectivity
+        client: n4dLocal
+        plugin: "WifiEduGva"
+        method: "check_connectivity"
+
+        onError: {
+            console.log("failed to check connectivity:",what,"\n",details);
+            showError(i18nd("lliurex-sddm-theme","Failed to check conection"));
+        }
+
+        onResponse: {
+            console.log("connectivity:",value);
+            if (value) {
+                wifiEduGvaStage = 3;
+                local_wait_for_domain.call([]);
+            }
+            else {
+                showError(i18nd("lliurex-sddm-theme","Failed to establish a WiFi connection"));
             }
         }
     }
