@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.5.0.0) noble; urgency=medium
+
+  * Reworked login process. It may require some testing
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Mon, 07 Jul 2025 08:44:00 +0200
+
 lliurex-sddm-theme (25.4.0.0) noble; urgency=medium
 
   * Allow user to select a custom wifi mode login
