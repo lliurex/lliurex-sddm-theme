@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.6.0.0) noble; urgency=medium
+
+  * Re-introduced wifi_edu autoselection where available
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Mon, 14 Jul 2025 09:41:31 +0200
+
 lliurex-sddm-theme (25.5.0.0) noble; urgency=medium
 
   * Reworked login process. It may require some testing
