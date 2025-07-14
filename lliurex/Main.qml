@@ -379,9 +379,18 @@ Item {
                 if (networks[n][0] == wifiEduGvaTarget) {
                     found = true;
                 }
+                if (networks[n][0] == "WIFI_EDU") {
+                    found = true;
+                    wifiEdu = true;
+                }
             }
 
             if (found) {
+                if (wifiEdu && root.loginMode != Main.LoginMode.WifiEduGvaIES) {
+                    root.wifiEduGvaTarget = "WIFI_EDU";
+                    console.log("Using Wifi EDU SSID instead");
+                }
+
                 wifiEduGvaStage = 1;
                 local_disconnect_all.call([]);
             }
