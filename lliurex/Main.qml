@@ -195,6 +195,8 @@ Item {
                     console.log("switch to WIFI_ALU profile");
                 }
 
+                root.wifiEduGvaStage = 0;
+                root.topWindow = wifiEduGvaFrame;
                 local_check_wired_connection.call([]);
                 return;
         }
@@ -448,7 +450,7 @@ Item {
                 root.loginMode == Main.LoginMode.WifiEduGvaTeacher ||
                     root.loginMode == Main.LoginMode.WifiEduGvaIES) {
                 //local_wait_for_domain.call([]);
-                local_check_connectivity.call([]));
+                local_check_connectivity.call([]);
                 //sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
             }
 
