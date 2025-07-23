@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.6.2.0) noble; urgency=medium
+
+  * No longer wait for AD
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Wed, 23 Jul 2025 08:08:27 +0200
+
 lliurex-sddm-theme (25.6.1.0) noble; urgency=medium
 
   * Fixed some minor bugs (but one of them preventing the them from load)
