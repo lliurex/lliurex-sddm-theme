@@ -476,7 +476,8 @@ Item {
             console.log("connectivity:",value);
             if (value) {
                 wifiEduGvaStage = 3;
-                local_wait_for_domain.call([]);
+                //local_wait_for_domain.call([]);
+                sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
             }
             else {
                 showError(i18nd("lliurex-sddm-theme","Failed to establish a WiFi connection"));
