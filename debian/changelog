@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.6.3.0) noble; urgency=medium
+
+  * Simple fix for login mode window, it may require some clever approach on the future
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Tue, 29 Jul 2025 08:55:44 +0200
+
 lliurex-sddm-theme (25.6.2.0) noble; urgency=medium
 
   * No longer wait for AD
