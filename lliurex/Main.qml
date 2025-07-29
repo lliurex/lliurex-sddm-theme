@@ -673,7 +673,7 @@ Item {
         id: loginSelectorFrame
         visible: root.topWindow == this
         title: i18nd("lliurex-sddm-theme","Log in mode")
-        width: 620
+        width: 700
         height:128
 
         anchors.centerIn: parent
@@ -737,6 +737,7 @@ Item {
             PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","GVA Wifi Edu")
                 //visible: root.wifiEduGvaEnabled
+                visible:false
                 implicitWidth: Kirigami.Units.gridUnit*8
                 icon.name:"folder-cloud"
                 display: QQC2.AbstractButton.TextUnderIcon
