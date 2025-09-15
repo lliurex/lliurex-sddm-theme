@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.7.0.0) noble; urgency=medium
+
+  * GVA Wifis are now merged into WIFI_EDU
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Mon, 15 Sep 2025 10:15:00 +0200
+
 lliurex-sddm-theme (25.6.3.0) noble; urgency=medium
 
   * Simple fix for login mode window, it may require some clever approach on the future
