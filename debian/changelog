@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.7.1.0) noble; urgency=medium
+
+  * Fixed typo
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Tue, 16 Sep 2025 16:13:31 +0200
+
 lliurex-sddm-theme (25.7.0.0) noble; urgency=medium
 
   * GVA Wifis are now merged into WIFI_EDU
