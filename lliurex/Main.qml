@@ -665,7 +665,6 @@ Item {
             PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","GVA Wifi")
                 visible: root.wifiEduGvaEnabled
-                visible:false
                 implicitWidth: Kirigami.Units.gridUnit*8
                 icon.name:"folder-cloud"
                 display: QQC2.AbstractButton.TextUnderIcon
