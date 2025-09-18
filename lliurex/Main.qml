@@ -72,7 +72,7 @@ Item {
     property int wifiEduGvaLogin: 0
     property int wifiEduGvaLoginManual: 0
     property string wifiEduGvaAutoLoginSettings: ""
-    property string wifiEduGvaTarget: "WIFI_ALU"
+    property string wifiEduGvaTarget: "WIFI_EDU"
     property var networks
     property int wifiEduGvaStage: -1
     
@@ -109,6 +109,8 @@ Item {
 
     function login()
     {
+        console.log("Login mode:"+root.loginMode);
+
         if (root.loginMode == Main.LoginMode.Local) {
             console.log("performing a local login...");
             sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
@@ -307,8 +309,7 @@ Item {
         onResponse: {
             wifiEduGvaStage = 2;
 
-            if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
-                    root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
+            if (root.loginMode == Main.LoginMode.WifiEduGva) {
                 local_create_connection.call(["WifiEduGva",wifiEduGvaTarget,txtUser.text,txtPass.text,""]);
             }
 
@@ -334,8 +335,7 @@ Item {
 
         onResponse: {
             //wifiEduGvaStage = 3;
-            if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
-                    root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
+            if (root.loginMode == Main.LoginMode.WifiEduGva) {
                 //local_wait_for_domain.call([]);
                 local_check_connectivity.call([]);
             }
@@ -406,6 +406,7 @@ Item {
 
         onResponse: {
             wifiEduGvaLogin = value;
+            console.log("Current WifiEduGva settings:"+value);
 
             if (value > 0 ) {
                 wifiEduGvaEnabled = true;
@@ -413,10 +414,10 @@ Item {
 
             switch (value) {
                 case Main.WifiEduGva.Teacher:
-                    loginMode = Main.LoginMode.WifiEduGvaTeacher;
+                    loginMode = Main.LoginMode.WifiEduGva;
                 break;
                 case Main.WifiEduGva.Student:
-                    loginMode = Main.LoginMode.WifiEduGvaStudent;
+                    loginMode = Main.LoginMode.WifiEduGva;
                 break;
                 case Main.WifiEduGva.Auto:
                     loginMode = Main.LoginMode.AutoStudent;
@@ -647,14 +648,14 @@ Item {
 
                     switch (root.wifiEduGvaLogin) {
                         case Main.WifiEduGva.Teacher:
-                            root.loginMode = Main.LoginMode.WifiEduGvaTeacher;
+                            root.loginMode = Main.LoginMode.WifiEduGva;
                         break;
                         case Main.WifiEduGva.Student:
                         case Main.WifiEduGva.Auto:
                             root.loginMode = Main.LoginMode.WifiEduGvaStudent;
                         break;
                         default:
-                            root.loginMode = Main.LoginMode.WifiEduGvaStudent;
+                            root.loginMode = Main.LoginMode.WifiEduGva;
                         break;
                     }
 
@@ -836,7 +837,8 @@ Item {
             }
 
             RowLayout {
-                visible: root.loginMode == Main.LoginMode.WifiEduGvaStudent || root.loginMode == Main.LoginMode.WifiEduGvaTeacher || root.loginMode == Main.LoginMode.AutoStudent
+                //visible: root.loginMode == Main.LoginMode.WifiEduGva || root.loginMode == Main.LoginMode.WifiEduGvaTeacher || root.loginMode == Main.LoginMode.AutoStudent
+                visible: false
                 Layout.alignment: Qt.AlignHCenter
                 spacing: 6
 
@@ -942,7 +944,7 @@ Item {
 
         Keys.onEscapePressed: {
             if (visible) {
-                root.loginMode = Main.LoginMode.WifiEduGvaStudent;
+                root.loginMode = Main.LoginMode.WifiEduGva;
                 timerAutoLogin.stop();
                 root.topWindow = loginFrame;
             }
@@ -983,7 +985,7 @@ Item {
                     //implicitHeight: 64
 
                     onClicked: {
-                        root.loginMode = Main.LoginMode.WifiEduGvaStudent;
+                        root.loginMode = Main.LoginMode.WifiEduGva;
                         timerAutoLogin.stop();
                         root.topWindow = loginFrame;
                     }
