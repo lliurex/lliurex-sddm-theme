@@ -41,6 +41,7 @@ Item {
         Guest,
         WifiEduGvaTeacher,
         WifiEduGvaStudent,
+        WifiEduGva,
         AutoStudent
     }
 
@@ -113,8 +114,7 @@ Item {
             sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
         }
 
-        if (root.loginMode == Main.LoginMode.WifiEduGvaTeacher ||
-                    root.loginMode == Main.LoginMode.WifiEduGvaStudent) {
+        if (root.loginMode == Main.LoginMode.WifiEduGva) {
             console.log("performing a WifiEduGva login...");
             root.wifiEduGvaStage = 0;
             root.topWindow = wifiEduGvaFrame;
@@ -234,8 +234,7 @@ Item {
 
         onResponse: {
             if (value) {
-                if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
-                        root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
+                if (root.loginMode == Main.LoginMode.WifiEduGva) {
                     sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
                 }
 
@@ -264,20 +263,11 @@ Item {
 
         onResponse: {
 
-            if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
-                    root.loginMode == Main.LoginMode.AutoStudent) {
-                root.wifiEduGvaTarget = "WIFI_ALU";
-            }
-
-            if (root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
-                root.wifiEduGvaTarget = "WIFI_PROF";
-            }
-
-            console.log("Using target:",wifiEduGvaTarget);
+            console.log("Using target:",root.wifiEduGvaTarget);
             console.log("networks:",value);
             networks = value;
             var found = false;
-            var wifiEdu = false;
+
             for (var n=0;n<networks.length;n++) {
 
                 console.log(networks[n]);
@@ -286,21 +276,12 @@ Item {
                     continue;
                 }
 
-                if (networks[n][0] == wifiEduGvaTarget) {
-                    found = true;
-                }
-
-                if (networks[n][0] == "WIFI_EDU") {
-                    wifiEdu = true;
+                if (networks[n][0] == root.wifiEduGvaTarget) {
                     found = true;
                 }
             }
 
             if (found) {
-                if (wifiEdu) {
-                    root.wifiEduGvaTarget = "WIFI_EDU";
-                }
-
                 wifiEduGvaStage = 1;
                 local_disconnect_all.call([]);
             }
