@@ -21,6 +21,7 @@ import "ui" as Lliurex
 import net.lliurex.ui 1.0 as LLX
 
 import Edupals.N4D 1.0 as N4D
+import Edupals.Base as Edupals
 
 import SddmComponents 2.0 as Sddm
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -41,6 +42,7 @@ Item {
         Guest,
         WifiEduGvaTeacher,
         WifiEduGvaStudent,
+        WifiEdu,
         AutoStudent
     }
 
@@ -71,7 +73,7 @@ Item {
     property int wifiEduGvaLogin: 0
     property int wifiEduGvaLoginManual: 0
     property string wifiEduGvaAutoLoginSettings: ""
-    property string wifiEduGvaTarget: "WIFI_ALU"
+    property string wifiEduGvaTarget: "WIFI_EDU"
     property var networks
     property int wifiEduGvaStage: -1
     
@@ -106,15 +108,33 @@ Item {
         root.topWindow.enabled = true;
     }
 
+    function isLocal(username)
+    {
+        var localUsers = userQuery.getLocalUsers();
+        var local = false;
+
+        console.log("local users:");
+        for (var n=0;n<localUsers.length;n++) {
+            console.log(localUsers[n]);
+            if (username == localUsers[n]) {
+                local = true;
+                break;
+            }
+        }
+
+        return local;
+    }
+
     function login()
     {
-        if (root.loginMode == Main.LoginMode.Local) {
+        console.log("Login mode:"+root.loginMode);
+
+        if (root.loginMode == Main.LoginMode.Local || isLocal(txtUser.text)) {
             console.log("performing a local login...");
             sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
         }
 
-        if (root.loginMode == Main.LoginMode.WifiEduGvaTeacher ||
-                    root.loginMode == Main.LoginMode.WifiEduGvaStudent) {
+        if (root.loginMode == Main.LoginMode.WifiEdu) {
             console.log("performing a WifiEduGva login...");
             root.wifiEduGvaStage = 0;
             root.topWindow = wifiEduGvaFrame;
@@ -133,6 +153,11 @@ Item {
             root.topWindow = wifiEduGvaFrame;
             local_check_wired_connection.call([]);
         }
+    }
+
+    Edupals.UserQuery
+    {
+        id: userQuery
     }
 
     N4D.Client
@@ -234,8 +259,7 @@ Item {
 
         onResponse: {
             if (value) {
-                if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
-                        root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
+                if (root.loginMode == Main.LoginMode.WifiEdu) {
                     sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
                 }
 
@@ -264,20 +288,11 @@ Item {
 
         onResponse: {
 
-            if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
-                    root.loginMode == Main.LoginMode.AutoStudent) {
-                root.wifiEduGvaTarget = "WIFI_ALU";
-            }
-
-            if (root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
-                root.wifiEduGvaTarget = "WIFI_PROF";
-            }
-
-            console.log("Using target:",wifiEduGvaTarget);
+            console.log("Using target:",root.wifiEduGvaTarget);
             console.log("networks:",value);
             networks = value;
             var found = false;
-            var wifiEdu = false;
+
             for (var n=0;n<networks.length;n++) {
 
                 console.log(networks[n]);
@@ -286,21 +301,12 @@ Item {
                     continue;
                 }
 
-                if (networks[n][0] == wifiEduGvaTarget) {
-                    found = true;
-                }
-
-                if (networks[n][0] == "WIFI_EDU") {
-                    wifiEdu = true;
+                if (networks[n][0] == root.wifiEduGvaTarget) {
                     found = true;
                 }
             }
 
             if (found) {
-                if (wifiEdu) {
-                    root.wifiEduGvaTarget = "WIFI_EDU";
-                }
-
                 wifiEduGvaStage = 1;
                 local_disconnect_all.call([]);
             }
@@ -326,8 +332,7 @@ Item {
         onResponse: {
             wifiEduGvaStage = 2;
 
-            if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
-                    root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
+            if (root.loginMode == Main.LoginMode.WifiEdu) {
                 local_create_connection.call(["WifiEduGva",wifiEduGvaTarget,txtUser.text,txtPass.text,""]);
             }
 
@@ -353,8 +358,7 @@ Item {
 
         onResponse: {
             //wifiEduGvaStage = 3;
-            if (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
-                    root.loginMode == Main.LoginMode.WifiEduGvaTeacher) {
+            if (root.loginMode == Main.LoginMode.WifiEdu) {
                 //local_wait_for_domain.call([]);
                 local_check_connectivity.call([]);
             }
@@ -424,22 +428,25 @@ Item {
         }
 
         onResponse: {
-            wifiEduGvaLogin = value;
+            root.wifiEduGvaLogin = parseInt(value);
+            console.log("Current WifiEduGva settings:"+root.wifiEduGvaLogin);
 
-            if (value > 0 ) {
+            if (root.wifiEduGvaLogin > 0 ) {
                 wifiEduGvaEnabled = true;
             }
 
-            switch (value) {
+            switch (root.wifiEduGvaLogin) {
                 case Main.WifiEduGva.Teacher:
-                    loginMode = Main.LoginMode.WifiEduGvaTeacher;
+                    console.log("Teacher Login Mode");
+                    root.loginMode = Main.LoginMode.WifiEdu;
                 break;
                 case Main.WifiEduGva.Student:
-                    loginMode = Main.LoginMode.WifiEduGvaStudent;
+                    console.log("Student Login mode");
+                    root.loginMode = Main.LoginMode.WifiEdu;
                 break;
                 case Main.WifiEduGva.Auto:
-                    loginMode = Main.LoginMode.AutoStudent;
-                    wifiEduGvaAutoEnabled = true;
+                    root.loginMode = Main.LoginMode.AutoStudent;
+                    root.wifiEduGvaAutoEnabled = true;
                 break;
 
             }
@@ -666,14 +673,14 @@ Item {
 
                     switch (root.wifiEduGvaLogin) {
                         case Main.WifiEduGva.Teacher:
-                            root.loginMode = Main.LoginMode.WifiEduGvaTeacher;
+                            root.loginMode = Main.LoginMode.WifiEdu;
                         break;
                         case Main.WifiEduGva.Student:
                         case Main.WifiEduGva.Auto:
                             root.loginMode = Main.LoginMode.WifiEduGvaStudent;
                         break;
                         default:
-                            root.loginMode = Main.LoginMode.WifiEduGvaStudent;
+                            root.loginMode = Main.LoginMode.WifiEdu;
                         break;
                     }
 
@@ -855,7 +862,8 @@ Item {
             }
 
             RowLayout {
-                visible: root.loginMode == Main.LoginMode.WifiEduGvaStudent || root.loginMode == Main.LoginMode.WifiEduGvaTeacher || root.loginMode == Main.LoginMode.AutoStudent
+                //visible: root.loginMode == Main.LoginMode.WifiEduGva || root.loginMode == Main.LoginMode.WifiEduGvaTeacher || root.loginMode == Main.LoginMode.AutoStudent
+                visible: false
                 Layout.alignment: Qt.AlignHCenter
                 spacing: 6
 
@@ -961,7 +969,7 @@ Item {
 
         Keys.onEscapePressed: {
             if (visible) {
-                root.loginMode = Main.LoginMode.WifiEduGvaStudent;
+                root.loginMode = Main.LoginMode.WifiEdu;
                 timerAutoLogin.stop();
                 root.topWindow = loginFrame;
             }
@@ -1002,7 +1010,7 @@ Item {
                     //implicitHeight: 64
 
                     onClicked: {
-                        root.loginMode = Main.LoginMode.WifiEduGvaStudent;
+                        root.loginMode = Main.LoginMode.WifiEdu;
                         timerAutoLogin.stop();
                         root.topWindow = loginFrame;
                     }
