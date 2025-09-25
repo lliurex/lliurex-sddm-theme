@@ -21,7 +21,7 @@ import "ui" as Lliurex
 import net.lliurex.ui 1.0 as LLX
 
 import Edupals.N4D 1.0 as N4D
-import Edupals.Base as Edupals
+import Edupals.Base 1.0 as Edupals
 
 import SddmComponents 2.0 as Sddm
 import org.kde.plasma.core 2.0 as PlasmaCore
