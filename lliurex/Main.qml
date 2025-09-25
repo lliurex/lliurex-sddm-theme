@@ -21,6 +21,7 @@ import "ui" as Lliurex
 import net.lliurex.ui 1.0 as LLX
 
 import Edupals.N4D 1.0 as N4D
+import Edupals.Base as Edupals
 
 import SddmComponents 2.0 as Sddm
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -107,11 +108,28 @@ Item {
         root.topWindow.enabled = true;
     }
 
+    function isLocal(username)
+    {
+        var localUsers = userQuery.getLocalUsers();
+        var local = false;
+
+        console.log("local users:");
+        for (var n=0;n<localUsers.length;n++) {
+            console.log(localUsers[n]);
+            if (username == localUsers[n]) {
+                local = true;
+                break;
+            }
+        }
+
+        return local;
+    }
+
     function login()
     {
         console.log("Login mode:"+root.loginMode);
 
-        if (root.loginMode == Main.LoginMode.Local) {
+        if (root.loginMode == Main.LoginMode.Local || isLocal(txtUser.text)) {
             console.log("performing a local login...");
             sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
         }
@@ -135,6 +153,11 @@ Item {
             root.topWindow = wifiEduGvaFrame;
             local_check_wired_connection.call([]);
         }
+    }
+
+    Edupals.UserQuery
+    {
+        id: userQuery
     }
 
     N4D.Client
