@@ -1,3 +1,10 @@
+lliurex-sddm-theme (23.6.0.0) jammy; urgency=medium
+
+  * Refactored to use single Wifi GVA SSID
+  * Using local login if detected instead of raising a wifi connection
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Thu, 25 Sep 2025 11:16:39 +0200
+
 lliurex-sddm-theme (23.5.0.0) jammy; urgency=medium
 
   * Matched with newest n4d-wifiedugva, it improves waiting for connection and gives a proper error message when wifi cannot be stablished
