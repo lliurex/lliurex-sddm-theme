@@ -40,7 +40,7 @@ Item {
     enum LoginMode {
         Local = 0,
         Guest,
-        WifiEduGva,
+        WifiEdu,
         AutoStudent
     }
 
@@ -172,12 +172,7 @@ Item {
             return;
         }
 
-        var isWifiGVA = (root.loginMode == Main.LoginMode.WifiEduGvaStudent ||
-            root.loginMode == Main.LoginMode.WifiEduGvaTeacher ||
-            root.loginMode == Main.LoginMode.WifiEduGvaIES
-        );
-
-        if (loginMode == Main.LoginMode.WifiEduGva && isLocal(userName) == false) {
+        if (loginMode == Main.LoginMode.WifiEdu && isLocal(userName) == false) {
 
                 console.log("performing a WifiEduGva login...");
 
@@ -188,6 +183,7 @@ Item {
         }
 
         //go ahead with pam
+        console.log("performing a default login...");
         sddm.login(userName, userPass, cmbSession.currentIndex);
 
     }
@@ -292,7 +288,7 @@ Item {
             console.log("Failed to guess preferred WiFi mode");
         }
 
-        onResponse: {
+        onResponse: function(value) {
             root.guessMode = value;
             console.log("Guessed:",value);
         }
@@ -313,7 +309,7 @@ Item {
 
         onResponse: {
             if (value) {
-                if (root.loginMode == Main.LoginMode.WifiEduGva) {
+                if (root.loginMode == Main.LoginMode.WifiEdu) {
                     sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
                 }
 
@@ -381,7 +377,7 @@ Item {
         onResponse: {
             wifiEduGvaStage = 2;
 
-            if (root.loginMode == Main.LoginMode.WifiEduGva ) {
+            if (root.loginMode == Main.LoginMode.WifiEdu ) {
                 local_create_connection.call(["WifiEduGva",root.wifiEduGvaTarget,txtUser.text,txtPass.text,""]);
             }
 
@@ -407,7 +403,7 @@ Item {
 
         onResponse: {
             wifiEduGvaStage = 2;
-            if (root.loginMode == Main.LoginMode.WifiEduGva) {
+            if (root.loginMode == Main.LoginMode.WifiEdu) {
                 //local_wait_for_domain.call([]);
                 local_check_connectivity.call([]);
                 //sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
@@ -465,7 +461,7 @@ Item {
             switch (value) {
                 case Main.WifiEduGva.Enabled:
                 case Main.WifiEduGva.Legacy:
-                    loginMode = Main.LoginMode.WifiEduGva;
+                    loginMode = Main.LoginMode.WifiEdu;
                 break;
 
                 case Main.WifiEduGva.AutoStudent:
@@ -670,7 +666,7 @@ Item {
                 display: QQC2.AbstractButton.TextUnderIcon
 
                 onClicked: {
-                    root.loginMode = Main.LoginMode.WifiEduGva;
+                    root.loginMode = Main.LoginMode.WifiEdu;
                     root.topWindow = loginFrame;
                 }
             }
@@ -915,7 +911,7 @@ Item {
 
         Keys.onEscapePressed: {
             if (visible) {
-                root.loginMode = Main.LoginMode.WifiEduGva; // why?
+                root.loginMode = Main.LoginMode.WifiEdu; // why?
                 timerAutoLogin.stop();
                 root.topWindow = loginFrame;
             }
@@ -956,7 +952,7 @@ Item {
                     //implicitHeight: 64
 
                     onClicked: {
-                        root.loginMode = Main.LoginMode.WifiEduGva;
+                        root.loginMode = Main.LoginMode.WifiEdu;
                         timerAutoLogin.stop();
                         root.topWindow = loginFrame;
                     }
