@@ -74,6 +74,7 @@ Item {
     property int wifiEduGvaLoginManual: 0
     property string wifiEduGvaAutoLoginSettings: ""
     property string wifiEduGvaTarget: "WIFI_EDU"
+    property var wifiEduWhitelist: ([""])
     property var networks
     property int wifiEduGvaStage: -1
     
@@ -308,7 +309,7 @@ Item {
 
             if (found) {
                 wifiEduGvaStage = 1;
-                local_disconnect_all.call([]);
+                local_disconnect_all.call([root.wifiEduWhitelist]);
             }
             else {
                 console.log("WifiEduGVA target not found!");
@@ -477,6 +478,23 @@ Item {
 
     N4D.Proxy
     {
+        id: local_get_whitelist
+        client: n4dLocal
+        plugin: "WifiEduGva"
+        method: "get_whitelist"
+
+        onError: {
+            console.log("Failed to get WifiEduGva SSID whitelist ");
+        }
+
+        onResponse: {
+
+            root.wifiEduWhitelist = value;
+        }
+    }
+
+    N4D.Proxy
+    {
         id: local_wait_for_domain
         client: n4dLocal
         plugin: "WifiEduGva"
@@ -556,6 +574,7 @@ Item {
 
         local_get_settings.call([]);
         local_get_autologin.call([]);
+        local_get_whitelist.call([]);
         local_lliurex_version.call([]);
 
     }
