@@ -1,3 +1,9 @@
+lliurex-sddm-theme (23.7.0.0) jammy; urgency=medium
+
+  * Using a ssid whitelist for now, in a n4d variable
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Fri, 12 Dec 2025 09:28:06 +0100
+
 lliurex-sddm-theme (23.6.1.1) jammy; urgency=medium
 
   * Using extrict version for qml edupals
