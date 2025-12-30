@@ -1,3 +1,9 @@
+lliurex-sddm-theme (23.7.1.0) jammy; urgency=medium
+
+  * Re-done the white list system, using a check before disconnection
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Tue, 30 Dec 2025 10:54:20 +0100
+
 lliurex-sddm-theme (23.7.0.0) jammy; urgency=medium
 
   * Using a ssid whitelist for now, in a n4d variable
