@@ -139,7 +139,7 @@ Item {
             console.log("performing a WifiEduGva login...");
             root.wifiEduGvaStage = 0;
             root.topWindow = wifiEduGvaFrame;
-            //local_check_wired_connection.call([]);
+            //local_check_initial_connection.call([]);
             local_is_cdc_enabled.call([]);
         }
 
@@ -152,7 +152,7 @@ Item {
             console.log("performing an autologin...");
             root.wifiEduGvaStage = 0;
             root.topWindow = wifiEduGvaFrame;
-            local_check_wired_connection.call([]);
+            local_check_initial_connection.call([]);
         }
     }
 
@@ -236,7 +236,7 @@ Item {
 
         onResponse: {
             if (value) {
-                local_check_wired_connection.call([]);
+                local_check_initial_connection.call([]);
             }
             else {
                 console.log("CDC is not enabled");
@@ -247,19 +247,51 @@ Item {
 
     N4D.Proxy
     {
-        id: local_check_wired_connection
+        id: local_check_initial_connection
         client: n4dLocal
         plugin: "WifiEduGva"
-        method: "check_wired_connection"
+        method: "get_active_connections"
 
         onError: {
-            console.log("Warning! Failed to check wired connections");
-            local_scan_network.call([]);
-            // TODO: show error here?
+            console.log("Warning! Failed to check connections");
+            showError(i18nd("lliurex-sddm-theme","Failed to check conection"));
         }
 
+        var hasLan = false;
+        var hasWifi = false;
+
         onResponse: {
-            if (value) {
+            for (var n=0;n<value.length;n++) {
+                var connection = value[n];
+
+                var conType = connection[1];
+
+                if (conType == "802-3-ethernet") {
+                    hasLan = true;
+                    console.log("connection: ",value[1]," of type Ethernet");
+                }
+                else if (conType == "802-11-wireless") {
+                    var ssid = value[2]["ssid"];
+
+                    console.log("connection: ",value[1]," of type WiFi with SSID ",ssid);
+
+                    for (var m=0;m < root.wifiEduWhitelist; m++) {
+                        var wssid = root.wifiEduWhitelist[m];
+
+                        if (wssid == ssid) {
+                            hasWifi = true;
+                            console.log("Found as white listed");
+                            break;
+                        }
+                    }
+                }
+                else {
+                    console.log("connection: ",value[1]," of type ",conType );
+                }
+
+            }
+
+            if (hasLan || hasWifi) {
                 if (root.loginMode == Main.LoginMode.WifiEdu) {
                     sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
                 }
@@ -269,7 +301,7 @@ Item {
                 }
             }
             else {
-                console.log("no cable found");
+                console.log("A valid enabled connection not found, lets create a new one...");
                 local_scan_network.call([]);
             }
         }
