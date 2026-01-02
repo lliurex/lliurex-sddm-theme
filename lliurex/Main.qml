@@ -133,6 +133,7 @@ Item {
         if (root.loginMode == Main.LoginMode.Local || isLocal(txtUser.text)) {
             console.log("performing a local login...");
             sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
+            return;
         }
 
         if (root.loginMode == Main.LoginMode.WifiEdu) {
@@ -141,11 +142,13 @@ Item {
             root.topWindow = wifiEduGvaFrame;
             //local_check_initial_connection.call([]);
             local_is_cdc_enabled.call([]);
+            return;
         }
 
         if (root.loginMode == Main.LoginMode.Guest) {
             console.log("performing a guest login...");
-            sddm.login("guest-user","",cmbSession.currentIndex)
+            sddm.login("guest-user","",cmbSession.currentIndex);
+            return;
         }
 
         if (root.loginMode == Main.LoginMode.AutoStudent) {
@@ -153,6 +156,7 @@ Item {
             root.wifiEduGvaStage = 0;
             root.topWindow = wifiEduGvaFrame;
             local_check_initial_connection.call([]);
+            return;
         }
     }
 
