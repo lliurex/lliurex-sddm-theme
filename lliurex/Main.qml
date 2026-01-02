@@ -257,10 +257,10 @@ Item {
             showError(i18nd("lliurex-sddm-theme","Failed to check conection"));
         }
 
-        var hasLan = false;
-        var hasWifi = false;
-
         onResponse: {
+            var hasLan = false;
+            var hasWifi = false;
+
             for (var n=0;n<value.length;n++) {
                 var connection = value[n];
 
