@@ -130,9 +130,24 @@ Item {
     {
         console.log("Login mode:"+root.loginMode);
 
+        if (root.loginMode == Main.LoginMode.Guest) {
+            console.log("performing a guest login...");
+            sddm.login("guest-user","",cmbSession.currentIndex);
+            return;
+        }
+
+        if (root.loginMode == Main.LoginMode.AutoStudent) {
+            console.log("performing an autologin...");
+            root.wifiEduGvaStage = 0;
+            root.topWindow = wifiEduGvaFrame;
+            local_check_initial_connection.call([]);
+            return;
+        }
+
         if (root.loginMode == Main.LoginMode.Local || isLocal(txtUser.text)) {
             console.log("performing a local login...");
             sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
+            return;
         }
 
         if (root.loginMode == Main.LoginMode.WifiEdu) {
@@ -141,19 +156,9 @@ Item {
             root.topWindow = wifiEduGvaFrame;
             //local_check_initial_connection.call([]);
             local_is_cdc_enabled.call([]);
+            return;
         }
 
-        if (root.loginMode == Main.LoginMode.Guest) {
-            console.log("performing a guest login...");
-            sddm.login("guest-user","",cmbSession.currentIndex)
-        }
-
-        if (root.loginMode == Main.LoginMode.AutoStudent) {
-            console.log("performing an autologin...");
-            root.wifiEduGvaStage = 0;
-            root.topWindow = wifiEduGvaFrame;
-            local_check_initial_connection.call([]);
-        }
     }
 
     Edupals.UserQuery
@@ -268,14 +273,14 @@ Item {
 
                 if (conType == "802-3-ethernet") {
                     hasLan = true;
-                    console.log("connection: ",value[1]," of type Ethernet");
+                    console.log("connection: ",connection[0]," of type Ethernet");
                 }
                 else if (conType == "802-11-wireless") {
-                    var ssid = value[2]["ssid"];
+                    var ssid = connection[2]["ssid"];
 
-                    console.log("connection: ",value[1]," of type WiFi with SSID ",ssid);
+                    console.log("connection: ",connection[0]," of type WiFi with SSID ",ssid);
 
-                    for (var m=0;m < root.wifiEduWhitelist; m++) {
+                    for (var m=0;m < root.wifiEduWhitelist.length; m++) {
                         var wssid = root.wifiEduWhitelist[m];
 
                         if (wssid == ssid) {
@@ -286,7 +291,7 @@ Item {
                     }
                 }
                 else {
-                    console.log("connection: ",value[1]," of type ",conType );
+                    console.log("connection: ",connection[0]," of type ",conType );
                 }
 
             }
@@ -341,7 +346,7 @@ Item {
 
             if (found) {
                 wifiEduGvaStage = 1;
-                local_disconnect_all.call([root.wifiEduWhitelist]);
+                local_disconnect_all.call([]);
             }
             else {
                 console.log("WifiEduGVA target not found!");
