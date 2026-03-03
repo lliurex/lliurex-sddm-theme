@@ -36,12 +36,12 @@ class Tag: public QObject
     Q_PROPERTY(QString name MEMBER m_name CONSTANT)
     Q_PROPERTY(bool isAuto MEMBER m_isAuto CONSTANT)
     
-public:
+    public:
     
     explicit Tag(QObject* parent = nullptr);
     Tag(QString name);
     
-private:
+    private:
     
     QString m_name;
     bool m_isAuto;
@@ -52,17 +52,20 @@ class Tags: public QObject
 {
     Q_OBJECT
     
-    Q_PROPERTY(QList<QObject *> tagsModel MEMBER m_tagsModel CONSTANT)
+    Q_PROPERTY(QList<QObject *> tagsModel MEMBER m_tagsModel NOTIFY onTagsChanged)
 
     
-public:
+    public:
     
     explicit Tags(QObject* parent = nullptr);
     
     Q_INVOKABLE void reload();
+
+    signals:
+
+    void onTagsChanged();
     
-    
-private:
+    private:
     QList<QObject*> m_tagsModel;
 
 };
@@ -72,7 +75,8 @@ class TagsPlugin : public QQmlExtensionPlugin
     Q_OBJECT
     Q_PLUGIN_METADATA (IID "Lliurex.Tags")
 
-public:
+    public:
+
     explicit TagsPlugin(QObject *parent = nullptr);
     void registerTypes(const char *uri) override;
 };
