@@ -19,6 +19,7 @@
 
 import "ui" as Lliurex
 import net.lliurex.ui 1.0 as LLX
+import net.lliurex.tags 1.0 as Autoupgrade
 
 import Edupals.N4D 1.0 as N4D
 import Edupals.Base 1.0 as Edupals
@@ -159,6 +160,20 @@ Item {
             return;
         }
 
+    }
+
+    Autoupgrade.Tags {
+        id: tags
+
+        onTagsModelChanged: {
+            console.log("tags found:",tags.tagsModel.length);
+            for (var n=0;n<tags.tagsModel.length;n++) {
+
+                console.log(tags.tagsModel[n].name,":",tags.tagsModel[n].isAuto);
+
+            }
+
+        }
     }
 
     Edupals.UserQuery
@@ -615,7 +630,6 @@ Item {
         local_lliurex_version.call([]);
 
     }
-    
     /* catch login events */
     Connections {
         target: sddm

@@ -48,6 +48,9 @@ Tag::Tag(QString name) : QObject(nullptr), m_name(name)
     if (m_name.indexOf(QString::fromLatin1(".")) >= 0) {
         m_isAuto = true;
     }
+    else {
+        m_isAuto = false;
+    }
 }
 
 Tags::Tags(QObject* parent): QObject(parent)
