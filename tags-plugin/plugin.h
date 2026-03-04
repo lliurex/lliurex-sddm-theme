@@ -61,7 +61,7 @@ class Tags: public QObject
     
     Q_INVOKABLE void reload();
 
-    signals:
+    Q_SIGNALS:
 
     void onTagsChanged();
     

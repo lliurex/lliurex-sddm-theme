@@ -30,6 +30,7 @@
 #include <QAbstractItemModel>
 #include <QProcess>
 #include <QLocale>
+#include <QDir>
 
 #include <iostream>
 #include <fstream>
@@ -42,9 +43,9 @@ Tag::Tag(QObject* parent): QObject(parent)
 {
 }
 
-Tag::tag(QString name) : QObject(nullptr), m_name(name)
+Tag::Tag(QString name) : QObject(nullptr), m_name(name)
 {
-    if (m_name.indexOf(".") >= 0) {
+    if (m_name.indexOf(QString::fromLatin1(".")) >= 0) {
         m_isAuto = true;
     }
 }
@@ -57,7 +58,7 @@ Tags::Tags(QObject* parent): QObject(parent)
 void Tags::reload()
 {
 
-    QDir dir("/etc/lliurex-auto-upgrade/tags/");
+    QDir dir(QString::fromLatin1("/etc/lliurex-auto-upgrade/tags/"));
 
     dir.setFilter(QDir::Files);
 
