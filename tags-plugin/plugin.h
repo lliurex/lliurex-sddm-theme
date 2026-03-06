@@ -52,7 +52,7 @@ class Tags: public QObject
 {
     Q_OBJECT
     
-    Q_PROPERTY(QList<QObject *> tagsModel MEMBER m_tagsModel NOTIFY onTagsChanged)
+    Q_PROPERTY(QList<QObject *> tagsModel MEMBER m_tagsModel NOTIFY tagsChanged)
 
     
     public:
@@ -63,7 +63,7 @@ class Tags: public QObject
 
     Q_SIGNALS:
 
-    void onTagsChanged();
+    void tagsChanged();
     
     private:
     QList<QObject*> m_tagsModel;

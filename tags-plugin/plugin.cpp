@@ -73,7 +73,7 @@ void Tags::reload()
         m_tagsModel.append(new Tag(file));
     }
 
-    emit onTagsChanged();
+    emit tagsChanged();
 }
 
 TagsPlugin::TagsPlugin(QObject* parent) : QQmlExtensionPlugin(parent)
