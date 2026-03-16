@@ -19,6 +19,7 @@
 
 import "ui" as Lliurex
 import net.lliurex.ui 1.0 as LLX
+import net.lliurex.tags 1.0 as Autoupgrade
 
 import Edupals.N4D 1.0 as N4D
 import Edupals.Base 1.0 as Edupals
@@ -159,6 +160,20 @@ Item {
             return;
         }
 
+    }
+
+    Autoupgrade.Tags {
+        id: tags
+
+        onTagsChanged: {
+            console.log("tags found:",tags.tagsModel.length);
+            for (var n=0;n<tags.tagsModel.length;n++) {
+
+                console.log(tags.tagsModel[n].name,":",tags.tagsModel[n].isAuto);
+
+            }
+
+        }
     }
 
     Edupals.UserQuery
@@ -614,8 +629,9 @@ Item {
         local_get_whitelist.call([]);
         local_lliurex_version.call([]);
 
+        tags.reload();
     }
-    
+
     /* catch login events */
     Connections {
         target: sddm
@@ -1292,6 +1308,62 @@ Item {
         
     }
     
+     /* Shutdown frame */
+    LLX.Window {
+        id: tagsFrame
+        property bool system: false
+
+        title: i18nd("lliurex-sddm-theme","Tags")
+        visible: root.topWindow == this
+        anchors.centerIn: parent
+
+        width: 400
+        height: 600
+
+        ColumnLayout {
+            anchors.fill:parent
+
+            ListView {
+                id: viewTags
+                Layout.fillHeight:true
+
+                model: tags.tagsModel
+
+                delegate: PlasmaComponents.Label {
+                    text: tags.tagsModel[index].name
+                    visible: tags.tagsModel[index].isAuto == chkSystem.checked
+                    height: visible ? implicitHeight : 0
+                }
+
+            }
+
+            PlasmaComponents.Button {
+                id: chkSystem
+                text: i18nd("lliurex-sddm-theme","Show automatic tags")
+                checkable: true
+
+                onClicked: {
+                    viewTags.forceLayout();
+                }
+            }
+
+            RowLayout {
+                Item {
+                    Layout.fillWidth:true
+                }
+
+                PlasmaComponents.Button {
+                    text: i18nd("lliurex-sddm-theme","Close")
+                    Layout.alignment: Qt.AlignRight
+
+                    onClicked: {
+                        root.topWindow = loginFrame;
+                    }
+                }
+            }
+        }
+    }
+
     QQC2.Pane {
         id: panel
         padding:2
@@ -1370,6 +1442,20 @@ Item {
 
             Item {
                 Layout.fillWidth:true
+            }
+
+            PlasmaComponents.Button {
+                id: btnTagsInfo
+
+                //Layout.alignment: Qt.AlignLeft
+                icon.name:"tag-symbolic"
+                display: QQC2.AbstractButton.IconOnly
+                icon.width:24
+                icon.height:24
+
+                onClicked: {
+                    root.topWindow = tagsFrame;
+                }
             }
             
             PlasmaComponents.Label {

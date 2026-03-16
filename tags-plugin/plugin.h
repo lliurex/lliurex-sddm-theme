@@ -34,9 +34,11 @@ class Tags: public QObject
 {
     Q_OBJECT
     
+
     Q_PROPERTY(QStringList tagsModel MEMBER m_tagsModel NOTIFY onTagsChanged)
     Q_PROPERTY(QStringList autoTagsModel MEMBER m_autoTagsModel NOTIFY onTagsChanged)
     Q_PROPERTY(QStringList systemTagsModel MEMBER m_systemTagsModel NOTIFY onTagsChanged)
+
     
     public:
     
@@ -44,9 +46,9 @@ class Tags: public QObject
     
     Q_INVOKABLE void reload();
 
-    signals:
+    Q_SIGNALS:
 
-    void onTagsChanged();
+    void tagsChanged();
     
     private:
     QStringList m_tagsModel;

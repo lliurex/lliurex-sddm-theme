@@ -30,6 +30,7 @@
 #include <QAbstractItemModel>
 #include <QProcess>
 #include <QLocale>
+#include <QDir>
 
 #include <iostream>
 #include <fstream>
@@ -39,13 +40,13 @@ using namespace std;
 
 QStringList list_files(QString path)
 {
-    QStringList files;
 
     QDir dir(path);
 
     dir.setFilter(QDir::Files);
 
     return dir.entryList();
+
 }
 
 Tags::Tags(QObject* parent): QObject(parent)
@@ -65,7 +66,7 @@ void Tags::reload()
     m_systemTagsModel.clear();
     m_systemTagsModel = list_files("/usr/share/lliurex-auto-upgrade/tags/");
 
-    emit onTagsChanged();
+    emit tagsChanged();
 }
 
 TagsPlugin::TagsPlugin(QObject* parent) : QQmlExtensionPlugin(parent)
