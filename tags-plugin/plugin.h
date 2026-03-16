@@ -28,32 +28,15 @@
 #include <QObject>
 #include <QList>
 #include <QMap>
-
-class Tag: public QObject
-{
-    Q_OBJECT
-    
-    Q_PROPERTY(QString name MEMBER m_name CONSTANT)
-    Q_PROPERTY(bool isAuto MEMBER m_isAuto CONSTANT)
-    
-    public:
-    
-    explicit Tag(QObject* parent = nullptr);
-    Tag(QString name);
-    
-    private:
-    
-    QString m_name;
-    bool m_isAuto;
-    
-};
+#include <QStringList>
 
 class Tags: public QObject
 {
     Q_OBJECT
     
-    Q_PROPERTY(QList<QObject *> tagsModel MEMBER m_tagsModel NOTIFY onTagsChanged)
-
+    Q_PROPERTY(QStringList tagsModel MEMBER m_tagsModel NOTIFY onTagsChanged)
+    Q_PROPERTY(QStringList autoTagsModel MEMBER m_autoTagsModel NOTIFY onTagsChanged)
+    Q_PROPERTY(QStringList systemTagsModel MEMBER m_systemTagsModel NOTIFY onTagsChanged)
     
     public:
     
@@ -66,7 +49,9 @@ class Tags: public QObject
     void onTagsChanged();
     
     private:
-    QList<QObject*> m_tagsModel;
+    QStringList m_tagsModel;
+    QStringList m_autoTagsModel;
+    QStringList m_systemTagsModel;
 
 };
 

@@ -37,16 +37,15 @@
 
 using namespace std;
 
-
-Tag::Tag(QObject* parent): QObject(parent)
+QStringList list_files(QString path)
 {
-}
+    QStringList files;
 
-Tag::tag(QString name) : QObject(nullptr), m_name(name)
-{
-    if (m_name.indexOf(".") >= 0) {
-        m_isAuto = true;
-    }
+    QDir dir(path);
+
+    dir.setFilter(QDir::Files);
+
+    return dir.entryList();
 }
 
 Tags::Tags(QObject* parent): QObject(parent)
@@ -57,17 +56,14 @@ Tags::Tags(QObject* parent): QObject(parent)
 void Tags::reload()
 {
 
-    QDir dir("/etc/lliurex-auto-upgrade/tags/");
-
-    dir.setFilter(QDir::Files);
-
-    QStringList files = dir.entryList();
-
     m_tagsModel.clear();
+    m_tagsModel = list_files("/etc/lliurex-auto-upgrade/tags/");
 
-    for (const QString& file : files) {
-        m_tagsModel.append(new Tag(file));
-    }
+    m_autoTagsModel.clear();
+    m_autoTagsModel = list_files("/run/lliurex-auto-upgrade/tags/");
+
+    m_systemTagsModel.clear();
+    m_systemTagsModel = list_files("/usr/share/lliurex-auto-upgrade/tags/");
 
     emit onTagsChanged();
 }
