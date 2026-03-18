@@ -164,16 +164,6 @@ Item {
 
     Autoupgrade.Tags {
         id: tags
-
-        onTagsChanged: {
-            console.log("tags found:",tags.tagsModel.length);
-            for (var n=0;n<tags.tagsModel.length;n++) {
-
-                console.log(tags.tagsModel[n].name,":",tags.tagsModel[n].isAuto);
-
-            }
-
-        }
     }
 
     Edupals.UserQuery
@@ -1318,7 +1308,7 @@ Item {
         anchors.centerIn: parent
 
         width: 400
-        height: 600
+        height: 400
 
         ColumnLayout {
             anchors.fill:parent
@@ -1330,9 +1320,7 @@ Item {
                 model: tags.tagsModel
 
                 delegate: PlasmaComponents.Label {
-                    text: tags.tagsModel[index].name
-                    visible: tags.tagsModel[index].isAuto == chkSystem.checked
-                    height: visible ? implicitHeight : 0
+                    text: tags.tagsModel[index]
                 }
 
             }
@@ -1341,6 +1329,7 @@ Item {
                 id: chkSystem
                 text: i18nd("lliurex-sddm-theme","Show automatic tags")
                 checkable: true
+                visible: false
 
                 onClicked: {
                     viewTags.forceLayout();

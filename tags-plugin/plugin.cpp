@@ -58,13 +58,13 @@ void Tags::reload()
 {
 
     m_tagsModel.clear();
-    m_tagsModel = list_files("/etc/lliurex-auto-upgrade/tags/");
+    m_tagsModel = list_files(QString::fromLatin1("/etc/lliurex-auto-upgrade/tags/"));
 
     m_autoTagsModel.clear();
-    m_autoTagsModel = list_files("/run/lliurex-auto-upgrade/tags/");
+    m_autoTagsModel = list_files(QString::fromLatin1("/run/lliurex-auto-upgrade/tags/"));
 
     m_systemTagsModel.clear();
-    m_systemTagsModel = list_files("/usr/share/lliurex-auto-upgrade/tags/");
+    m_systemTagsModel = list_files(QString::fromLatin1("/usr/share/lliurex-auto-upgrade/tags/"));
 
     emit tagsChanged();
 }
@@ -75,7 +75,6 @@ TagsPlugin::TagsPlugin(QObject* parent) : QQmlExtensionPlugin(parent)
 
 void TagsPlugin::registerTypes(const char* uri)
 {
-    qmlRegisterType<Tag> (uri, 1, 0, "Tag");
     qmlRegisterType<Tags> (uri, 1, 0, "Tags");
     qmlRegisterAnonymousType<QMimeData>(uri, 1);
     
