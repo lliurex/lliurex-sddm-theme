@@ -743,19 +743,7 @@ Item {
 
                 onClicked: {
 
-                    switch (root.wifiEduGvaLogin) {
-                        case Main.WifiEduGva.Teacher:
-                            root.loginMode = Main.LoginMode.WifiEdu;
-                        break;
-                        case Main.WifiEduGva.Student:
-                        case Main.WifiEduGva.Auto:
-                            root.loginMode = Main.LoginMode.WifiEduGvaStudent;
-                        break;
-                        default:
-                            root.loginMode = Main.LoginMode.WifiEdu;
-                        break;
-                    }
-
+                    root.loginMode = Main.LoginMode.WifiEdu;
                     root.topWindow = loginFrame;
 
                 }
