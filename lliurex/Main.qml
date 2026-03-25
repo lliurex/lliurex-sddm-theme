@@ -78,6 +78,8 @@ Item {
     property var wifiEduWhitelist: ([""])
     property var networks
     property int wifiEduGvaStage: -1
+
+    property ListModel autoupgradeTagsModel: ListModel {}
     
     //property bool compact: (loginFrame.width+dateFrame.width+60) > theme.width
     
@@ -164,6 +166,21 @@ Item {
 
     Autoupgrade.Tags {
         id: tags
+
+        onTagsChanged: {
+            console.log("tags changed!");
+
+            root.autoupgradeTagsModel.clear();
+
+            for (var n=0;n<tags.tagsModel.length;n++) {
+                root.autoupgradeTagsModel.append({"name":tags.tagsModel[n],"type":"admin"});
+            }
+
+            for (var n=0;n<tags.systemTagsModel.length;n++) {
+                root.autoupgradeTagsModel.append({"name":tags.systemTagsModel[n],"type":"system"});
+            }
+
+        }
     }
 
     Edupals.UserQuery
@@ -1286,17 +1303,16 @@ Item {
         
     }
     
-     /* Shutdown frame */
+     /* Tags frame */
     LLX.Window {
         id: tagsFrame
-        property bool system: false
 
         title: i18nd("lliurex-sddm-theme","Tags")
         visible: root.topWindow == this
         anchors.centerIn: parent
 
         width: 400
-        height: 400
+        height: 500
 
         ColumnLayout {
             anchors.fill:parent
@@ -1305,23 +1321,28 @@ Item {
                 id: viewTags
                 Layout.fillHeight:true
 
-                model: tags.tagsModel
+                model: root.autoupgradeTagsModel
 
-                delegate: PlasmaComponents.Label {
-                    text: tags.tagsModel[index]
+                delegate: RowLayout {
+                    PlasmaCore.IconItem {
+                        implicitWidth: PlasmaCore.Units.gridUnit
+                        implicitHeight: PlasmaCore.Units.gridUnit
+
+                        source: {
+                            if (type=="admin") {
+                                return "tag-symbolic";
+                            }
+
+                            if (type=="system") {
+                                return "tools-symbolic";
+                            }
+                        }
+                    }
+                    PlasmaComponents.Label {
+                        text: name
+                    }
                 }
 
-            }
-
-            PlasmaComponents.Button {
-                id: chkSystem
-                text: i18nd("lliurex-sddm-theme","Show automatic tags")
-                checkable: true
-                visible: false
-
-                onClicked: {
-                    viewTags.forceLayout();
-                }
             }
 
             RowLayout {
