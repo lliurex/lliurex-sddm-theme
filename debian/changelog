@@ -1,3 +1,10 @@
+lliurex-sddm-theme (23.8.0.0) jammy; urgency=medium
+
+  * Added an auto-upgrade tags viewer
+  * May fix a bug trying to change login to Wifi Edu
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Wed, 25 Mar 2026 13:40:31 +0100
+
 lliurex-sddm-theme (23.7.1.0) jammy; urgency=medium
 
   * Re-done the white list system, using a check before disconnection
