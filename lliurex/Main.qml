@@ -19,6 +19,7 @@
 
 import "ui" as Lliurex
 import net.lliurex.ui 1.0 as LLX
+import net.lliurex.tags 1.0 as Autoupgrade
 
 import Edupals.N4D 1.0 as N4D
 import Edupals.Base 1.0 as Edupals
@@ -77,6 +78,8 @@ Item {
     property var wifiEduWhitelist: ([""])
     property var networks
     property int wifiEduGvaStage: -1
+
+    property ListModel autoupgradeTagsModel: ListModel {}
     
     //property bool compact: (loginFrame.width+dateFrame.width+60) > theme.width
     
@@ -159,6 +162,25 @@ Item {
             return;
         }
 
+    }
+
+    Autoupgrade.Tags {
+        id: tags
+
+        onTagsChanged: {
+            console.log("tags changed!");
+
+            root.autoupgradeTagsModel.clear();
+
+            for (var n=0;n<tags.tagsModel.length;n++) {
+                root.autoupgradeTagsModel.append({"name":tags.tagsModel[n],"type":"admin"});
+            }
+
+            for (var n=0;n<tags.systemTagsModel.length;n++) {
+                root.autoupgradeTagsModel.append({"name":tags.systemTagsModel[n],"type":"system"});
+            }
+
+        }
     }
 
     Edupals.UserQuery
@@ -614,8 +636,9 @@ Item {
         local_get_whitelist.call([]);
         local_lliurex_version.call([]);
 
+        tags.reload();
     }
-    
+
     /* catch login events */
     Connections {
         target: sddm
@@ -727,19 +750,7 @@ Item {
 
                 onClicked: {
 
-                    switch (root.wifiEduGvaLogin) {
-                        case Main.WifiEduGva.Teacher:
-                            root.loginMode = Main.LoginMode.WifiEdu;
-                        break;
-                        case Main.WifiEduGva.Student:
-                        case Main.WifiEduGva.Auto:
-                            root.loginMode = Main.LoginMode.WifiEduGvaStudent;
-                        break;
-                        default:
-                            root.loginMode = Main.LoginMode.WifiEdu;
-                        break;
-                    }
-
+                    root.loginMode = Main.LoginMode.WifiEdu;
                     root.topWindow = loginFrame;
 
                 }
@@ -1292,6 +1303,65 @@ Item {
         
     }
     
+     /* Tags frame */
+    LLX.Window {
+        id: tagsFrame
+
+        title: i18nd("lliurex-sddm-theme","Tags")
+        visible: root.topWindow == this
+        anchors.centerIn: parent
+
+        width: 400
+        height: 500
+
+        ColumnLayout {
+            anchors.fill:parent
+
+            ListView {
+                id: viewTags
+                Layout.fillHeight:true
+
+                model: root.autoupgradeTagsModel
+
+                delegate: RowLayout {
+                    PlasmaCore.IconItem {
+                        implicitWidth: PlasmaCore.Units.gridUnit
+                        implicitHeight: PlasmaCore.Units.gridUnit
+
+                        source: {
+                            if (type=="admin") {
+                                return "tag-symbolic";
+                            }
+
+                            if (type=="system") {
+                                return "tools-symbolic";
+                            }
+                        }
+                    }
+                    PlasmaComponents.Label {
+                        text: name
+                    }
+                }
+
+            }
+
+            RowLayout {
+                Item {
+                    Layout.fillWidth:true
+                }
+
+                PlasmaComponents.Button {
+                    text: i18nd("lliurex-sddm-theme","Close")
+                    Layout.alignment: Qt.AlignRight
+
+                    onClicked: {
+                        root.topWindow = loginFrame;
+                    }
+                }
+            }
+        }
+    }
+
     QQC2.Pane {
         id: panel
         padding:2
@@ -1370,6 +1440,20 @@ Item {
 
             Item {
                 Layout.fillWidth:true
+            }
+
+            PlasmaComponents.Button {
+                id: btnTagsInfo
+
+                //Layout.alignment: Qt.AlignLeft
+                icon.name:"tag-symbolic"
+                display: QQC2.AbstractButton.IconOnly
+                icon.width:24
+                icon.height:24
+
+                onClicked: {
+                    root.topWindow = tagsFrame;
+                }
             }
             
             PlasmaComponents.Label {

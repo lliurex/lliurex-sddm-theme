@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(lliurex-sddm)
 add_subdirectory(locale-plugin)
+add_subdirectory(tags-plugin)
 
 install (DIRECTORY lliurex DESTINATION share/sddm/themes/)
 install (DIRECTORY lliurex-live DESTINATION share/sddm/themes/)
