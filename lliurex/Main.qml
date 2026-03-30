@@ -61,7 +61,7 @@ Item {
 
     readonly property int autoLoginTimeout: 30000 //30 seconds
 
-    property Item topWindow: loginFrame
+    property Item topWindow: easyLoginFrame
     property bool firstBoot: true
     property int loginMode : Main.LoginMode.Local
     property int guessMode: 0
@@ -1095,6 +1095,138 @@ Item {
         }
     }
     
+    LLX.Window {
+        id: easyLoginFrame
+
+        title: i18nd("lliurex-sddm-theme","Easy Login")
+        visible: root.topWindow == this
+        anchors.centerIn: parent
+
+        width: 400
+        height: 400
+
+        property string theme:"animals"
+        property var password:[]
+        property int maxPassword: 4
+
+        function onPushCode() {
+            if (easyLoginFrame.password.length < easyLoginFrame.maxPassword) {
+                easyLoginFrame.password.push({ code: arguments[0], source: arguments[1]});
+                viewPassword.model = easyLoginFrame.password.length;
+            }
+        }
+
+
+        QQC2.Pane {
+            anchors.fill:parent
+
+            ColumnLayout {
+                anchors.centerIn: parent
+
+                GridLayout {
+                    id: container
+
+                    columns: 3
+                    rows: 3
+
+                    Layout.preferredWidth: 200
+                    Layout.preferredHeight: 200
+
+                    Component.onCompleted: {
+
+                        var component = Qt.createComponent("ui/FancyButton.qml");
+
+                        for (var j=0;j<rows;j++) {
+                            for (var i=0; i<columns;i++) {
+
+                                var o = component.createObject(container);
+
+                                o.theme = easyLoginFrame.theme;
+                                o.Layout.row = j;
+                                o.Layout.column = i;
+                                o.pushCode.connect(easyLoginFrame.onPushCode);
+                            }
+                        }
+                    }
+
+                }
+
+                RowLayout {
+                    QQC2.Button {
+                        id: btnErase
+
+                        Layout.preferredWidth: 64
+                        Layout.preferredHeight: 64
+
+                        icon.source: "arrow-left"
+
+                        onClicked: {
+                            if (easyLoginFrame.password.length > 0) {
+                                easyLoginFrame.password.pop();
+                                viewPassword.model = easyLoginFrame.password.length;
+                            }
+                        }
+                    }
+
+                    Item {
+                        Layout.preferredWidth: 64
+                        Layout.preferredHeight: 64
+                    }
+
+                    QQC2.Button {
+                        id: btnApply
+
+                        Layout.preferredWidth: 64
+                        Layout.preferredHeight: 64
+
+                        icon.source: "dialog-ok"
+
+                        onClicked: {
+                            if (easyLoginFrame.password.length == 4) {
+                                var output = "";
+
+                                for (var n=0;n<4;n++) {
+                                    output=output + easyLoginFrame.password[n].code;
+                                }
+
+                                console.log(output);
+                            }
+                        }
+                    }
+                }
+
+                RowLayout {
+                    QQC2.Label {
+                        text:"Output:"
+                    }
+                }
+
+                RowLayout {
+                    Layout.preferredHeight: 64
+                    Layout.maximumHeight: 64
+
+                    Repeater {
+                        id: viewPassword
+                        model: 0
+
+                        Image {
+
+                            source: "easy-login/themes/"+easyLoginFrame.theme+"/" + easyLoginFrame.password[index].code +".png"
+                            //source: easyLoginFrame.password[index].source
+                            Layout.preferredWidth: 48
+                            Layout.preferredHeight: 48
+                            mipmap: true
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+
+    }
+
     /* Shutdown frame */
     LLX.Window {
         id: shutdownFrame
