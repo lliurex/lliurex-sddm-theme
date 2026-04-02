@@ -61,7 +61,7 @@ Item {
 
     readonly property int autoLoginTimeout: 30000 //30 seconds
 
-    property Item topWindow: easyLoginFrame
+    property Item topWindow: loginFrame
     property bool firstBoot: true
     property int loginMode : Main.LoginMode.Local
     property int guessMode: 0
@@ -1102,8 +1102,8 @@ Item {
         visible: root.topWindow == this
         anchors.centerIn: parent
 
-        width: 400
-        height: 400
+        width: 460
+        height: 480
 
         property string theme:"animals"
         property var password:[]
@@ -1112,7 +1112,9 @@ Item {
         function onPushCode() {
             if (easyLoginFrame.password.length < easyLoginFrame.maxPassword) {
                 easyLoginFrame.password.push({ code: arguments[0], source: arguments[1]});
-                viewPassword.model = easyLoginFrame.password.length;
+                //viewPassword.model = easyLoginFrame.password.length;
+                viewPassword.model = undefined;
+                viewPassword.model = easyLoginFrame.maxPassword;
             }
         }
 
@@ -1121,7 +1123,13 @@ Item {
             anchors.fill:parent
 
             ColumnLayout {
-                anchors.centerIn: parent
+                anchors.fill:parent
+                //anchors.centerIn: parent
+                //Layout.fillWidth:true
+
+                Item {
+                    implicitHeight:Kirigami.Units.gridUnit*2
+                }
 
                 GridLayout {
                     id: container
@@ -1131,6 +1139,7 @@ Item {
 
                     Layout.preferredWidth: 200
                     Layout.preferredHeight: 200
+                    Layout.alignment: Qt.AlignHCenter
 
                     Component.onCompleted: {
 
@@ -1152,6 +1161,7 @@ Item {
                 }
 
                 RowLayout {
+                    Layout.alignment: Qt.AlignCenter
                     QQC2.Button {
                         id: btnErase
 
@@ -1163,7 +1173,9 @@ Item {
                         onClicked: {
                             if (easyLoginFrame.password.length > 0) {
                                 easyLoginFrame.password.pop();
-                                viewPassword.model = easyLoginFrame.password.length;
+                                //viewPassword.model = easyLoginFrame.password.length;
+                                viewPassword.model = undefined;
+                                viewPassword.model = easyLoginFrame.maxPassword;
                             }
                         }
                     }
@@ -1195,27 +1207,35 @@ Item {
                     }
                 }
 
-                RowLayout {
-                    QQC2.Label {
-                        text:"Output:"
-                    }
+                Item {
+                    implicitHeight:Kirigami.Units.gridUnit*1
                 }
 
                 RowLayout {
                     Layout.preferredHeight: 64
                     Layout.maximumHeight: 64
+                    Layout.alignment: Qt.AlignCenter
 
                     Repeater {
                         id: viewPassword
-                        model: 0
+                        model: easyLoginFrame.maxPassword
 
-                        Image {
+                        Kirigami.Icon {
 
-                            source: "easy-login/themes/"+easyLoginFrame.theme+"/" + easyLoginFrame.password[index].code +".png"
-                            //source: easyLoginFrame.password[index].source
+                            source: {
+                                if (index<easyLoginFrame.password.length) {
+
+                                    return Qt.resolvedUrl("easy-login/themes/"+easyLoginFrame.theme+"/" + easyLoginFrame.password[index].code +".png");
+                                }
+                                else {
+                                    return "task-process-0";
+                                }
+                            }
+
+
                             Layout.preferredWidth: 48
                             Layout.preferredHeight: 48
-                            mipmap: true
+                            //mipmap: true
                         }
                     }
 
