@@ -19,6 +19,8 @@
 
 import "ui" as Lliurex
 import net.lliurex.ui 1.0 as LLX
+import net.lliurex.tags 1.0 as Autoupgrade
+
 
 import Edupals.Base as Edupals
 import Edupals.N4D 1.0 as N4D
@@ -83,6 +85,8 @@ Item {
     property string wifiEduGvaTarget: "WIFI_EDU"
     property var networks
     property int wifiEduGvaStage: -1
+
+    property ListModel autoupgradeTagsModel: ListModel {}
     
     //property bool compact: (loginFrame.width+dateFrame.width+60) > theme.width
     
@@ -187,6 +191,25 @@ Item {
         sddm.login(userName, userPass, cmbSession.currentIndex);
 
     }
+
+    Autoupgrade.Tags {
+        id: tags
+
+        onTagsChanged: {
+
+            root.autoupgradeTagsModel.clear();
+
+            for (var n=0;n<tags.tagsModel.length;n++) {
+                root.autoupgradeTagsModel.append({"name":tags.tagsModel[n],"type":"admin"});
+            }
+
+            for (var n=0;n<tags.systemTagsModel.length;n++) {
+                root.autoupgradeTagsModel.append({"name":tags.systemTagsModel[n],"type":"system"});
+            }
+
+        }
+    }
+
 
     Edupals.UserQuery
     {
@@ -1329,6 +1352,65 @@ Item {
         }
         
     }
+
+    /* Tags frame */
+    LLX.Window {
+        id: tagsFrame
+
+        title: i18nd("lliurex-sddm-theme","Tags")
+        visible: root.topWindow == this
+        anchors.centerIn: parent
+
+        width: 400
+        height: 500
+
+        ColumnLayout {
+            anchors.fill:parent
+
+            ListView {
+                id: viewTags
+                Layout.fillHeight:true
+
+                model: root.autoupgradeTagsModel
+
+                delegate: RowLayout {
+                    PlasmaCore.IconItem {
+                        implicitWidth: PlasmaCore.Units.gridUnit
+                        implicitHeight: PlasmaCore.Units.gridUnit
+
+                        source: {
+                            if (type=="admin") {
+                                return "tag-symbolic";
+                            }
+
+                            if (type=="system") {
+                                return "tools-symbolic";
+                            }
+                        }
+                    }
+                    PlasmaComponents.Label {
+                        text: name
+                    }
+                }
+
+            }
+
+            RowLayout {
+                Item {
+                    Layout.fillWidth:true
+                }
+
+                PlasmaComponents.Button {
+                    text: i18nd("lliurex-sddm-theme","Close")
+                    Layout.alignment: Qt.AlignRight
+
+                    onClicked: {
+                        root.topWindow = loginFrame;
+                    }
+                }
+            }
+        }
+    }
     
     QQC2.Pane {
         id: panel
@@ -1409,6 +1491,19 @@ Item {
                 Layout.fillWidth:true
             }
             
+            PlasmaComponents.Button {
+                id: btnTagsInfo
+
+                icon.name:"tag-symbolic"
+                display: QQC2.AbstractButton.IconOnly
+                icon.width:24
+                icon.height:24
+
+                onClicked: {
+                    root.topWindow = tagsFrame;
+                }
+            }
+
             PlasmaComponents.Label {
                 id: widgetHost
                 Layout.alignment: Qt.AlignRight
