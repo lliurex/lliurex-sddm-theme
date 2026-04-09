@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.8.2.0) noble; urgency=medium
+
+  * Fixed deprecated Plasma Icon
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Thu, 09 Apr 2026 14:44:37 +0200
+
 lliurex-sddm-theme (25.8.1.0) noble; urgency=medium
 
   * Using qt6 in tags plugin (ported from jammy)
