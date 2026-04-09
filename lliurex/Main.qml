@@ -1374,7 +1374,7 @@ Item {
                 model: root.autoupgradeTagsModel
 
                 delegate: RowLayout {
-                    PlasmaCore.IconItem {
+                    Kirigami.Icon {
                         implicitWidth: PlasmaCore.Units.gridUnit
                         implicitHeight: PlasmaCore.Units.gridUnit
 
