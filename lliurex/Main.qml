@@ -19,6 +19,8 @@
 
 import "ui" as Lliurex
 import net.lliurex.ui 1.0 as LLX
+import net.lliurex.tags 1.0 as Autoupgrade
+
 
 import Edupals.Base as Edupals
 import Edupals.N4D 1.0 as N4D
@@ -83,6 +85,8 @@ Item {
     property string wifiEduGvaTarget: "WIFI_EDU"
     property var networks
     property int wifiEduGvaStage: -1
+
+    property ListModel autoupgradeTagsModel: ListModel {}
     
     //property bool compact: (loginFrame.width+dateFrame.width+60) > theme.width
     
@@ -187,6 +191,25 @@ Item {
         sddm.login(userName, userPass, cmbSession.currentIndex);
 
     }
+
+    Autoupgrade.Tags {
+        id: tags
+
+        onTagsChanged: {
+
+            root.autoupgradeTagsModel.clear();
+
+            for (var n=0;n<tags.tagsModel.length;n++) {
+                root.autoupgradeTagsModel.append({"name":tags.tagsModel[n],"type":"admin"});
+            }
+
+            for (var n=0;n<tags.systemTagsModel.length;n++) {
+                root.autoupgradeTagsModel.append({"name":tags.systemTagsModel[n],"type":"system"});
+            }
+
+        }
+    }
+
 
     Edupals.UserQuery
     {
@@ -1095,6 +1118,158 @@ Item {
         }
     }
     
+    LLX.Window {
+        id: easyLoginFrame
+
+        title: i18nd("lliurex-sddm-theme","Easy Login")
+        visible: root.topWindow == this
+        anchors.centerIn: parent
+
+        width: 460
+        height: 480
+
+        property string theme:"animals"
+        property var password:[]
+        property int maxPassword: 4
+
+        function onPushCode() {
+            if (easyLoginFrame.password.length < easyLoginFrame.maxPassword) {
+                easyLoginFrame.password.push({ code: arguments[0], source: arguments[1]});
+                //viewPassword.model = easyLoginFrame.password.length;
+                viewPassword.model = undefined;
+                viewPassword.model = easyLoginFrame.maxPassword;
+            }
+        }
+
+
+        QQC2.Pane {
+            anchors.fill:parent
+
+            ColumnLayout {
+                anchors.fill:parent
+                //anchors.centerIn: parent
+                //Layout.fillWidth:true
+
+                Item {
+                    implicitHeight:Kirigami.Units.gridUnit*2
+                }
+
+                GridLayout {
+                    id: container
+
+                    columns: 3
+                    rows: 3
+
+                    Layout.preferredWidth: 200
+                    Layout.preferredHeight: 200
+                    Layout.alignment: Qt.AlignHCenter
+
+                    Component.onCompleted: {
+
+                        var component = Qt.createComponent("ui/FancyButton.qml");
+
+                        for (var j=0;j<rows;j++) {
+                            for (var i=0; i<columns;i++) {
+
+                                var o = component.createObject(container);
+
+                                o.theme = easyLoginFrame.theme;
+                                o.Layout.row = j;
+                                o.Layout.column = i;
+                                o.pushCode.connect(easyLoginFrame.onPushCode);
+                            }
+                        }
+                    }
+
+                }
+
+                RowLayout {
+                    Layout.alignment: Qt.AlignCenter
+                    QQC2.Button {
+                        id: btnErase
+
+                        Layout.preferredWidth: 64
+                        Layout.preferredHeight: 64
+
+                        icon.source: "arrow-left"
+
+                        onClicked: {
+                            if (easyLoginFrame.password.length > 0) {
+                                easyLoginFrame.password.pop();
+                                //viewPassword.model = easyLoginFrame.password.length;
+                                viewPassword.model = undefined;
+                                viewPassword.model = easyLoginFrame.maxPassword;
+                            }
+                        }
+                    }
+
+                    Item {
+                        Layout.preferredWidth: 64
+                        Layout.preferredHeight: 64
+                    }
+
+                    QQC2.Button {
+                        id: btnApply
+
+                        Layout.preferredWidth: 64
+                        Layout.preferredHeight: 64
+
+                        icon.source: "dialog-ok"
+
+                        onClicked: {
+                            if (easyLoginFrame.password.length == 4) {
+                                var output = "";
+
+                                for (var n=0;n<4;n++) {
+                                    output=output + easyLoginFrame.password[n].code;
+                                }
+
+                                console.log(output);
+                            }
+                        }
+                    }
+                }
+
+                Item {
+                    implicitHeight:Kirigami.Units.gridUnit*1
+                }
+
+                RowLayout {
+                    Layout.preferredHeight: 64
+                    Layout.maximumHeight: 64
+                    Layout.alignment: Qt.AlignCenter
+
+                    Repeater {
+                        id: viewPassword
+                        model: easyLoginFrame.maxPassword
+
+                        Kirigami.Icon {
+
+                            source: {
+                                if (index<easyLoginFrame.password.length) {
+
+                                    return Qt.resolvedUrl("easy-login/themes/"+easyLoginFrame.theme+"/" + easyLoginFrame.password[index].code +".png");
+                                }
+                                else {
+                                    return "task-process-0";
+                                }
+                            }
+
+
+                            Layout.preferredWidth: 48
+                            Layout.preferredHeight: 48
+                            //mipmap: true
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+
+    }
+
     /* Shutdown frame */
     LLX.Window {
         id: shutdownFrame
@@ -1177,6 +1352,65 @@ Item {
         }
         
     }
+
+    /* Tags frame */
+    LLX.Window {
+        id: tagsFrame
+
+        title: i18nd("lliurex-sddm-theme","Tags")
+        visible: root.topWindow == this
+        anchors.centerIn: parent
+
+        width: 400
+        height: 500
+
+        ColumnLayout {
+            anchors.fill:parent
+
+            ListView {
+                id: viewTags
+                Layout.fillHeight:true
+
+                model: root.autoupgradeTagsModel
+
+                delegate: RowLayout {
+                    PlasmaCore.IconItem {
+                        implicitWidth: PlasmaCore.Units.gridUnit
+                        implicitHeight: PlasmaCore.Units.gridUnit
+
+                        source: {
+                            if (type=="admin") {
+                                return "tag-symbolic";
+                            }
+
+                            if (type=="system") {
+                                return "tools-symbolic";
+                            }
+                        }
+                    }
+                    PlasmaComponents.Label {
+                        text: name
+                    }
+                }
+
+            }
+
+            RowLayout {
+                Item {
+                    Layout.fillWidth:true
+                }
+
+                PlasmaComponents.Button {
+                    text: i18nd("lliurex-sddm-theme","Close")
+                    Layout.alignment: Qt.AlignRight
+
+                    onClicked: {
+                        root.topWindow = loginFrame;
+                    }
+                }
+            }
+        }
+    }
     
     QQC2.Pane {
         id: panel
@@ -1257,6 +1491,19 @@ Item {
                 Layout.fillWidth:true
             }
             
+            PlasmaComponents.Button {
+                id: btnTagsInfo
+
+                icon.name:"tag-symbolic"
+                display: QQC2.AbstractButton.IconOnly
+                icon.width:24
+                icon.height:24
+
+                onClicked: {
+                    root.topWindow = tagsFrame;
+                }
+            }
+
             PlasmaComponents.Label {
                 id: widgetHost
                 Layout.alignment: Qt.AlignRight
