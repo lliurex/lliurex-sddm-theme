@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.8.1.0) noble; urgency=medium
+
+  * Using qt6 in tags plugin (ported from jammy)
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Thu, 09 Apr 2026 13:31:40 +0200
+
 lliurex-sddm-theme (25.8.0.0) noble; urgency=medium
 
   * Added wip easy login 
