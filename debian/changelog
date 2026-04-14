@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.8.3.0) noble; urgency=medium
+
+  * Force an initial tag reload (load in fact)
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Tue, 14 Apr 2026 11:54:37 +0200
+
 lliurex-sddm-theme (25.8.2.0) noble; urgency=medium
 
   * Fixed deprecated Plasma Icon
