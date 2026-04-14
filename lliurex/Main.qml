@@ -575,6 +575,8 @@ Item {
         local_lliurex_version.call([]);
         local_guess_mode.call([]);
 
+        tags.reload();
+
     }
     
     /* catch login events */
