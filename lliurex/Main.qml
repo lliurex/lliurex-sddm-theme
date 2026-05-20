@@ -43,7 +43,8 @@ Item {
         Local = 0,
         Guest,
         WifiEdu,
-        AutoStudent
+        AutoStudent,
+        EasyStudent
     }
 
     enum Meta {
@@ -58,7 +59,8 @@ Item {
         Disabled = 0,
         Enabled = 1,
         Legacy = 2,
-        AutoStudent = 3
+        AutoStudent = 3,
+        EasyStudent = 4
     }
 
     readonly property int autoLoginTimeout: 30000 //30 seconds
@@ -170,6 +172,14 @@ Item {
 
         if (root.loginMode == Main.LoginMode.AutoStudent) {
             console.log("performing an autologin...");
+            root.wifiEduGvaStage = 0;
+            root.topWindow = wifiEduGvaFrame;
+            local_check_wired_connection.call([]);
+            return;
+        }
+
+        if (root.loginMode == Main.LoginMode.EasyStudent) {
+            console.log("performing an easy student login...");
             root.wifiEduGvaStage = 0;
             root.topWindow = wifiEduGvaFrame;
             local_check_wired_connection.call([]);
@@ -339,6 +349,11 @@ Item {
                 if (root.loginMode == Main.LoginMode.AutoStudent) {
                     sddm.login("alumnat","",cmbSession.currentIndex);
                 }
+
+                if (root.loginMode == Main.LoginMode.EasyStudent) {
+                    sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
+                }
+
             }
             else {
                 console.log("no cable found");
@@ -408,6 +423,10 @@ Item {
                 local_create_connection.call(["WifiEduGva",wifiEduGvaTarget,"alumnat",root.wifiEduGvaAutoLoginSettings,""]);
             }
 
+            if (root.loginMode == Main.LoginMode.EasyStudent) {
+                local_create_connection.call(["WifiEduGva",wifiEduGvaTarget,"alumnat",root.wifiEduGvaAutoLoginSettings,""]);
+            }
+
         }
     }
 
@@ -434,6 +453,11 @@ Item {
 
             if (root.loginMode == Main.LoginMode.AutoStudent) {
                 sddm.login("alumnat","",cmbSession.currentIndex);
+            }
+
+            if (root.loginMode == Main.LoginMode.EasyStudent) {
+                //local_check_connectivity.call([]);
+                sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
             }
         }
     }
@@ -492,12 +516,20 @@ Item {
                     wifiEduGvaAutoEnabled = true;
                 break;
 
+                case Main.WifiEduGva.EasyStudent:
+                    loginMode = Main.LoginMode.EasyStudent;
+                break;
+
             }
 
             if (firstBoot) {
                 firstBoot = false;
                 if (wifiEduGvaAutoEnabled) {
                     root.topWindow = wifiEduGvaAutoLoginFrame;
+                }
+
+                if (loginMode == Main.LoginMode.EasyStudent) {
+                    root.topWindow = easyLoginFrame;
                 }
             }
         }
@@ -1227,6 +1259,12 @@ Item {
                                 }
 
                                 console.log(output);
+
+                                txtUser.text = output;
+                                txtPass.text = "-";
+
+                                easyLoginFrame.enabled = false;
+                                login();
                             }
                         }
                     }
@@ -1377,8 +1415,8 @@ Item {
 
                 delegate: RowLayout {
                     Kirigami.Icon {
-                        implicitWidth: PlasmaCore.Units.gridUnit
-                        implicitHeight: PlasmaCore.Units.gridUnit
+                        implicitWidth: Kirigami.Units.gridUnit
+                        implicitHeight: Kirigami.Units.gridUnit
 
                         source: {
                             if (type=="admin") {
