@@ -80,6 +80,7 @@ Item {
     property bool guestEnabled : false
     property bool wifiEduGvaEnabled : false
     property bool wifiEduGvaAutoEnabled: false
+    property bool easyLoginEnabled: false
 
     property int wifiEduGvaLogin: 0
     property int wifiEduGvaLoginManual: 0
@@ -499,36 +500,37 @@ Item {
         }
 
         onResponse: function (value) {
-            wifiEduGvaLogin = value;
+            root.wifiEduGvaLogin = value;
 
             if (value > 0 ) {
-                wifiEduGvaEnabled = true;
+                root.wifiEduGvaEnabled = true;
             }
 
             switch (value) {
                 case Main.WifiEduGva.Enabled:
                 case Main.WifiEduGva.Legacy:
-                    loginMode = Main.LoginMode.WifiEdu;
+                    root.loginMode = Main.LoginMode.WifiEdu;
                 break;
 
                 case Main.WifiEduGva.AutoStudent:
-                    loginMode = Main.LoginMode.AutoStudent;
-                    wifiEduGvaAutoEnabled = true;
+                    root.loginMode = Main.LoginMode.AutoStudent;
+                    root.wifiEduGvaAutoEnabled = true;
                 break;
 
                 case Main.WifiEduGva.EasyStudent:
-                    loginMode = Main.LoginMode.EasyStudent;
+                    root.loginMode = Main.LoginMode.EasyStudent;
+                    root.easyLoginEnabled = true;
                 break;
 
             }
 
-            if (firstBoot) {
-                firstBoot = false;
-                if (wifiEduGvaAutoEnabled) {
+            if (root.firstBoot) {
+                root.firstBoot = false;
+                if (root.wifiEduGvaAutoEnabled) {
                     root.topWindow = wifiEduGvaAutoLoginFrame;
                 }
 
-                if (loginMode == Main.LoginMode.EasyStudent) {
+                if (root.loginMode == Main.LoginMode.EasyStudent) {
                     root.topWindow = easyLoginFrame;
                 }
             }
@@ -627,6 +629,11 @@ Item {
             loginFrame.enabled=true;
             txtPass.text = "";
             txtPass.focus = true;
+
+            if (root.loginMode == Main.LoginMode.EasyStudent) {
+                txtUser.text = "";
+            }
+
         }
     }
     
@@ -738,6 +745,19 @@ Item {
                 onClicked: {
                     root.loginMode = Main.LoginMode.AutoStudent;
                     root.topWindow = wifiEduGvaAutoLoginFrame;
+                }
+            }
+
+            PlasmaComponents.Button {
+                text: i18nd("lliurex-sddm-theme","Easy")
+                visible: root.easyLoginEnabled
+                implicitWidth: Kirigami.Units.gridUnit*8
+                icon.name:"smiley"
+                display: QQC2.AbstractButton.TextUnderIcon
+
+                onClicked: {
+                    root.loginMode = Main.LoginMode.EasyStudent;
+                    root.topWindow = easyLoginFrame;
                 }
             }
 
