@@ -1,3 +1,10 @@
+lliurex-sddm-theme (25.8.4.0) noble; urgency=medium
+
+  * Fixed easylogin showing user-pass when login fails (ie: service not available)
+  * Added easylogin button on mode selection
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Mon, 25 May 2026 10:34:55 +0200
+
 lliurex-sddm-theme (25.8.3.2) noble; urgency=medium
 
   *  wip
