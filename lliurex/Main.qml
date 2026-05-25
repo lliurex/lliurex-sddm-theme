@@ -750,7 +750,7 @@ Item {
 
             PlasmaComponents.Button {
                 text: i18nd("lliurex-sddm-theme","Easy")
-                visible: root.wifiEduGvaAutoEnabled
+                visible: root.easyLoginEnabled
                 implicitWidth: Kirigami.Units.gridUnit*8
                 icon.name:"smiley"
                 display: QQC2.AbstractButton.TextUnderIcon
