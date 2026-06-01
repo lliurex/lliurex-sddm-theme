@@ -632,6 +632,8 @@ Item {
 
             if (root.loginMode == Main.LoginMode.EasyStudent) {
                 txtUser.text = "";
+                root.topWindow = root.easyLoginFrame;
+                root.easyLoginFrame.enabled = true;
             }
 
         }
@@ -1185,6 +1187,7 @@ Item {
         property string theme:"animals"
         property var password:[]
         property int maxPassword: 4
+        signal clear
 
         function onPushCode() {
             if (easyLoginFrame.password.length < easyLoginFrame.maxPassword) {
@@ -1195,6 +1198,10 @@ Item {
             }
         }
 
+        onClear: function () {
+            console.log("clear!");
+            easyLoginFrame.password = [];
+        }
 
         QQC2.Pane {
             anchors.fill:parent
@@ -1284,6 +1291,7 @@ Item {
                                 txtPass.text = "-";
 
                                 easyLoginFrame.enabled = false;
+                                easyLoginFrame.clear();
                                 login();
                             }
                         }
