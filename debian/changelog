@@ -1,3 +1,9 @@
+lliurex-sddm-theme (25.8.5.0) noble; urgency=medium
+
+  * Show again easy login frame in case of bad password, but clearing the field
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Mon, 01 Jun 2026 12:11:17 +0200
+
 lliurex-sddm-theme (25.8.4.0) noble; urgency=medium
 
   * Fixed easylogin showing user-pass when login fails (ie: service not available)
