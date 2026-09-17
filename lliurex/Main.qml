@@ -44,7 +44,8 @@ Item {
         Guest,
         WifiEdu,
         AutoStudent,
-        EasyStudent
+        EasyStudent,
+        EasyStudentWired
     }
 
     enum Meta {
@@ -60,7 +61,8 @@ Item {
         Enabled = 1,
         Legacy = 2,
         AutoStudent = 3,
-        EasyStudent = 4
+        EasyStudent = 4,
+        EasyStudentWired = 5
     }
 
     readonly property int autoLoginTimeout: 30000 //30 seconds
@@ -179,7 +181,7 @@ Item {
             return;
         }
 
-        if (root.loginMode == Main.LoginMode.EasyStudent) {
+        if (root.loginMode == Main.LoginMode.EasyStudent || root.loginMode == Main.LoginMode.EasyStudentWired) {
             console.log("performing an easy student login...");
             root.wifiEduGvaStage = 0;
             root.topWindow = wifiEduGvaFrame;
@@ -355,9 +357,20 @@ Item {
                     sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
                 }
 
+                if (root.loginMode == Main.LoginMode.EasyStudentWired) {
+                    sddm.login(txtUser.text,txtPass.text,cmbSession.currentIndex);
+                }
+
             }
             else {
                 console.log("no cable found");
+
+                if (root.loginMode == Main.LoginMode.EasyStudentWired) {
+                    console.log("Wired Easy Student mode, no wired connection available but WiFi will not be tried");
+
+                    return;
+                }
+
                 local_scan_network.call([]);
             }
         }
@@ -522,6 +535,11 @@ Item {
                     root.easyLoginEnabled = true;
                 break;
 
+                case Main.WifiEduGva.EasyStudentWired:
+                    root.loginMode = Main.LoginMode.EasyStudentWired;
+                    root.easyLoginEnabled = true;
+                break;
+
             }
 
             if (root.firstBoot) {
@@ -530,7 +548,7 @@ Item {
                     root.topWindow = wifiEduGvaAutoLoginFrame;
                 }
 
-                if (root.loginMode == Main.LoginMode.EasyStudent) {
+                if (root.loginMode == Main.LoginMode.EasyStudent || root.loginMode == Main.LoginMode.EasyStudentWired) {
                     root.topWindow = easyLoginFrame;
                 }
             }
@@ -630,7 +648,7 @@ Item {
             txtPass.text = "";
             txtPass.focus = true;
 
-            if (root.loginMode == Main.LoginMode.EasyStudent) {
+            if (root.loginMode == Main.LoginMode.EasyStudent || root.loginMode == Main.LoginMode.EasyStudentWired) {
                 txtUser.text = "";
                 root.topWindow = root.easyLoginFrame;
                 root.easyLoginFrame.enabled = true;
@@ -759,6 +777,19 @@ Item {
 
                 onClicked: {
                     root.loginMode = Main.LoginMode.EasyStudent;
+                    root.topWindow = easyLoginFrame;
+                }
+            }
+
+            PlasmaComponents.Button {
+                text: i18nd("lliurex-sddm-theme","Easy (wired)")
+                visible: root.easyLoginEnabled
+                implicitWidth: Kirigami.Units.gridUnit*8
+                icon.name:"smiley"
+                display: QQC2.AbstractButton.TextUnderIcon
+
+                onClicked: {
+                    root.loginMode = Main.LoginMode.EasyStudentWired;
                     root.topWindow = easyLoginFrame;
                 }
             }
